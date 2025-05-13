@@ -23,3 +23,13 @@
  
 This project is part of ICST - The Interdisciplinary Center for Smart Technologies, Taub Faculty of Computer Science, Technion
 https://icst.cs.technion.ac.il/
+
+
+# ideas
+calibration: if the light is static, we can assume that this is the current light condition and we can adjust threasholds accordingly.
+preamble: a sequence that marks the beggining of a message. It is recommended that the preamble to be ossilating so it is unlikely to be from the env.
+
+sampling rate should be few times higher than the transmition rate, and use mean over samples.
+
+
+|----preamble---|----data----|
