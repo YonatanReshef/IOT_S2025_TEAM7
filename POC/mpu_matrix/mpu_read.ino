@@ -135,6 +135,7 @@ void get_average(){
 
 void setup(void) {
   Serial.begin(115200);
+  sleep(1)
   while (!Serial)
     delay(10); // will pause Zero, Leonardo, etc until serial console opens
 
