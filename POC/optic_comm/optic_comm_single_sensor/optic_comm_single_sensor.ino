@@ -13,9 +13,10 @@ const int SAMPLE_INTERVAL_MS = 10;
 const int LIGHT_THRESHOLD = 250;
 const int PREAMBLE_DURATION_MS = 500;
 
-// Transmission data: 5-bit preamble + 5-bit message
+// Transmission data: 6-bit preamble + 4-bit message
 const int TRANSMISSION_SIZE = 10;
 int send_data[TRANSMISSION_SIZE] = {1, 1, 1, 1, 1, 0, 1, 0, 1, 1}; 
+//                                 |----preamble----|----data----|S
 
 // Transmission state
 int current_bit = 0;
