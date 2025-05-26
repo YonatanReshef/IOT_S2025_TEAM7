@@ -5,20 +5,26 @@
 #include "globals.h"
 #include <Arduino.h>
 #include "optic_comm.h"
+#include "light_matrix.h"
+#include <Adafruit_NeoPixel.h>
 
 
-bool checkMacExists(const uint8_t *mac) {
-  if((compareMacs(mac, rightMac) == 0) || (compareMacs(mac, leftMac) == 0)) {
-    return true;  // MAC exists in known sides
+int checkMacExists(const uint8_t *mac) {
+  if(compareMacs(mac, rightMac) == 0) {
+    return 1;
   }
-  return false;  // MAC does not exist in known sides
+  if(compareMacs(mac, leftMac) == 0) {
+    return 0;
+  }
+  return -1;
 }
 
 
 // ESP-NOW recv callback
 void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
   if (((char)incomingData[0] == 'r' || (char)incomingData[0] == 'l')) {
-    if(!checkMacExists(mac)) {
+    int mac_loc = checkMacExists(mac);
+    if (mac_loc == -1) {
       Serial.println("Received message from unknown MAC, ignoring");
       Serial.print("Known MACs: ");
       for (int i = 0; i < 6; i++){
@@ -48,6 +54,10 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
         if (i < 5) Serial.print(":");
       }
       Serial.println("=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
+
+      drawNeighborMatrix(mac_loc, 1, pixels.Color(0, 0, 255), pixels.Color(255, 255, 255));
+      pixels.show();  // Update the pixel display
+
     } else if ((char)incomingData[0] == 'l') {
       Serial.print("Received left side message from known MAC: ");
       for (int i = 0; i < 6; i++) {
@@ -55,6 +65,10 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
         if (i < 5) Serial.print(":");
       }
       Serial.println("=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
+
+      Serial.print("Drawing neighbor mat");
+      drawNeighborMatrix(mac_loc, 0, pixels.Color(0, 0, 255), pixels.Color(255, 255, 255));
+      pixels.show();  // Update the pixel display
     } else {
       Serial.println("Unknown message received");
     }

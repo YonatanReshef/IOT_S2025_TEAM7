@@ -4,6 +4,9 @@
 #include <tuple>  // Required for std::tuple
 #include <Arduino.h>
 #include "side_msg.h"
+#include "light_matrix.h"
+#include <Adafruit_NeoPixel.h>
+
 
 Receiver receiverL = {.analogInPin = 33 , WAIT_PREAMBLE, 0, 0, 0, {0}};
 Receiver receiverR = {.analogInPin = 32 , WAIT_PREAMBLE, 0, 0, 0, {0}};
@@ -155,6 +158,13 @@ void update_side_macs(int leftId, int rightId) {
     //Serial.print("Left ID: ");
     //Serial.println(leftId);
     //Serial.println(" exceeds known MACs count, ignoring.");
+    if(is_mac_empty(leftMac) && (sub_matL == 1)) {
+      pixels.clear(); // Clear the pixel display
+      drawMyMiniMatrix(pixels.Color(0, 255, 0), pixels.Color(255, 255, 255));
+      pixels.show(); // Update the pixel display
+      sub_matL = 0; // Reset sub_matL to 0
+      sub_matR = 0;
+    }
   }
   else if (leftId == -1) {
     if(is_mac_empty(leftMac)) {
@@ -163,6 +173,23 @@ void update_side_macs(int leftId, int rightId) {
       for (int i = 0; i < 6; i++) {
         leftMac[i] = 0xFF;
       }
+    }
+    
+    if(sub_matL == 1){
+      pixels.clear(); // Clear the pixel display
+      drawMyMiniMatrix(pixels.Color(0, 255, 0), pixels.Color(255, 255, 255));
+      pixels.show(); // Update the pixel display
+      sub_matL = 0; // Reset sub_matL to 0
+      sub_matR = 0;
+    }
+  }
+  else if(leftId == -2) {
+    if(is_mac_empty(leftMac) && (sub_matL == 1)) {
+      pixels.clear(); // Clear the pixel display
+      drawMyMiniMatrix(pixels.Color(0, 255, 0), pixels.Color(255, 255, 255));
+      pixels.show(); // Update the pixel display
+      sub_matL = 0; // Reset sub_matL to 0
+      sub_matR = 0;
     }
   }
   else if(leftId >= 0 && leftId < macCount) {
@@ -177,6 +204,13 @@ void update_side_macs(int leftId, int rightId) {
     //Serial.print("Right ID: ");
     //Serial.println(rightId);
     //Serial.println(" exceeds known MACs count, ignoring.");
+    if(is_mac_empty(rightMac) && (sub_matR == 1)) {
+      pixels.clear(); // Clear the pixel display
+      drawMyMiniMatrix(pixels.Color(0, 255, 0), pixels.Color(255, 255, 255));
+      pixels.show(); // Update the pixel display
+      sub_matR = 0; // Reset sub_matL to 0
+      sub_matL = 0;
+    }
   }
   else if (rightId == -1) {
     if(is_mac_empty(rightMac)) {
@@ -186,6 +220,21 @@ void update_side_macs(int leftId, int rightId) {
       for (int i = 0; i < 6; i++) {
         rightMac[i] = 0xFF;
       }
+    }
+    
+    pixels.clear(); // Clear the pixel display
+    drawMyMiniMatrix(pixels.Color(0, 255, 0), pixels.Color(255, 255, 255));
+    pixels.show(); // Update the pixel display
+    sub_matR = 0; // Reset sub_matL to 0
+    sub_matL = 0;
+  }
+  else if(rightId == -2) {
+    if(is_mac_empty(rightMac) && (sub_matR == 1)) {
+      pixels.clear(); // Clear the pixel display
+      drawMyMiniMatrix(pixels.Color(0, 255, 0), pixels.Color(255, 255, 255));
+      pixels.show(); // Update the pixel display
+      sub_matR = 0; // Reset sub_matL to 0
+      sub_matL = 0;
     }
   }
   else if (rightId >= 0 && rightId < macCount) { 

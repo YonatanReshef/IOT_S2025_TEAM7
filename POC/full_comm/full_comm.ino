@@ -3,6 +3,7 @@
 #include "mac_table.h"
 #include "side_msg.h"
 #include "send_recv.h"
+#include "light_matrix.h"
 #include <tuple>  // Required for std::tuple
 #include <Arduino.h>
 #include <esp_now.h>
@@ -14,6 +15,7 @@ void setup() {
   pinMode(analogOutPin, OUTPUT);
 
   mac_map_setup();
+  matrix_setup();
   Serial.println("Setup Success");
 }
 
