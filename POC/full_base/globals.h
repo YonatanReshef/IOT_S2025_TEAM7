@@ -7,7 +7,7 @@
 #pragma once
 
 // Declare global variables
-/*extern const int analogOutPin;
+extern const int analogOutPin;
 extern int tick;
 
 
@@ -20,8 +20,6 @@ extern int sub_matL;
 extern int sub_matR;
 
 extern int leftId;
-extern int rightId;*/
-
-
+extern int rightId;
 
 #endif

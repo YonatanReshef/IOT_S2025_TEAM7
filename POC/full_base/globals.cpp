@@ -1,6 +1,6 @@
 #include "globals.h"
 
-/*const int analogOutPin = 12;
+const int analogOutPin = 12;
 int tick = 0;
 
 uint8_t rightMac[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
@@ -18,4 +18,4 @@ int sub_matL = 0;
 int sub_matR = 0;
 
 int leftId = -2;  // Default value indicating no ID
-int rightId = -2; // Default value indicating no ID*/
+int rightId = -2; // Default value indicating no ID

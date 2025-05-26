@@ -9,6 +9,7 @@
 #include <esp_now.h>
 #include <esp_wifi.h>
 #include <WiFi.h>
+#include "globals.h"
 
 
 #include "base_optic_comm.h"
@@ -70,8 +71,13 @@ void loop() {
   }
 
   // RECEIVE
-  receive_logic(receiverL);
-  receive_logic(receiverR);
+  int idL = receive_logic(receiverL);
+  int idR = receive_logic(receiverR);
+
+  update_side_macs(idL, idR);
+  
+
+  
 
   delay(1);
 }
