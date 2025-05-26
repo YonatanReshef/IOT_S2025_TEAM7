@@ -19,7 +19,7 @@ int send_data[TRANSMISSION_SIZE] = {1, 1, 1, 1, 1, 0, 1, 0, 1, 1};
 
 // Transmission state
 int current_bit = 0;
-int tick = 0;
+int tick = 0;  
 
 const int MESSAGE_SIZE = 4; // 4 data bits
 
