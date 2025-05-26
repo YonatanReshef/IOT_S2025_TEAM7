@@ -76,8 +76,10 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
     return;
   }
 
-  insertMac(mac);  // Add sender MAC to list
-  update_optic_data();  // Update data to send
+  //else if((char)incomingData[0] == 'h'){
+  //  insertMac(mac);  // Add sender MAC to list
+  //  update_optic_data();  // Update data to send
+  //}
 }
 
 // callback when data is sent

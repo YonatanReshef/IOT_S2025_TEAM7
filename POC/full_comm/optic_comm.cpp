@@ -13,7 +13,7 @@ Receiver receiverR = {.analogInPin = 32 , WAIT_PREAMBLE, 0, 0, 0, {0}};
 
 // Transmission data: 6-bit preamble + 4-bit message
 const int TRANSMISSION_SIZE = 10;
-int send_data[TRANSMISSION_SIZE] = {1, 1, 1, 1, 1, 0, 1, 1, 1, 1}; 
+int send_data[TRANSMISSION_SIZE] = {1, 1, 1, 1, 1, 0, 0, 0, 0, 0}; 
 //                                 |----preamble----|----data----|
 
 // Transmission state
@@ -45,6 +45,8 @@ int find_mac_index(const uint8_t* mac) {
 
 void update_optic_data() {
     int index = find_mac_index(ownMac);
+    Serial.print("Updated MAC index: ");
+    Serial.println(index);
     for (int i = 0; i < MESSAGE_SIZE; ++i) {
         int data_idx = 6 + i; // Data starts after preamble
         send_data[data_idx] = (index >> (MESSAGE_SIZE - 1 - i)) & 1;
@@ -68,6 +70,12 @@ int receive_logic(Receiver& r) {
     case WAIT_PREAMBLE:
       if (tick % SAMPLE_INTERVAL_MS == 0) {
         int sensorValue = analogRead(r.analogInPin);
+        int bit = (sensorValue < LIGHT_THRESHOLD) ? 1 : 0;
+        //Serial.print("Received bit: ");
+        //Serial.print(bit);
+        //Serial.print(" at pin ");
+        //Serial.print(r.analogInPin);
+        //Serial.println("=-=-=-=-=-=-=-=-=-=-=-");
         if (sensorValue < LIGHT_THRESHOLD) {
           r.ticksOnPreamble += SAMPLE_INTERVAL_MS;
         } else {
@@ -87,6 +95,11 @@ int receive_logic(Receiver& r) {
 
         if (r.bits_read < MESSAGE_SIZE) {
           r.received_data[r.bits_read] = bit;
+          //Serial.print("Received bit: ");
+          //Serial.print(bit);
+          //Serial.print(" at pin ");
+          //Serial.print(r.analogInPin);
+          //Serial.println("=-=-=-=-=-=-=-=-=-=-=-");
         }
 
         r.bits_read++;
@@ -98,12 +111,17 @@ int receive_logic(Receiver& r) {
 
           int stop_bit = bit;
           //Serial.print("[PIN ");
-          //Serial.print(r.analogInPin);
-          //Serial.print("] Received: ");
+          //if (r.analogInPin == 33) {
+          //  Serial.print("L");
+          //} else if (r.analogInPin == 32) {
+          //  Serial.print("R");
+          //}
+          //Serial.print(" ] Received: ");
           //for (int i = 0; i < MESSAGE_SIZE; ++i) {
           //  Serial.print(r.received_data[i]);
           //}
           //Serial.println();
+          //Serial.println("=============");
           if (stop_bit == 1) {
             //Serial.println("Valid.");
             //Serial.println("===========");
@@ -154,7 +172,7 @@ bool is_mac_empty(const uint8_t* mac) {
 
 
 void update_side_macs(int leftId, int rightId) {
-  if (leftId >= macCount) {
+  if (leftId >= 3) {
     //Serial.print("Left ID: ");
     //Serial.println(leftId);
     //Serial.println(" exceeds known MACs count, ignoring.");
@@ -167,6 +185,7 @@ void update_side_macs(int leftId, int rightId) {
     }
   }
   else if (leftId == -1) {
+    Serial.println("Left ID gone.---------------------=======================");
     if(is_mac_empty(leftMac)) {
       //Serial.println("No left ID, ignoring.");
     } else {
@@ -192,9 +211,16 @@ void update_side_macs(int leftId, int rightId) {
       sub_matR = 0;
     }
   }
-  else if(leftId >= 0 && leftId < macCount) {
+  else if((leftId >= 0 && leftId < 3) && (compareMacs(baseMacs[leftId], leftMac) != 0)) {
+    Serial.print("Left ID is now: ");
+    Serial.println(leftId);
     for (int i = 0; i < 6; i++) {
-      leftMac[i] = knownMacs[leftId][i];
+      Serial.print(baseMacs[leftId][i], HEX);
+      Serial.print(" ");
+    }
+    Serial.println("--==--==--==--==--==--==--==--==--==--==--==--==--");
+    for (int i = 0; i < 6; i++) {
+      leftMac[i] = baseMacs[leftId][i];
     }
     
     send_side(0, leftMac); // Send left side message
@@ -213,6 +239,7 @@ void update_side_macs(int leftId, int rightId) {
     }
   }
   else if (rightId == -1) {
+    Serial.println("Right ID gone.----------------=====================");
     if(is_mac_empty(rightMac)) {
       //Serial.println("No right ID, ignoring.");
     } else {
@@ -237,9 +264,16 @@ void update_side_macs(int leftId, int rightId) {
       sub_matL = 0;
     }
   }
-  else if (rightId >= 0 && rightId < macCount) { 
+  else if ((rightId >= 0 && rightId < 3) && (compareMacs(baseMacs[rightId], rightMac) != 0)) { 
+    Serial.print("Right ID is now: ");
+    Serial.println(rightId);
     for (int i = 0; i < 6; i++) {
-      rightMac[i] = knownMacs[rightId][i];
+      Serial.print(baseMacs[rightId][i], HEX);
+      Serial.print(" ");
+    }
+    Serial.println("--==--==--==--==--==--==--==--==--==--==--==--==--");
+    for (int i = 0; i < 6; i++) {
+      rightMac[i] = baseMacs[rightId][i];
     }
     
     send_side(1, rightMac); // Send right side message
