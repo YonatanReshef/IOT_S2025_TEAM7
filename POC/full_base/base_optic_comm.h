@@ -48,7 +48,9 @@ extern Receiver receiverR;
 
 
 
-
+int find_mac_index(const uint8_t* mac);
+void update_optic_data();
+void readMacAddress();
 
 int receive_logic(Receiver& r);
 int binaryArrayToInt(int* binary_arr, int size);

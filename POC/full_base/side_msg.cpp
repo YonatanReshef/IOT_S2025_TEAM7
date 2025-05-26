@@ -2,7 +2,6 @@
 #include <WiFi.h>
 #include <Arduino.h>
 
-#include "mac_table.h"
 #include "globals.h"
 #include "side_msg.h"
 

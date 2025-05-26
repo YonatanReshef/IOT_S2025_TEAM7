@@ -1,6 +1,12 @@
 #include "base_optic_comm.h"
 #include "globals.h"
 #include <Arduino.h>
+#include "side_msg.h"
+#include "light_matrix.h"
+#include "send_recv.h"
+#include <WiFi.h>
+#include <esp_wifi.h>
+
 
 
 
@@ -18,7 +24,7 @@ const int PREAMBLE_DURATION_MS = 500;
 
 // Transmission data: 6-bit preamble + 4-bit message
 const int TRANSMISSION_SIZE = 10;
-int send_data[TRANSMISSION_SIZE] = {1, 1, 1, 1, 1, 0, 0, 0, 0, 1}; 
+int send_data[TRANSMISSION_SIZE] = {1, 1, 1, 1, 1, 0, 0, 0, 0, 0}; 
 //                                 |----preamble----|----data----|
 
 // Transmission state
@@ -29,6 +35,44 @@ const int MESSAGE_SIZE = 4; // 4 data bits
 
 Receiver receiverL = {.analogInPin = 33 , WAIT_PREAMBLE, 0, 0, 0, 0, {0}};
 Receiver receiverR = {.analogInPin = 32 , WAIT_PREAMBLE, 0, 0, 0, 0, {0}};
+
+
+
+
+void readMacAddress(){
+  esp_err_t ret = esp_wifi_get_mac(WIFI_IF_STA, ownMac);
+  if (ret == ESP_OK) {
+    /*Serial.printf("%02x:%02x:%02x:%02x:%02x:%02x\n",
+                  baseMac[0], baseMac[1], baseMac[2],
+                  baseMac[3], baseMac[4], baseMac[5]);*/
+  } else {
+    Serial.println("Failed to read MAC address");
+  }
+}
+
+int find_mac_index(const uint8_t* mac) {
+  int numMacs = sizeof(baseMacs) / sizeof(*baseMacs);
+  Serial.print("numMacs: ");
+  Serial.println(numMacs);
+  for (int i = 0; i < numMacs; i++) { //3 is num of macs
+    if (compareMacs(baseMacs[i], mac) == 0) {
+      return i;
+    }
+  }
+  return -1; // Not found
+}
+
+
+void update_optic_data() {
+    readMacAddress();
+    int index = find_mac_index(ownMac);
+    Serial.print("Updated MAC index: ");
+    Serial.println(index);
+    for (int i = 0; i < MESSAGE_SIZE; ++i) {
+        int data_idx = 6 + i; // Data starts after preamble
+        send_data[data_idx] = (index >> (MESSAGE_SIZE - 1 - i)) & 1;
+    }
+}
 
 
 
@@ -153,9 +197,15 @@ void update_side_macs(int idL, int idR){
       leftId = idL;
       leftChanged = true;
       if (leftId >= 0 && leftId < 3) {
+          Serial.print("Updating left mac with id: ");
+          Serial.println(leftId);
           copy_mac(leftMac, baseMacs[leftId]);
+          Serial.print("Drawing left matrix");
+          drawNeighborMatrix(0, 1, pixels.Color(0, 0, 255), pixels.Color(255, 255, 255));
+          pixels.show();
       }
       else if(leftId == -3 || leftId == -1){
+          Serial.println("Defaulting left mac");
           default_mac(leftMac);
       }
   }
@@ -166,11 +216,17 @@ void update_side_macs(int idL, int idR){
 
   if (idR != rightId && idR != -2) {
       rightId = idR;
-      leftChanged = true;
+      rightChanged = true;
       if(rightId >= 0 && rightId < 3) {
+          Serial.print("Updating right mac with id: ");
+          Serial.println(rightId);
           copy_mac(rightMac, baseMacs[rightId]);
+          Serial.print("Drawing right matrix");
+          drawNeighborMatrix(1, 1, pixels.Color(0, 0, 255), pixels.Color(255, 255, 255));
+          pixels.show();
       }
       else if(rightId == -3 || rightId == -1) {
+          Serial.println("Defaulting right mac");
           default_mac(rightMac);
       }
   }
@@ -178,18 +234,65 @@ void update_side_macs(int idL, int idR){
       rightChanged = false;
   }
 
-  if(leftChanged || rightChanged) {
+  if(leftChanged) {
     Serial.print("Left mac: ");
-      for (int i = 0; i < 6; i++) {
-        Serial.print(leftMac[i], HEX);
-        if (i < 5) Serial.print(":");
-      }
-      Serial.println();
+    for (int i = 0; i < 6; i++) {
+      Serial.print(leftMac[i], HEX);
+      if (i < 5) Serial.print(":");
+    }
+    Serial.println("=-------------------------------------");
+
+    if (leftId >= 0 && leftId < 3) {
+      //send_side(0, leftMac);
+    }
+    else if(leftId == -3 || leftId == -1) {
+      drawNeighborMatrix(0, 1, pixels.Color(0, 0, 0),   pixels.Color(0, 0, 0));  // Top neighbor, top row red
+      pixels.show();
+    }
+    
+  }
+
+  if(rightChanged) {
     Serial.print("Right mac: ");
     for (int i = 0; i < 6; i++) {
       Serial.print(rightMac[i], HEX);
       if (i < 5) Serial.print(":");
     }
     Serial.println("=-------------------------------------");
+
+    if (rightId >= 0 && rightId < 3) {
+      //send_side(1, rightMac);
+    }
+    else if(rightId == -3 || rightId == -1) {
+      // Test neighbors on all four sides
+      drawNeighborMatrix(1, 1, pixels.Color(0, 0, 0),   pixels.Color(0, 0, 0));  // Top neighbor, top row red
+      pixels.show();
+    }
   }
+
+
+  /*if(tick % 2058 == 0){
+    if(leftId >= 0 && leftId < 3) {
+      Serial.print("Sending left side message to: ");
+      for (int i = 0; i < 6; i++) {
+        Serial.print(leftMac[i], HEX);
+        if (i < 5) Serial.print(":");
+      }
+      Serial.println();
+      //send_side(0, leftMac);
+    }
+  
+    if(rightId >= 0 && rightId < 3) {
+        Serial.print("Sending right side message to: ");
+        for (int i = 0; i < 6; i++) {
+          Serial.print(rightMac[i], HEX);
+          if (i < 5) Serial.print(":");
+        }
+        Serial.println();
+        //send_side(1, rightMac);
+    }
+  }
+  */
+
+  
 }

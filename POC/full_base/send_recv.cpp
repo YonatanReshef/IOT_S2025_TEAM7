@@ -1,12 +1,22 @@
 #include <esp_now.h>
 #include <WiFi.h>
-#include "mac_table.h"
 #include "side_msg.h"
+#include "send_recv.h"
 #include "globals.h"
 #include <Arduino.h>
-#include "optic_comm.h"
+#include "base_optic_comm.h"
 #include "light_matrix.h"
 #include <Adafruit_NeoPixel.h>
+
+
+// Helper to compare MACs (returns -1, 0, 1 like strcmp)
+int compareMacs(const uint8_t* a, const uint8_t* b) {
+  for (int i = 0; i < 6; i++) {
+    if (a[i] < b[i]) return -1;
+    if (a[i] > b[i]) return 1;
+  }
+  return 0;
+}
 
 
 int checkMacExists(const uint8_t *mac) {
@@ -25,7 +35,7 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
   if (((char)incomingData[0] == 'r' || (char)incomingData[0] == 'l')) {
     int mac_loc = checkMacExists(mac);
     if (mac_loc == -1) {
-      Serial.println("Received message from unknown MAC, ignoring");
+      /*Serial.println("Received message from unknown MAC, ignoring");
       Serial.print("Known MACs: ");
       for (int i = 0; i < 6; i++){
         Serial.printf("%02X", rightMac[i]);
@@ -43,7 +53,7 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
         if (i < 5) Serial.print(":");
       }
       Serial.println();
-      Serial.println("=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
+      Serial.println("=-=-=-=-=-=-=-=-=-=-=-=-=-=-");*/
       return;  // Ignore messages from unknown MACs
     }
     

@@ -10,6 +10,9 @@
 #include <esp_wifi.h>
 #include <WiFi.h>
 #include "globals.h"
+#include "send_recv.h"
+#include "side_msg.h"
+#include "light_matrix.h"
 
 
 #include "base_optic_comm.h"
@@ -21,23 +24,24 @@ void setup() {
   pinMode(analogOutPin, OUTPUT);
 
   //mac_map_setup();
-  /*WiFi.mode(WIFI_STA);
+  WiFi.mode(WIFI_STA);
   if (esp_now_init() != ESP_OK) {
     Serial.println("Error initializing ESP-NOW");
     return;
   }
 
+  update_optic_data();
+
   // setup handlers
-  esp_now_register_recv_cb(OnDataRecv);
-  esp_now_register_send_cb(OnDataSent);
+  //esp_now_register_recv_cb(OnDataRecv);
+  //esp_now_register_send_cb(OnDataSent);
 
-
-
-  matrix_setup();*/
+  matrix_setup();
   Serial.println("Setup Success");
 }
 
 void loop() {
+  unsigned long start = millis();
   tick++;
 
   //if(tick % 2000 == 0 ) {
@@ -74,10 +78,9 @@ void loop() {
   int idL = receive_logic(receiverL);
   int idR = receive_logic(receiverR);
 
-  update_side_macs(idL, idR);
-  
 
-  
+  update_side_macs(idL, idR);
+
 
   delay(1);
 }
