@@ -23,14 +23,17 @@ const int LIGHT_THRESHOLD = 250;
 const int PREAMBLE_DURATION_MS = 500;
 
 // Transmission data: 6-bit preamble + 4-bit message
-const int TRANSMISSION_SIZE = 10;
-int send_data[TRANSMISSION_SIZE] = {1, 1, 1, 1, 1, 0, 0, 0, 0, 0}; 
-//                                 |----preamble----|----data----|
+const int TRANSMISSION_SIZE = 12;
+int send_dataL[TRANSMISSION_SIZE] = {1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0}; 
+//                                 |----preamble----|----data---|-side-|
+
+int send_dataR[TRANSMISSION_SIZE] = {1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1}; 
+//                                 |----preamble----|----data---|-side-|
 
 // Transmission state
 int current_bit = 0;
 
-const int MESSAGE_SIZE = 4; // 4 data bits
+const int MESSAGE_SIZE = 6; // 4 data bits + 2 side bits
 
 
 Receiver receiverL = {.analogInPin = 33 , WAIT_PREAMBLE, 0, 0, 0, 0, {0}};
@@ -66,11 +69,24 @@ int find_mac_index(const uint8_t* mac) {
 void update_optic_data() {
     readMacAddress();
     int index = find_mac_index(ownMac);
+    my_index = index; // Store the index globally
     Serial.print("Updated MAC index: ");
     Serial.println(index);
-    for (int i = 0; i < MESSAGE_SIZE; ++i) {
+    for (int i = 0; i < MESSAGE_SIZE - 2; ++i) {
         int data_idx = 6 + i; // Data starts after preamble
-        send_data[data_idx] = (index >> (MESSAGE_SIZE - 1 - i)) & 1;
+        send_dataR[data_idx] = (index >> (MESSAGE_SIZE - 2 - 1 - i)) & 1;
+        send_dataL[data_idx] = (index >> (MESSAGE_SIZE - 2 - 1 - i)) & 1;
+    }
+
+    //print
+    Serial.print("Left send data: ");
+    for (int i = 0; i < TRANSMISSION_SIZE; ++i) {
+        Serial.print(send_dataL[i]);
+    }
+    Serial.println();
+    Serial.print("Right send data: ");
+    for (int i = 0; i < TRANSMISSION_SIZE; ++i) {
+        Serial.print(send_dataR[i]);
     }
 }
 
@@ -91,6 +107,7 @@ int receive_logic(Receiver& r) {
     case WAIT_PREAMBLE:
       if (tick % SAMPLE_INTERVAL_MS == 0) {
         int sensorValue = analogRead(r.analogInPin);
+
         if (sensorValue < LIGHT_THRESHOLD) {
           r.ticksWaitPreamble = 0;
           r.ticksOnPreamble += SAMPLE_INTERVAL_MS;
@@ -127,18 +144,22 @@ int receive_logic(Receiver& r) {
           r.ticksOnPreamble = BIT_PERIOD_MS;
 
           int stop_bit = bit;
-          /*Serial.print("[PIN ");
+          Serial.print("[PIN ");
           if(r.analogInPin == 33){
             Serial.print("L");
           } else if(r.analogInPin == 32){
             Serial.print("R");
           }
-          Serial.print("] Received: ");*/
-          int id = binaryArrayToInt(r.received_data, MESSAGE_SIZE);
-          /*for (int i = 0; i < MESSAGE_SIZE; ++i) {
+          Serial.print("] Received: ");
+          int id = binaryArrayToInt(r.received_data, MESSAGE_SIZE - 2); // Exclude the side bits
+          int side = binaryArrayToInt(r.received_data + MESSAGE_SIZE - 2, 2); // Exclude the side bits
+          for (int i = 0; i < MESSAGE_SIZE; ++i) {
             Serial.print(r.received_data[i]);
           }
-          Serial.println();*/
+          Serial.println();
+          Serial.print("Side: ");
+          Serial.print(side);
+          Serial.println();
 
           
 
@@ -201,7 +222,8 @@ void update_side_macs(int idL, int idR){
           Serial.println(leftId);
           copy_mac(leftMac, baseMacs[leftId]);
           Serial.print("Drawing left matrix");
-          drawNeighborMatrix(0, 1, pixels.Color(0, 0, 255), pixels.Color(255, 255, 255));
+          int side = binaryArrayToInt(receiverL.received_data + MESSAGE_SIZE - 2, 2); // Exclude the side bits
+          drawNeighborMatrix(0, side, matColors[leftId], pixels.Color(255, 255, 255));
           pixels.show();
       }
       else if(leftId == -3 || leftId == -1){
@@ -222,7 +244,8 @@ void update_side_macs(int idL, int idR){
           Serial.println(rightId);
           copy_mac(rightMac, baseMacs[rightId]);
           Serial.print("Drawing right matrix");
-          drawNeighborMatrix(1, 1, pixels.Color(0, 0, 255), pixels.Color(255, 255, 255));
+          int side = binaryArrayToInt(receiverR.received_data + MESSAGE_SIZE - 2, 2); // Exclude the side bits
+          drawNeighborMatrix(1, side, matColors[rightId], pixels.Color(255, 255, 255));
           pixels.show();
       }
       else if(rightId == -3 || rightId == -1) {

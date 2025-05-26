@@ -21,7 +21,8 @@
 void setup() {
   Serial.begin(9600);
   sleep(1);
-  pinMode(analogOutPin, OUTPUT);
+  pinMode(analogOutPinL, OUTPUT);
+  pinMode(analogOutPinR, OUTPUT);
 
   //mac_map_setup();
   WiFi.mode(WIFI_STA);
@@ -69,8 +70,11 @@ void loop() {
 
   // TRANSMIT
   if (tick % BIT_PERIOD_MS == 0) {
-    int outputValue = send_data[current_bit] * PWM_MAX;
-    analogWrite(analogOutPin, outputValue);
+    int outputValueL = send_dataL[current_bit] * PWM_MAX;
+    int outputValueR = send_dataR[current_bit] * PWM_MAX;
+
+    analogWrite(analogOutPinL, outputValueL);
+    analogWrite(analogOutPinR, outputValueR);
     current_bit = (current_bit + 1) % TRANSMISSION_SIZE;
   }
 

@@ -7,7 +7,8 @@
 
 // Transmission data: 6-bit preamble + 4-bit message
 extern const int TRANSMISSION_SIZE;
-extern int send_data[10];
+extern int send_dataL[12];
+extern int send_dataR[12];
 
 // Transmission state
 extern int current_bit;
@@ -39,7 +40,7 @@ typedef struct {
   int ticksWaitPreamble;
   int sync_val;
   int bits_read;
-  int received_data[4];
+  int received_data[6];
 } Receiver;
 
 

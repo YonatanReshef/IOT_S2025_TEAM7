@@ -86,7 +86,7 @@ void matrix_setup() {
   pixels.clear();
 
   // Draw your own center mini-matrix in green
-  drawMyMiniMatrix(pixels.Color(0, 255, 0), pixels.Color(255, 255, 255));
+  drawMyMiniMatrix(matColors[my_index], pixels.Color(255, 255, 255));
 
   // Test neighbors on all four sides
   //drawNeighborMatrix("left", "left", pixels.Color(0, 0, 255),   pixels.Color(255, 255, 255));  // Top neighbor, top row red
