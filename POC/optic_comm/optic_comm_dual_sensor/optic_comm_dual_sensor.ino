@@ -1,7 +1,8 @@
 // Communication using LED and light sensor via PWM and analog read.
 
 // Pin configuration
-const int analogOutPin = 12;     // PWM output pin for LED
+const int analogOutPin1 = 12;     // PWM output pin for LED
+const int analogOutPin2 = 13;     // PWM output pin for LED
 
 // Transmission configuration
 const int PWM_MAX = 255;
@@ -40,8 +41,8 @@ typedef struct {
 } Receiver;
 
 
-Receiver receiverL = {.analogInPin = 4 , WAIT_PREAMBLE, 0, 0, 0, {0}};
-Receiver receiverR = {.analogInPin = 2 , WAIT_PREAMBLE, 0, 0, 0, {0}};
+Receiver receiverL = {.analogInPin = 32 , WAIT_PREAMBLE, 0, 0, 0, {0}};
+Receiver receiverR = {.analogInPin = 33 , WAIT_PREAMBLE, 0, 0, 0, {0}};
 
 
 // Receive logic function
@@ -101,7 +102,8 @@ void receive_logic(Receiver& r) {
 
 void setup() {
   Serial.begin(9600);
-  pinMode(analogOutPin, OUTPUT);
+  pinMode(analogOutPin1, OUTPUT);
+  pinMode(analogOutPin2, OUTPUT);
 }
 
 void loop() {
@@ -111,7 +113,8 @@ void loop() {
   // TRANSMIT
   if (tick % BIT_PERIOD_MS == 0) {
     int outputValue = send_data[current_bit] * PWM_MAX;
-    analogWrite(analogOutPin, outputValue);
+    analogWrite(analogOutPin1, outputValue);
+    analogWrite(analogOutPin2, outputValue);
     current_bit = (current_bit + 1) % TRANSMISSION_SIZE;
   }
 
