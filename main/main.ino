@@ -19,15 +19,15 @@ void setup() {
 
 
 void loop() {
-
-    int dt = my_clock.tick();
-    
-    /* 
-    LOOP LOGIC 
-    use dt instead of tick
-    */
-   
-    Serial.print("Loop!");
-    Serial.println(dt);
+  
+  int dt = my_clock.tick();
+  
+  /* 
+  LOOP LOGIC 
+  use dt instead of tick
+  */
+  
+  Serial.print("Loop!");
+  Serial.println(dt);
 
 }
