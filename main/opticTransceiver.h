@@ -57,7 +57,7 @@ class OpticTransceiver
 
   /* ==== inner funcs ==== */
   void transmitLogic();
-  int receiveLogic();
+  void receiveLogic();
 
   public:
   // 4-bit msg

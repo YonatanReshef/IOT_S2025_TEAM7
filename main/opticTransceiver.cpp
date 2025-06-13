@@ -42,7 +42,7 @@ void OpticTransceiver::transmitLogic(){
 
   While none of the events occur, the msg values does not change.
 */
-int OpticTransceiver::receiveLogic(){
+void OpticTransceiver::receiveLogic(){
     switch (receiver.state) {
     case WAIT_PREAMBLE:
       if (tick % SAMPLE_INTERVAL_MS == 0) {
