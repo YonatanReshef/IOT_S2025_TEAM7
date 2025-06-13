@@ -32,18 +32,18 @@ double Gyro::getArrAvg(double* arr){
 
 
 
-void Gyro::setup() {
+bool Gyro::setup() {
   // Try to initialize!
-  if (!this->mpu.begin()) {
+  while (!this->mpu.begin()) {
     Serial.println("Failed to find MPU6050 chip");
-    while (1) {
-      delay(10);
-    }
+    return false;
   }
 
   this->mpu.setAccelerometerRange(MPU6050_RANGE_8_G);
   this->mpu.setGyroRange(MPU6050_RANGE_500_DEG);
   this->mpu.setFilterBandwidth(MPU6050_BAND_21_HZ);
+
+  return false;
 }
 
 
