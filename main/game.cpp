@@ -106,6 +106,7 @@ void Game::preformMovement(MovementOption option, Position pos) {
 
         
     } else if (option == CROSS_BORDER) {
+        this->map[this->ball.y][this->ball.x] = EMPTY;
         SIDE crossing_side = calcCrossingSide(pos);
         // Logic to send message to other side about ball crossing
     }
