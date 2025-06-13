@@ -60,7 +60,7 @@ void Gyro::update() {
         this->acc_y = this->getArrAvg(this->acc_y_arr);
         this->acc_z = this->getArrAvg(this->acc_z_arr);
     }
-
+ 
     // Decide which axis dominates
     if (abs(this->acc_x) > abs(this->acc_y)) {
       // Move along X
