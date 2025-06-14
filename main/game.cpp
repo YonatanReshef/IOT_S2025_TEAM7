@@ -181,78 +181,18 @@ void Game::preformMovement(MovementOption option, Position pos) {
 
 
 
-void Game::update() {
-    this->tick += 1;
+void Game::update(int dt) {
+    this->tick += dt;
 
     this->move_to_side = this->gyro.update(); // Update gyro data
 
     //update map and move_to_side here somehow
 
-    if(this->tick >= 100){
-        Serial.print("Cur loc is: ");
-        Serial.print(this->ball.x - 1);
-        Serial.print(" ");
-        Serial.println(this->ball.y - 1);
-        Serial.println("--------------------------------------");
-
-
-        Serial.print("Movement is to side: ");
-        if(this->move_to_side == Gyro::SIDE::DOWN){
-            Serial.println("DOWN");
-        }
-        if(this->move_to_side == Gyro::SIDE::UP){
-            Serial.println("UP");
-        }
-        if(this->move_to_side == Gyro::SIDE::LEFT){
-            Serial.println("LEFT");
-        }
-        if(this->move_to_side == Gyro::SIDE::RIGHT){
-            Serial.println("RIGHT");
-        }
-        if(this->move_to_side == Gyro::SIDE::STAY){
-            Serial.println("STAY");
-        }
-        Serial.println("--------------------------------");
+    if(this->tick >= 500){
 
         Position next_pos = calcNextPos();
 
-        Serial.print("Next loc is: ");
-        Serial.print(next_pos.x - 1);
-        Serial.print(" ");
-        Serial.println(next_pos.y - 1);
-        Serial.println("-------------------------");
-
-        
-        Serial.print("And it is: ");
-        if(this->map[next_pos.y][next_pos.x] == WALL){
-            Serial.println("WALL");
-        }
-        if(this->map[next_pos.y][next_pos.x] == BORDER){
-            Serial.println("BORDER");
-        }
-        if(this->map[next_pos.y][next_pos.x] == EMPTY){
-            Serial.println("EMPTY");
-        }
-        Serial.println("----------------------------");
-
-
         MovementOption option = checkPos(next_pos);
-
-        
-
-        Serial.print("Next pos Mov is: ");
-        if(option == MovementOption::VALID){
-            Serial.println("VALID");
-        }
-        if(option == MovementOption::HIT_WALL){
-            Serial.println("HIT WALL");
-        }
-        if(option == MovementOption::CROSS_BORDER){
-            Serial.println("CROSS BORDER");
-        }
-        Serial.println("------------------------------");
-
-        Serial.println("==========================================");
 
         preformMovement(option, next_pos);
         this->tick = 0;

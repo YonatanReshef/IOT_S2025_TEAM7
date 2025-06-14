@@ -68,20 +68,8 @@ public:
     ~Game() = default;
 
     void setup();
-    void update();
+    void update(int dt);
 };
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 #endif // GAME_H
