@@ -23,6 +23,7 @@ void ESPTransceiver::setup(){
         Serial.println("Failed to read MAC address");
     }
     esp_now_register_send_cb(onSendWrapper);
+    esp_now_register_recv_cb(onReceiveWrapper);
 
 }
 
@@ -139,9 +140,4 @@ void ESPTransceiver::onReceiveWrapper(const uint8_t* mac, const uint8_t* incomin
             Serial.println("Unknown message type received.");
             break;
     }
-}
-
-
-void ESPTransceiver::receive() {
-    esp_now_register_recv_cb(onReceiveWrapper));
 }
