@@ -1,4 +1,6 @@
 
+#ifndef CONFIG_H
+#define CONFIG_H
 // here define constants and pins
 
 // ==== optic comm pins ====
@@ -21,3 +23,13 @@
 // ==== LED matrix ====
 #define PIN_MAT_IN 0
 
+// ==== Buttons ====
+#define PIN_START_BTN 0
+
+
+// ==== Settings ====
+#define DELTA_TIME 10
+#define BRIGHTNESS 20
+
+
+#endif

@@ -3,11 +3,9 @@
 #include <Arduino.h>
 
 
-OpticTransceiver::OpticTransceiver(int sender_pin, int receiver_pin, int msg)
+OpticTransceiver::OpticTransceiver(int sender_pin, int receiver_pin)
   : trasmitter{sender_pin, 0}, receiver{receiver_pin, WAIT_PREAMBLE, 0, 0, 0, {0}, -1}, tick(0)
-{
-  setMessage(msg);
-}
+{}
 
 
 void OpticTransceiver::setMessage(int msg){
@@ -109,8 +107,9 @@ void OpticTransceiver::receiveLogic(){
   }
 }
 
-void OpticTransceiver::setup(){
+void OpticTransceiver::setup(int msg){
   pinMode(trasmitter.analogOutPin, OUTPUT);
+  setMessage(msg);
 }
 
 

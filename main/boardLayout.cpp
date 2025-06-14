@@ -66,20 +66,20 @@ static void printState(int my_side, int prev, int curr) {
 }
 
 
-BoardLayout::BoardLayout(int my_id)
+BoardLayout::BoardLayout()
     : transceivers{
-        OpticTransceiver(PIN_LED_OUT_L, PIN_RECVR_L, setData(my_id, SIDE::LEFT)),
-        OpticTransceiver(PIN_LED_OUT_R, PIN_RECVR_R, setData(my_id, SIDE::RIGHT)),
-        OpticTransceiver(PIN_LED_OUT_U, PIN_RECVR_U, setData(my_id, SIDE::UP)),
-        OpticTransceiver(PIN_LED_OUT_D, PIN_RECVR_D, setData(my_id, SIDE::DOWN))
+        OpticTransceiver(PIN_LED_OUT_L, PIN_RECVR_L),
+        OpticTransceiver(PIN_LED_OUT_R, PIN_RECVR_R),
+        OpticTransceiver(PIN_LED_OUT_U, PIN_RECVR_U),
+        OpticTransceiver(PIN_LED_OUT_D, PIN_RECVR_D)
     }, 
     connectorsStates{-1}
 {}
 
-void BoardLayout::setup()
+void BoardLayout::setup(int id)
 {
     for (size_t i = 0; i < NUM_SIDES; i++){
-        transceivers[i].setup();
+        transceivers[i].setup(setData(id, i));
     }
 }
 
@@ -101,4 +101,10 @@ int BoardLayout::getState(int my_side, int &other_side){
         getData(connectorsStates[i], id, other_side);
     }
     return id;
+}
+
+void BoardLayout::setMsgId(int id){
+    for (size_t i = 0; i < NUM_SIDES; i++){
+        transceivers[i].setMessage(setData(id, i));
+    }
 }

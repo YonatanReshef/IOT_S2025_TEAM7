@@ -1,10 +1,9 @@
 
+#include "config.h"
 #include "clock.h"
 #include "boardLayout.h"
 #include <Arduino.h>
 
-
-#define DELAY_TIME 10 
 
 namespace {
     Clock my_clock(DELAY_TIME);

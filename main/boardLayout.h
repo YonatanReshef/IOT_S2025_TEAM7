@@ -27,7 +27,7 @@ public:
        DOWN    = 3
    };
    
-   BoardLayout(int my_id);
+   BoardLayout();
    ~BoardLayout() = default;
    
     void setup();
@@ -37,6 +37,7 @@ public:
         Connection: returns id and sets other_side
     */
     int getState(int my_side, int &other_side);
+    void setMsgId(int id);
 };
 
 #endif
