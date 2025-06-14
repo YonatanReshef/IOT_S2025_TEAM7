@@ -1,24 +1,7 @@
 #include "game.h"
+#include "config.h"
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-void Game::setup() {
+void Game::setup(){
     /*
     Initialize the game setup here.
     Initialize:
@@ -27,17 +10,98 @@ void Game::setup() {
     ball
     */
 
-    this->ball = {-1, -1};
-    this->is_player_here = false;
-    for (int i = 0; i < 18; ++i) {
-        for (int j = 0; j < 18; ++j) {
-            this->map[i][j] = EMPTY;
+    this->ball = {7, 9};
+    this->is_player_here = true;
+
+
+    BlockType init_map[18][18] = {
+    {BORDER, BORDER, BORDER, BORDER, BORDER, BORDER, BORDER, BORDER, BORDER, BORDER, BORDER, BORDER, BORDER, BORDER, BORDER, BORDER, BORDER, BORDER},
+    {BORDER, EMPTY,  WALL,   EMPTY,  EMPTY,  WALL,   EMPTY,  EMPTY,  EMPTY,  WALL,   EMPTY,  EMPTY,  EMPTY,  WALL,   EMPTY,  EMPTY,  EMPTY,  BORDER},
+    {BORDER, EMPTY,  WALL,   EMPTY,  WALL,   WALL,   WALL,   EMPTY,  WALL,   WALL,   WALL,   EMPTY,  WALL,   WALL,   WALL,   EMPTY,  EMPTY,  BORDER},
+    {BORDER, EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  WALL,   EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  WALL,   EMPTY,  EMPTY,  BORDER},
+    {BORDER, WALL,   WALL,   WALL,   WALL,   WALL,   WALL,   EMPTY,  WALL,   WALL,   WALL,   WALL,   WALL,   EMPTY,  WALL,   WALL,   EMPTY,  BORDER},
+    {BORDER, EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  WALL,   EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  WALL,   EMPTY,  EMPTY,  WALL,   EMPTY,  BORDER},
+    {BORDER, WALL,   WALL,   WALL,   WALL,   EMPTY,  WALL,   WALL,   WALL,   WALL,   WALL,   EMPTY,  WALL,   WALL,   WALL,   WALL,   EMPTY,  BORDER},
+    {BORDER, EMPTY,  EMPTY,  EMPTY,  WALL,   EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  WALL,   EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  BORDER},
+    {BORDER, WALL,   WALL,   EMPTY,  WALL,   WALL,   WALL,   WALL,   WALL,   EMPTY,  WALL,   WALL,   WALL,   WALL,   WALL,   WALL,   EMPTY,  BORDER},
+    {BORDER, EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  BALL,   WALL,   EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  WALL,   EMPTY,  BORDER},
+    {BORDER, WALL,   WALL,   WALL,   WALL,   WALL,   EMPTY,  WALL,   WALL,   WALL,   WALL,   WALL,   WALL,   WALL,   EMPTY,  WALL,   EMPTY,  BORDER},
+    {BORDER, EMPTY,  EMPTY,  EMPTY,  EMPTY,  WALL,   EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  WALL,   EMPTY,  EMPTY,  EMPTY,  BORDER},
+    {BORDER, WALL,   WALL,   WALL,   EMPTY,  WALL,   WALL,   WALL,   WALL,   WALL,   WALL,   WALL,   EMPTY,  WALL,   WALL,   WALL,   WALL,   BORDER},
+    {BORDER, EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  FINISH, BORDER},
+    {BORDER, WALL,   WALL,   WALL,   WALL,   WALL,   WALL,   WALL,   WALL,   WALL,   WALL,   WALL,   WALL,   WALL,   WALL,   WALL,   WALL,   BORDER},
+    {BORDER, EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  BORDER},
+    {BORDER, EMPTY,  WALL,   WALL,   WALL,   WALL,   WALL,   WALL,   WALL,   WALL,   WALL,   WALL,   WALL,   WALL,   WALL,   WALL,   EMPTY,  BORDER},
+    {BORDER, BORDER, BORDER, BORDER, BORDER, BORDER, BORDER, BORDER, BORDER, BORDER, BORDER, BORDER, BORDER, BORDER, BORDER, BORDER, BORDER, BORDER}
+    };
+
+
+    for (int y = 0; y < 18; ++y) {
+        for (int x = 0; x < 18; ++x) {
+            this->map[y][x] = init_map[y][x];
         }
     }
+
+    uint32_t map_colors[256] = {
+    // row 1
+    0x000000, 0xFFFFFF, 0x000000, 0x000000, 0xFFFFFF, 0x000000, 0x000000, 0x000000,
+    0xFFFFFF, 0x000000, 0x000000, 0x000000, 0xFFFFFF, 0x000000, 0x000000, 0x000000,
+    // row 2
+    0x000000, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x000000, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF,
+    0xFFFFFF, 0xFFFFFF, 0x000000, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x000000, 0x000000,
+    // row 3
+    0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0xFFFFFF, 0x000000,
+    0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0xFFFFFF, 0x000000, 0x000000,
+    // row 4
+    0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x000000, 0xFFFFFF, 0xFFFFFF,
+    0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x000000, 0xFFFFFF, 0xFFFFFF, 0x000000, 0xFFFFFF,
+    // row 5
+    0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000,
+    0xFFFFFF, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0xFFFFFF, 0x000000,
+    // row 6
+    0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x000000, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF,
+    0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x000000, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF,
+    // row 7
+    0x000000, 0x000000, 0x000000, 0xFFFFFF, 0x000000, 0x000000, 0x000000, 0x000000,
+    0x000000, 0xFFFFFF, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000,
+    // row 8
+    0xFFFFFF, 0xFFFFFF, 0x000000, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF,
+    0x000000, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x000000,
+    // row 9
+    0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x00FF00, 0xFFFFFF,
+    0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0xFFFFFF, 0x000000,
+    // row 10
+    0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x000000, 0xFFFFFF, 0xFFFFFF,
+    0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x000000, 0xFFFFFF, 0x000000,
+    // row 11
+    0x000000, 0x000000, 0x000000, 0x000000, 0xFFFFFF, 0x000000, 0x000000, 0x000000,
+    0x000000, 0x000000, 0x000000, 0x000000, 0xFFFFFF, 0x000000, 0x000000, 0x000000,
+    // row 12
+    0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x000000, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF,
+    0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x000000, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF,
+    // row 13
+    0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000,
+    0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x0000FF, 0x000000,
+    // row 14
+    0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF,
+    0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF,
+    // row 15
+    0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000,
+    0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000,
+    // row 16
+    0x000000, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF,
+    0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x000000
+};
+
+
+    this->matrix.setup(); // Assuming LedMatrix has a setup method
+    this->matrix.setBoard(map_colors); // Set the initial board colors
+
+    this->gyro.setup(); // Assuming Gyro has a setup method
 }
 
 
-Position Game::calcNextPos() {
+Game::Position Game::calcNextPos() {
     // Calculate the next position of the ball based on the current gyro data
     // and return it as an array of two integers [x, y].
     Position next_pos;
@@ -45,13 +109,13 @@ Position Game::calcNextPos() {
     next_pos.y = this->ball.y;
 
     // Example logic for calculating next position
-    if (this->move_to_side == LEFT) {
+    if (this->move_to_side == Gyro::SIDE::LEFT) {
         next_pos.x -= 1;
-    } else if (this->move_to_side == RIGHT) {
+    } else if (this->move_to_side == Gyro::SIDE::RIGHT) {
         next_pos.x += 1;
-    } else if (this->move_to_side == UP) {
+    } else if (this->move_to_side == Gyro::SIDE::UP) {
         next_pos.y -= 1;
-    } else if (this->move_to_side == DOWN) {
+    } else if (this->move_to_side == Gyro::SIDE::DOWN) {
         next_pos.y += 1;
     }
 
@@ -60,7 +124,7 @@ Position Game::calcNextPos() {
 
 
 
-MovementOption Game::checkPos(Position pos) {
+Game::MovementOption Game::checkPos(Position pos) {
     // Check if the position is valid (within bounds and not a wall)
     if (pos.x < 0 || pos.x >= 18 || pos.y < 0 || pos.y >= 18) {
         return OUT_OF_BOUNDS; // Out of bounds
@@ -78,19 +142,19 @@ MovementOption Game::checkPos(Position pos) {
 }
 
 
-SIDE Game::calcCrossingSide(Position pos) {
+Gyro::SIDE Game::calcCrossingSide(Position pos) {
     // Determine which side the player is crossing based on the position
     if (pos.x == 0) {
-        return LEFT;
+        return Gyro::SIDE::LEFT;
     } else if (pos.x == 17) {
-        return RIGHT;
+        return Gyro::SIDE::RIGHT;
     } else if (pos.y == 0) {
-        return UP;
+        return Gyro::SIDE::UP;
     } else if (pos.y == 17) {
-        return DOWN;
+        return Gyro::SIDE::DOWN;
     }
     
-    return LEFT; // Default case, should not happen
+    return Gyro::SIDE::LEFT; // Default case, should not happen
 }
 
 
@@ -101,13 +165,15 @@ void Game::preformMovement(MovementOption option, Position pos) {
     
     if (option == VALID) {
         this->map[this->ball.y][this->ball.x] = EMPTY; 
-        this->ball = pos; 
-        this->map[pos.y][pos.x] = BALL;
+        this->matrix.setPixelColor(this->ball.x - 1, this->ball.y - 1, 0x000000); // Clear the old position
+        this->ball = pos;
+        this->map[this->ball.y][this->ball.x] = BALL;
+        this->matrix.setPixelColor(this->ball.x - 1, this->ball.y - 1, 0x00FF00); // Set the new position
 
         
     } else if (option == CROSS_BORDER) {
-        this->map[this->ball.y][this->ball.x] = EMPTY;
-        SIDE crossing_side = calcCrossingSide(pos);
+        //this->map[this->ball.y][this->ball.x] = EMPTY;
+        //SIDE crossing_side = calcCrossingSide(pos);
         // Logic to send message to other side about ball crossing
     }
 }
@@ -116,9 +182,84 @@ void Game::preformMovement(MovementOption option, Position pos) {
 
 
 void Game::update() {
+    this->tick += 1;
+
+    this->move_to_side = this->gyro.update(); // Update gyro data
+
     //update map and move_to_side here somehow
 
-    Position next_pos = calcNextPos();
-    MovementOption option = checkPos(next_pos);
+    if(this->tick >= 100){
+        Serial.print("Cur loc is: ");
+        Serial.print(this->ball.x - 1);
+        Serial.print(" ");
+        Serial.println(this->ball.y - 1);
+        Serial.println("--------------------------------------");
 
+
+        Serial.print("Movement is to side: ");
+        if(this->move_to_side == Gyro::SIDE::DOWN){
+            Serial.println("DOWN");
+        }
+        if(this->move_to_side == Gyro::SIDE::UP){
+            Serial.println("UP");
+        }
+        if(this->move_to_side == Gyro::SIDE::LEFT){
+            Serial.println("LEFT");
+        }
+        if(this->move_to_side == Gyro::SIDE::RIGHT){
+            Serial.println("RIGHT");
+        }
+        if(this->move_to_side == Gyro::SIDE::STAY){
+            Serial.println("STAY");
+        }
+        Serial.println("--------------------------------");
+
+        Position next_pos = calcNextPos();
+
+        Serial.print("Next loc is: ");
+        Serial.print(next_pos.x - 1);
+        Serial.print(" ");
+        Serial.println(next_pos.y - 1);
+        Serial.println("-------------------------");
+
+        
+        Serial.print("And it is: ");
+        if(this->map[next_pos.y][next_pos.x] == WALL){
+            Serial.println("WALL");
+        }
+        if(this->map[next_pos.y][next_pos.x] == BORDER){
+            Serial.println("BORDER");
+        }
+        if(this->map[next_pos.y][next_pos.x] == EMPTY){
+            Serial.println("EMPTY");
+        }
+        Serial.println("----------------------------");
+
+
+        MovementOption option = checkPos(next_pos);
+
+        
+
+        Serial.print("Next pos Mov is: ");
+        if(option == MovementOption::VALID){
+            Serial.println("VALID");
+        }
+        if(option == MovementOption::HIT_WALL){
+            Serial.println("HIT WALL");
+        }
+        if(option == MovementOption::CROSS_BORDER){
+            Serial.println("CROSS BORDER");
+        }
+        Serial.println("------------------------------");
+
+        Serial.println("==========================================");
+
+        preformMovement(option, next_pos);
+        this->tick = 0;
+    }
+}
+
+
+
+Game::Game(): tick(0), matrix(PIN_MAT_IN){
 }

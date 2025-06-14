@@ -48,7 +48,7 @@ bool Gyro::setup() {
 
 
 
-void Gyro::update() {
+Gyro::SIDE Gyro::update() {
     this->getGyroRead();
     this->updateArrays();
 
@@ -64,13 +64,15 @@ void Gyro::update() {
     // Decide which axis dominates
     if (abs(this->acc_x) > abs(this->acc_y)) {
       // Move along X
-      if (this->acc_x < -3) return RIGHT;
-      else if (this->acc_x > 3) return LEFT;
+      if (this->acc_x < -3) return SIDE::RIGHT;
+      else if (this->acc_x > 3) return SIDE::LEFT;
     } else {
       // Move along Y
-      if (this->acc_y > 3) return UP;
-      else if (this->acc_y < -3) return DOWN;
+      if (this->acc_y > 3) return SIDE::UP;
+      else if (this->acc_y < -3) return SIDE::DOWN;
     }
+
+    return SIDE::STAY;
 }
 
 

@@ -9,6 +9,7 @@ LedMatrix::LedMatrix(int pin)
 
 void LedMatrix::setup() {
     pixels.begin();
+    pixels.setBrightness(10);
     pixels.show();  // Turn off all pixels initially
 }
 
