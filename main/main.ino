@@ -10,7 +10,7 @@ namespace {
     Clock my_clock(DELAY_TIME);
     
     // temp
-    BoardLayout bl(0);
+    BoardLayout bl(0); // change to my id
 }
 
 void setup() {
