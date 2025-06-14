@@ -6,14 +6,6 @@
 #include <Wire.h>
 #include <Adafruit_NeoPixel.h>
 
-// Sides for movement
-enum SIDE {
-    LEFT,
-    RIGHT,
-    UP,
-    DOWN
-};
-
 
 
 class Gyro
@@ -39,7 +31,7 @@ private:
 
     
     // Get the average of an array
-    double getArrAvg(double* arr)
+    double getArrAvg(double* arr);
 
     // Put the next reading in the arrays
     void updateArrays();
@@ -51,12 +43,21 @@ public:
     Gyro();
     ~Gyro() = default;
 
+    // Sides for movement
+    enum SIDE {
+        LEFT,
+        RIGHT,
+        UP,
+        DOWN, 
+        STAY
+    };
+
 
     bool setup();
-    void update();
+    SIDE update();
 
     // Add any other necessary methods or members here
-}
+};
 
 
 

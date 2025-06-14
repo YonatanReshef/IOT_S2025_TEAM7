@@ -42,7 +42,6 @@ public:
     void setup();
 
     void send(int idReceiver, MessageType msgType, size_t msgSize, char* msg);
-    void receive();
 
     int getId(uint8_t mac[6]);
 

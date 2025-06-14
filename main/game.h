@@ -9,6 +9,8 @@ class Game
 {
 private:
 
+    int tick;
+
     /* ==== Movement Option ==== */
     enum MovementOption {
         VALID,
@@ -44,12 +46,18 @@ private:
     
     Position ball;
     bool is_player_here;
-    SIDE move_to_side;
+    Gyro::SIDE move_to_side;
+
+
+    /* ==== Gyro and Matrix ==== */
+    Gyro gyro;
+    LedMatrix matrix;
+
 
 
     /* ==== inner funcs ==== */
     Position calcNextPos();
-    SIDE calcCrossingSide(Position pos);
+    Gyro::SIDE calcCrossingSide(Position pos);
     MovementOption checkPos(Position pos);
     void preformMovement(MovementOption option, Position pos);
 
