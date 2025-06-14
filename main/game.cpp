@@ -201,5 +201,4 @@ void Game::update(int dt) {
 
 
 
-Game::Game(): tick(0), matrix(PIN_MAT_IN){
-}
+Game::Game(): tick(0), matrix(PIN_MAT_IN){}
