@@ -7,6 +7,7 @@
 
 #include <WiFi.h>
 #include <esp_wifi.h>
+#include <queue>
 
 class ESPTransceiver
 {
@@ -17,21 +18,35 @@ class ESPTransceiver
             {0xCC, 0xDB, 0xA7, 0x5A, 0x5B, 0x1C},
             {0xF4, 0x65, 0x0B, 0xE9, 0x5E, 0x34}
         };
+
         const int macCount = 3;
 
         const uint8_t broadcast[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+        const int broadcast_id = -1;
+
         uint8_t selfMac[6];
 
-        void send(int id, MessageType msgType, char* msg);
-        void receive(int id, MessageType msgType, char* msg);
+        std::queue<BallCrossingMessage> ballCrossingQueue;
+        std::queue<GameInitMessage> gameInitQueue;
+        std::queue<VictoryMessage> victoryQueue;
+        std::queue<ReadyInitMessage> readyInitQueue;
+        std::queue<ReadyConnectMessage> readyConnectQueue;
+        std::queue<AckMessage> ackQueue;
 
-        void onReceiveWrapper(const uint8_t* mac, const uint8_t* incomingData, int len);
         void onSendWrapper(const uint8_t* mac_addr, esp_now_send_status_t status);
+        void onReceiveWrapper(const uint8_t* mac, const uint8_t* incomingData, int len);
 
+        int getStructSize(MessageType msgType);
 
 public:
 
     void setup();
+
+    void send(int idReceiver, MessageType msgType, size_t msgSize, char* msg);
+    void receive();
+
+    int getId(uint8_t mac[6]);
+
     enum MessageType {
         BALL_CROSSING,
         GAME_INIT,
@@ -67,10 +82,6 @@ public:
     typedef struct {
         int no_need_yet;
     } AckMessage;
-
-
-
-
 
 };
 
