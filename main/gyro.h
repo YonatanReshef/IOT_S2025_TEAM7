@@ -52,7 +52,7 @@ public:
     ~Gyro() = default;
 
 
-    void setup();
+    bool setup();
     void update();
 
     // Add any other necessary methods or members here
