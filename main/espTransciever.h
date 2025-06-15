@@ -66,6 +66,8 @@ class ESPTransceiver
         std::queue<ReadyConnectMessage> readyConnectQueue;
         std::queue<AckMessage> ackQueue;
         //ADD ALIVE MESSAGE, AND CHANGE QUEUES TO TUPLES OF (MESSAGE,ID)
+        //ADD HERE A LIVE ARRAY AND A WAY TO TRACK THE LIVENESS OF ALL ESPS
+        //THAT ARRAY IS OF (IS_ALIVE, TIMEOUT)
 
         void onSendWrapper(const uint8_t* mac_addr, esp_now_send_status_t status);
         void onReceiveWrapper(const uint8_t* mac, const uint8_t* incomingData, int len);

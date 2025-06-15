@@ -19,6 +19,8 @@ public:
     int update(int dt);
     void setPixelColor(int x, int y, uint32_t color);
     void setBoard(uint32_t *colors);
+
+    //add an effect function
 };
 
 #endif

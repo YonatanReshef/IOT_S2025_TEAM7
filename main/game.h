@@ -62,6 +62,13 @@ public:
 
     void setup(Gyro* gyro, LedMatrix* matrix);
     void update(int dt);
+
+    //ADD FUNCTION TO ANNOUNCE END GAME
+
+    //ADD A INIT GAME FUNC (NUM_PLAYERS, MAP_ID)
+    //ADD A INNER RESET FUNCTION
+    //ADD IF ON IS_BALL_HERE
+    //FUNC TO CHECK IF BALL CROSSING TO ME (inner)
 };
 
 
