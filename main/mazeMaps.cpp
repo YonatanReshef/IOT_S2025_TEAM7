@@ -45,13 +45,7 @@ void MazeMaps::getMapPart(int num_screens, int map_id, int screen_id, BlockType 
             for (int j = 0; j < 16; ++j)
                 out_map[i + 1][j + 1] = maps_for_4[map_id][screen_id][i][j];
         break;
-    
-    case 5:
-        for (int i = 0; i < 16; ++i)
-            for (int j = 0; j < 16; ++j)
-                out_map[i + 1][j + 1] = maps_for_5[map_id][screen_id][i][j];
-        break;
-    
+
     default:
         break;
     }
@@ -133,17 +127,6 @@ void MazeMaps::fillBorder(int num_screens, int map_id, int other_screen_id, Boar
             }
             else{
                 other_border[i] = this->maps_for_4[map_id][other_screen_id][i][his_idx];
-            }
-        }
-        break;
-
-    case 5:
-        for(int i = 0; i < 16; i++){
-            if(his_row){
-                other_border[i] = this->maps_for_5[map_id][other_screen_id][his_idx][i];
-            }
-            else{
-                other_border[i] = this->maps_for_5[map_id][other_screen_id][i][his_idx];
             }
         }
         break;

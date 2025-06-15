@@ -3,8 +3,7 @@
 #include "config.h"
 
 Manager::Manager():id(-1), state(PRE_GAME), comm(), board_layout(), gyro(), matrix(PIN_MAT_IN), game(&gyro, &matrix)
-{
-}
+{}
 
 void Manager::setup(){
     

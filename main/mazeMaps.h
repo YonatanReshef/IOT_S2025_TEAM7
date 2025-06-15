@@ -7,24 +7,22 @@
 class MazeMaps{
 public:
     enum BlockType {
-            EMPTY,
-            WALL,
-            BALL,
-            FINISH,
-            BORDER
+            EMPTY = 0,
+            WALL = 1,
+            BALL = 2,
+            FINISH = 3,
+            BORDER = 4
     };
 
 private:
     
-    BlockType maps_for_1[2][1][16][16];
+    BlockType maps_for_1[1][1][16][16];
 
-    BlockType maps_for_2[2][2][16][16];
+    BlockType maps_for_2[1][2][16][16];
 
-    BlockType maps_for_3[2][3][16][16];
+    BlockType maps_for_3[1][3][16][16];
 
-    BlockType maps_for_4[2][4][16][16];
-
-    BlockType maps_for_5[2][5][16][16];
+    BlockType maps_for_4[1][4][16][16];
 
 
 public:
