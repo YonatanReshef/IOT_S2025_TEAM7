@@ -8,13 +8,13 @@
 #include <Arduino.h>
 
 const uint8_t ESPTransceiver::knownMacs[ESPTransceiver::macCount][6] = {
-    {0xB0, 0xA7, 0x32, 0xD7, 0x84, 0x3C},
-    {0xCC, 0xDB, 0xA7, 0x5A, 0x5B, 0x1C},
-    {0xF4, 0x65, 0x0B, 0xE9, 0x5E, 0x34}
+        {0xB0, 0xA7, 0x32, 0xD7, 0x84, 0x3C},
+        {0xCC, 0xDB, 0xA7, 0x5A, 0x5B, 0x1C},
+        {0xF4, 0x65, 0x0B, 0xE9, 0x5E, 0x34}
 };
 
 const uint8_t ESPTransceiver::broadcast[6] = {
-    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
 };
 
 // --- Singleton Accessor ---
@@ -36,7 +36,10 @@ ESPTransceiver::~ESPTransceiver() {
 void ESPTransceiver::setup() {
     WiFi.mode(WIFI_STA);
     WiFi.begin();  // Changed from WiFi.STA.begin() (which is not valid)
-
+    if (esp_now_init() != ESP_OK) {
+        Serial.println("Error initializing ESP-NOW");
+        return;
+    }
     esp_err_t ret = esp_wifi_get_mac(WIFI_IF_STA, selfMac);
     if (ret == ESP_OK) {
         Serial.printf("Self MAC: %02x:%02x:%02x:%02x:%02x:%02x\n",
@@ -73,10 +76,22 @@ void ESPTransceiver::send(int idReceiver, MessageType msgType, char* msg) {
     buffer[0] = static_cast<uint8_t>(msgType);
     memcpy(buffer + 1, msg, msgSize);
 
+    esp_now_peer_info_t peerInfo = {};
+    memcpy(peerInfo.peer_addr, mac, 6);
+    peerInfo.channel = 0;       // 0 means "current channel"
+    peerInfo.encrypt = false;   // true if using encryption
+
+    if (!esp_now_is_peer_exist(mac)) {
+        if (esp_now_add_peer(&peerInfo) != ESP_OK) {
+            Serial.println("Failed to add peer");
+            return;
+        }
+    }
+
     esp_err_t result = esp_now_send(mac, buffer, totalSize);
 
     if (result != ESP_OK) {
-        Serial.printf("Failed to send to ID %d\n", idReceiver);
+        Serial.printf("Failed to send to ID %d: %s (code: 0x%x)\n", idReceiver, esp_err_to_name(result), result);
     } else {
         Serial.printf("Sent message of type %d to ID %d\n", msgType, idReceiver);
     }
