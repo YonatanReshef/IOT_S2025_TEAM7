@@ -3,6 +3,7 @@
 
 #include "gyro.h"
 #include "ledMatrix.h"
+#include "mazeMaps.h"
 
 
 class Game
@@ -20,19 +21,8 @@ private:
     };
 
 
-
-    /* ==== Block type ==== */
-    enum BlockType {
-        EMPTY,
-        WALL,
-        BALL,
-        FINISH,
-        BORDER
-    };
-
-
     /* ==== Game map ==== */
-    BlockType map[18][18];
+    MazeMaps::BlockType map[18][18];
 
 
 
