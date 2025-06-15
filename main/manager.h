@@ -26,7 +26,6 @@ private:
 
     /* ==== components ==== */
     BoardLayout board_layout;
-    ESPTransceiver comm;
 
     Gyro gyro;
     LedMatrix matrix;

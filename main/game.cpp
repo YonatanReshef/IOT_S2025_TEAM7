@@ -1,12 +1,12 @@
 #include "game.h"
 #include "config.h"
+#include "espTransceiver.h"
 #include <tuple>
 
-void Game::setup(Gyro* gyro, LedMatrix* matrix, MazeMaps* maze_maps, ESPTransceiver* esp_tranceiver, BoardLayout* board_layout){
+void Game::setup(Gyro* gyro, LedMatrix* matrix, MazeMaps* maze_maps, BoardLayout* board_layout){
     this->gyro = gyro;
     this->matrix = matrix;
     this->maze_maps = maze_maps;
-    this->esp_tranceiver = esp_tranceiver;
     this->board_layout = board_layout;
 }
 
@@ -127,10 +127,10 @@ void Game::updateBallCrossing(BoardLayout::SIDE my_side, int my_idx){
 }
 
 void Game::handleBallCrossing(){
-    if (!this->esp_tranceiver->ballCrossingQueue.empty()) {
+    if (!ESPTransceiver::getInstance().ballCrossingQueue.empty()) {
         // Get the front tuple
-        auto frontTuple = this->esp_tranceiver->ballCrossingQueue.front();
-        this->esp_tranceiver->ballCrossingQueue.pop();
+        auto frontTuple = ESPTransceiver::getInstance().ballCrossingQueue.front();
+        ESPTransceiver::getInstance().ballCrossingQueue.pop();
 
         // Unpack the tuple
         ESPTransceiver::BallCrossingMessage msg;
@@ -170,7 +170,7 @@ void Game::performMovement(MovementOption option, Position pos) {
 
         ESPTransceiver::BallCrossingMessage msg_struct = {other_side, other_idx};
 
-        this->esp_tranceiver->send(id_receiver, ESPTransceiver::MessageType::BALL_CROSSING, (char*)msg_struct);
+        ESPTransceiver::getInstance().send(id_receiver, ESPTransceiver::MessageType::BALL_CROSSING, (char*)msg_struct);
 
         this->map[this->ball.y][this->ball.x] = MazeMaps::BlockType::EMPTY;
         this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, 0x000000); 

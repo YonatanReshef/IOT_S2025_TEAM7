@@ -12,6 +12,7 @@
         "xtr1common": "cpp",
         "vector": "cpp",
         "xstring": "cpp",
-        "xutility": "cpp"
+        "xutility": "cpp",
+        "queue": "cpp"
     }
 }
