@@ -11,7 +11,6 @@ private:
     /* 
     Order of sides:
         L, R, U, D
-
     */
    
    static const int NUM_SIDES = 4;

@@ -6,7 +6,8 @@
 #include "game.h"
 #include "gyro.h"
 #include "ledMatrix.h"
-// #include "game.h"
+#include "mazeMaps.h"
+#include "button.h"
 
 class Manager
 {
@@ -29,7 +30,9 @@ private:
 
     Gyro gyro;
     LedMatrix matrix;
+    Button button;
 
+    MazeMaps maze_maps;
     Game game;
     
 

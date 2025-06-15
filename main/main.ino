@@ -1,15 +1,13 @@
 
 #include "config.h"
 #include "clock.h"
-#include "boardLayout.h"
+#include "manager.h"
 #include <Arduino.h>
 
 
 namespace {
     Clock my_clock(DELAY_TIME);
-    
-    // temp
-    BoardLayout bl(0); // change to my id
+    Manager manager();
 }
 
 void setup() {
@@ -17,7 +15,7 @@ void setup() {
   sleep(1);
   
   // init all others
-  bl.setup();
+  manager.setup();
   
   sleep(1);
   Serial.println("Setup Success");
@@ -32,8 +30,5 @@ void loop() {
   LOOP LOGIC 
   use dt instead of tick
   */
-  bl.update(dt);
-  
-  // Serial.print("Loop!");
-  // Serial.println(dt);
+  manager.update(dt);
 }

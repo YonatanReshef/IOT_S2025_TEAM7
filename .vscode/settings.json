@@ -9,6 +9,9 @@
         "initializer_list": "cpp",
         "type_traits": "cpp",
         "utility": "cpp",
-        "xtr1common": "cpp"
+        "xtr1common": "cpp",
+        "vector": "cpp",
+        "xstring": "cpp",
+        "xutility": "cpp"
     }
 }
