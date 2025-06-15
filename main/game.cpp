@@ -14,7 +14,7 @@ void Game::setup(){
     this->is_player_here = true;
 
 
-    MazeMaps::BlockType map[18][18] = {
+    this->map =  {
     {MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER},
     {MazeMaps::BlockType::BORDER, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::BORDER},
     {MazeMaps::BlockType::BORDER, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::BORDER},
@@ -36,13 +36,8 @@ void Game::setup(){
     };
 
 
-    for (int y = 0; y < 18; ++y) {
-        for (int x = 0; x < 18; ++x) {
-            this->map[y][x] = init_map[y][x];
-        }
-    }
-
-    uint32_t map_colors[256] = {
+    uint32_t map_colors[256];
+    /*uint32_t map_colors[256] = {
     // row 1
     0x000000, 0xFFFFFF, 0x000000, 0x000000, 0xFFFFFF, 0x000000, 0x000000, 0x000000,
     0xFFFFFF, 0x000000, 0x000000, 0x000000, 0xFFFFFF, 0x000000, 0x000000, 0x000000,
@@ -91,13 +86,25 @@ void Game::setup(){
     // row 16
     0x000000, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF,
     0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x000000
-};
+};*/
+
+    for(int y=0; y<16; y++){
+    for(int x=0; x<16; x++){
+        MazeMaps::BlockType t = this->map[y+1][x+1];
+        map_colors[y*16 + x] =
+            (t == MazeMaps::BlockType::EMPTY)  ? 0x000000 :
+            (t == MazeMaps::BlockType::WALL)   ? 0xFFFFFF :
+            (t == MazeMaps::BlockType::BALL)   ? 0x00FF00 :
+            (t == MazeMaps::BlockType::FINISH) ? 0x0000FF :
+            /*BORDER*/                         //0x000000; // or border color
+    }
+    }
 
 
-    this->matrix.setup(); // Assuming LedMatrix has a setup method
-    this->matrix.setBoard(map_colors); // Set the initial board colors
+    this->matrix->setup(); // Assuming LedMatrix has a setup method
+    this->matrix->setBoard(map_colors); // Set the initial board colors
 
-    this->gyro.setup(); // Assuming Gyro has a setup method
+    this->gyro->setup(); // Assuming Gyro has a setup method
 }
 
 
@@ -165,10 +172,10 @@ void Game::preformMovement(MovementOption option, Position pos) {
     
     if (option == VALID) {
         this->map[this->ball.y][this->ball.x] = EMPTY; 
-        this->matrix.setPixelColor(this->ball.x - 1, this->ball.y - 1, 0x000000); // Clear the old position
+        this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, 0x000000); // Clear the old position
         this->ball = pos;
         this->map[this->ball.y][this->ball.x] = BALL;
-        this->matrix.setPixelColor(this->ball.x - 1, this->ball.y - 1, 0x00FF00); // Set the new position
+        this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, 0x00FF00); // Set the new position
 
         
     } else if (option == CROSS_BORDER) {
@@ -184,7 +191,7 @@ void Game::preformMovement(MovementOption option, Position pos) {
 void Game::update(int dt) {
     this->tick += dt;
 
-    this->move_to_side = this->gyro.update(); // Update gyro data
+    this->move_to_side = this->gyro->update(); // Update gyro data
 
     //update map and move_to_side here somehow
 
@@ -201,4 +208,5 @@ void Game::update(int dt) {
 
 
 
-Game::Game(): tick(0), matrix(PIN_MAT_IN){}
+Game::Game(Gyro* gyro, LedMatrix* matrix): tick(0), gyro(gyro), matrix(matrix){
+}

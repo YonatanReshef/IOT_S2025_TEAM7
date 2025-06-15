@@ -40,8 +40,8 @@ private:
 
 
     /* ==== Gyro and Matrix ==== */
-    Gyro gyro;
-    LedMatrix matrix;
+    Gyro* gyro;
+    LedMatrix* matrix;
 
 
 
@@ -54,7 +54,7 @@ private:
     void updateMatrix();
 
 public:
-    Game();
+    Game(Gyro* gyro, LedMatrix* matrix);
     ~Game() = default;
 
     void setup();

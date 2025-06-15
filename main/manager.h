@@ -1,6 +1,11 @@
+#ifndef MANAGER
+#define MANAGER
 
 #include "boardLayout.h"
 #include "espTransciever.h"
+#include "game.h"
+#include "gyro.h"
+#include "ledMatrix.h"
 // #include "game.h"
 
 class Manager
@@ -21,6 +26,11 @@ private:
     /* ==== components ==== */
     BoardLayout board_layout;
     ESPTransceiver comm;
+
+    Gyro gyro;
+    LedMatrix matrix;
+
+    Game game;
     
 
 public:
@@ -31,3 +41,5 @@ public:
     void update(int dt);
 };
 
+
+#endif
