@@ -55,7 +55,6 @@ class ESPTransceiver
         void setup();
 
         void send(int idReceiver, MessageType msgType, char* msg);
-        void receive();
 
         int getId(uint8_t mac[6]);
         int getMyId();
@@ -66,6 +65,7 @@ class ESPTransceiver
         std::queue<ReadyInitMessage> readyInitQueue;
         std::queue<ReadyConnectMessage> readyConnectQueue;
         std::queue<AckMessage> ackQueue;
+        //ADD ALIVE MESSAGE, AND CHANGE QUEUES TO TUPLES OF (MESSAGE,ID)
 
         void onSendWrapper(const uint8_t* mac_addr, esp_now_send_status_t status);
         void onReceiveWrapper(const uint8_t* mac, const uint8_t* incomingData, int len);
