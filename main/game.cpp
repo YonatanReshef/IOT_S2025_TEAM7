@@ -1,7 +1,7 @@
 #include "game.h"
 #include "config.h"
 
-void Game::setup(){
+void Game::setup(Gyro* gyro, LedMatrix* matrix){
     /*
     Initialize the game setup here.
     Initialize:
@@ -9,6 +9,9 @@ void Game::setup(){
     is_player_here
     ball
     */
+
+    this->gyro = gyro;
+    this->matrix = matrix;
 
     this->ball = {7, 9};
     this->is_player_here = true;
@@ -35,76 +38,14 @@ void Game::setup(){
     {MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER}
     };
 
-
-    uint32_t map_colors[256];
-    /*uint32_t map_colors[256] = {
-    // row 1
-    0x000000, 0xFFFFFF, 0x000000, 0x000000, 0xFFFFFF, 0x000000, 0x000000, 0x000000,
-    0xFFFFFF, 0x000000, 0x000000, 0x000000, 0xFFFFFF, 0x000000, 0x000000, 0x000000,
-    // row 2
-    0x000000, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x000000, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF,
-    0xFFFFFF, 0xFFFFFF, 0x000000, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x000000, 0x000000,
-    // row 3
-    0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0xFFFFFF, 0x000000,
-    0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0xFFFFFF, 0x000000, 0x000000,
-    // row 4
-    0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x000000, 0xFFFFFF, 0xFFFFFF,
-    0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x000000, 0xFFFFFF, 0xFFFFFF, 0x000000, 0xFFFFFF,
-    // row 5
-    0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000,
-    0xFFFFFF, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0xFFFFFF, 0x000000,
-    // row 6
-    0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x000000, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF,
-    0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x000000, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF,
-    // row 7
-    0x000000, 0x000000, 0x000000, 0xFFFFFF, 0x000000, 0x000000, 0x000000, 0x000000,
-    0x000000, 0xFFFFFF, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000,
-    // row 8
-    0xFFFFFF, 0xFFFFFF, 0x000000, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF,
-    0x000000, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x000000,
-    // row 9
-    0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x00FF00, 0xFFFFFF,
-    0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0xFFFFFF, 0x000000,
-    // row 10
-    0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x000000, 0xFFFFFF, 0xFFFFFF,
-    0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x000000, 0xFFFFFF, 0x000000,
-    // row 11
-    0x000000, 0x000000, 0x000000, 0x000000, 0xFFFFFF, 0x000000, 0x000000, 0x000000,
-    0x000000, 0x000000, 0x000000, 0x000000, 0xFFFFFF, 0x000000, 0x000000, 0x000000,
-    // row 12
-    0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x000000, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF,
-    0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x000000, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF,
-    // row 13
-    0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000,
-    0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x0000FF, 0x000000,
-    // row 14
-    0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF,
-    0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF,
-    // row 15
-    0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000,
-    0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000,
-    // row 16
-    0x000000, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF,
-    0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x000000
-};*/
-
     for(int y=0; y<16; y++){
-    for(int x=0; x<16; x++){
-        MazeMaps::BlockType t = this->map[y+1][x+1];
-        map_colors[y*16 + x] =
-            (t == MazeMaps::BlockType::EMPTY)  ? 0x000000 :
-            (t == MazeMaps::BlockType::WALL)   ? 0xFFFFFF :
-            (t == MazeMaps::BlockType::BALL)   ? 0x00FF00 :
-            (t == MazeMaps::BlockType::FINISH) ? 0x0000FF :
-            /*BORDER*/                         //0x000000; // or border color
-    }
+        for(int x=0; x<16; x++){
+            MazeMaps::BlockType t = this->map[y+1][x+1];
+            map_colors[y*16 + x] = this->colors[t];
+        }
     }
 
-
-    this->matrix->setup(); // Assuming LedMatrix has a setup method
     this->matrix->setBoard(map_colors); // Set the initial board colors
-
-    this->gyro->setup(); // Assuming Gyro has a setup method
 }
 
 
@@ -168,7 +109,7 @@ Gyro::SIDE Game::calcCrossingSide(Position pos) {
 
 
 // Perform the movement based on the option
-void Game::preformMovement(MovementOption option, Position pos) {
+void Game::performMovement(MovementOption option, Position pos) {
     
     if (option == VALID) {
         this->map[this->ball.y][this->ball.x] = EMPTY; 
@@ -201,12 +142,12 @@ void Game::update(int dt) {
 
         MovementOption option = checkPos(next_pos);
 
-        preformMovement(option, next_pos);
+        performMovement(option, next_pos);
         this->tick = 0;
     }
 }
 
 
 
-Game::Game(Gyro* gyro, LedMatrix* matrix): tick(0), gyro(gyro), matrix(matrix){
+Game::Game(): tick(0){
 }

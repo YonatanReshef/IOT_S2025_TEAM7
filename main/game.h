@@ -25,6 +25,9 @@ private:
     MazeMaps::BlockType map[18][18];
 
 
+    uint32_t colors[4] = {0x000000, 0xFFFFFF, 0x00FF00, 0x0000FF}
+
+
 
 
     /* ==== Player ==== */
@@ -49,15 +52,15 @@ private:
     Position calcNextPos();
     Gyro::SIDE calcCrossingSide(Position pos);
     MovementOption checkPos(Position pos);
-    void preformMovement(MovementOption option, Position pos);
+    void performMovement(MovementOption option, Position pos);
 
     void updateMatrix();
 
 public:
-    Game(Gyro* gyro, LedMatrix* matrix);
+    Game();
     ~Game() = default;
 
-    void setup();
+    void setup(Gyro* gyro, LedMatrix* matrix);
     void update(int dt);
 };
 
