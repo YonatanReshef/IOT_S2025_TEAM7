@@ -2,15 +2,15 @@
 // Created on 6/13/2025.
 //
 
-# include "espTransciever.h"
+# include "espTransceiver.h"
 #include <esp_wifi.h>
 #include <WiFi.h>
 #include <Arduino.h>
 
 const uint8_t ESPTransceiver::knownMacs[ESPTransceiver::macCount][6] = {
-    {0xB0, 0xA7, 0x32, 0xD7, 0x84, 0x3C},
-    {0xCC, 0xDB, 0xA7, 0x5A, 0x5B, 0x1C},
-    {0xF4, 0x65, 0x0B, 0xE9, 0x5E, 0x34}
+        {0xB0, 0xA7, 0x32, 0xD7, 0x84, 0x3C},
+        {0xCC, 0xDB, 0xA7, 0x5A, 0x5B, 0x1C},
+        {0xF4, 0x65, 0x0B, 0xE9, 0x5E, 0x34}
 };
 
 ESPTransceiver::ESPTransceiver() {
@@ -22,11 +22,6 @@ const uint8_t ESPTransceiver::broadcast[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
 
 ESPTransceiver::~ESPTransceiver() {
     Serial.println("ESPTransceiver Destructor Called");
-}
-
-void ESPTransceiver::onSendWrapper(const uint8_t* mac_addr, esp_now_send_status_t status) {
-    Serial.print("\r\nLast Packet Send Status:\t");
-    Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
 }
 
 
@@ -46,12 +41,11 @@ void ESPTransceiver::setup(){
 
     myId = getId(selfMac);
 
-    esp_now_register_send_cb(onSendWrapper);
     esp_now_register_recv_cb(onReceiveWrapper);
 
 }
 
-int ESPTransceiver::getId(uint8_t mac[6]) {
+int ESPTransceiver::getId(const uint8_t *mac) {
     for (int i = 0; i < macCount; i++) {
         if (memcmp(knownMacs[i], mac, 6) == 0) {
             return i;
@@ -62,7 +56,6 @@ int ESPTransceiver::getId(uint8_t mac[6]) {
 
 int ESPTransceiver::getStructSize(MessageType msgType){
     switch (msgType) {
-
         case BALL_CROSSING:
             return sizeof(BallCrossingMessage);
         case GAME_INIT:
@@ -75,7 +68,8 @@ int ESPTransceiver::getStructSize(MessageType msgType){
             return sizeof(ReadyConnectMessage);
         case ACK:
             return sizeof(AckMessage);
-
+        case LIVENESS:
+            return sizeof(LivenessMessage);
         default:
             return 0;
     }
@@ -118,53 +112,69 @@ void ESPTransceiver::onReceiveWrapper(const uint8_t* mac, const uint8_t* incomin
 
     MessageType msgType = static_cast<MessageType>(incomingData[0]);
     const uint8_t* payload = incomingData + 1;
+    int senderId = getId(mac);
 
     switch (msgType) {
         case BALL_CROSSING: {
-            if (len >= 1 + sizeof(BallCrossingMessage)) {
+            int size = getStructSize(BALL_CROSSING);
+            if (len >= 1 + size) {
                 BallCrossingMessage msg;
-                memcpy(&msg, payload, sizeof(BallCrossingMessage));
-                ballCrossingQueue.push(msg);
+                memcpy(&msg, payload, size);
+                ballCrossingQueue.push(std::make_tuple(msg, senderId));
             }
             break;
         }
         case GAME_INIT: {
-            if (len >= 1 + sizeof(GameInitMessage)) {
+            int size = getStructSize(GAME_INIT);
+            if (len >= 1 + size) {
                 GameInitMessage msg;
-                memcpy(&msg, payload, sizeof(GameInitMessage));
-                gameInitQueue.push(msg);
+                memcpy(&msg, payload, size);
+                gameInitQueue.push(std::make_tuple(msg, senderId));
             }
             break;
         }
         case VICTORY: {
-            if (len >= 1 + sizeof(VictoryMessage)) {
+            int size = getStructSize(VICTORY);
+            if (len >= 1 + size) {
                 VictoryMessage msg;
-                memcpy(&msg, payload, sizeof(VictoryMessage));
-                victoryQueue.push(msg);
+                memcpy(&msg, payload, size);
+                victoryQueue.push(std::make_tuple(msg, senderId));
             }
             break;
         }
         case READY_INIT: {
-            if (len >= 1 + sizeof(ReadyInitMessage)) {
+            int size = getStructSize(READY_INIT);
+            if (len >= 1 + size) {
                 ReadyInitMessage msg;
-                memcpy(&msg, payload, sizeof(ReadyInitMessage));
-                readyInitQueue.push(msg);
+                memcpy(&msg, payload, size);
+                readyInitQueue.push(std::make_tuple(msg, senderId));
             }
             break;
         }
         case READY_CONNECT: {
-            if (len >= 1 + sizeof(ReadyConnectMessage)) {
+            int size = getStructSize(READY_CONNECT);
+            if (len >= 1 + size) {
                 ReadyConnectMessage msg;
-                memcpy(&msg, payload, sizeof(ReadyConnectMessage));
-                readyConnectQueue.push(msg);
+                memcpy(&msg, payload, size);
+                readyConnectQueue.push(std::make_tuple(msg, senderId));
             }
             break;
         }
         case ACK: {
-            if (len >= 1 + sizeof(AckMessage)) {
+            int size = getStructSize(ACK);
+            if (len >= 1 + size) {
                 AckMessage msg;
-                memcpy(&msg, payload, sizeof(AckMessage));
-                ackQueue.push(msg);
+                memcpy(&msg, payload, size);
+                ackQueue.push(std::make_tuple(msg, senderId));
+            }
+            break;
+        }
+        case LIVENESS: {
+            int size = getStructSize(LIVENESS);
+            if (len >= 1 + size) {
+                LivenessMessage msg;
+                memcpy(&msg, payload, size);
+                livenessQueue.push(std::make_tuple(msg, senderId));
             }
             break;
         }
@@ -173,6 +183,7 @@ void ESPTransceiver::onReceiveWrapper(const uint8_t* mac, const uint8_t* incomin
             break;
     }
 }
+
 
 int ESPTransceiver::getMyId(){
     return myId;
