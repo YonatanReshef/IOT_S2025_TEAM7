@@ -6,6 +6,7 @@
 #include <esp_now.h>
 #include <queue>
 #include <tuple>
+#include <stdbool.h>
 
 class ESPTransceiver
 {
@@ -53,10 +54,13 @@ public:
     static ESPTransceiver& getInstance(); // Accessor for singleton instance
 
     void setup();
+    void update(int dt);
+
     void send(int idReceiver, MessageType msgType, char* msg);
     int getMyId();
     int getId(const uint8_t* mac);
     int getStructSize(MessageType msgType);
+    bool isAlive(int id);
     void onReceiveWrapper(const uint8_t* mac, const uint8_t* incomingData, int len);
 
     std::queue<std::tuple<BallCrossingMessage, int>> ballCrossingQueue;
@@ -78,9 +82,13 @@ private:
     static const uint8_t knownMacs[macCount][6];
     static const uint8_t broadcast[6];
     const int broadcast_id = -1;
-
+    static constexpr int liveness_send_delay = 2000;
+    static constexpr int timeout = liveness_send_delay * 3;
+    
     uint8_t selfMac[6];
     int myId;
+    int tick;
+    int timeoutVals[macCount] = {timeout};
 };
 
 #endif // IOT_S2025_TEAM7_ESPTRANSCEIVER_H

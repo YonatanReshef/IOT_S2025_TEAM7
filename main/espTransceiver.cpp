@@ -65,16 +65,19 @@ void ESPTransceiver::update(int dt){
     
     int id;
     LivenessMessage msg;
-    while(!ESPTransceiver::getInstance().livenessQueue.empty()){
-        std::tie(msg, id) = livenessQueue.pop();
+    while (!livenessQueue.empty()) {
+        auto [queuedMsg, queuedId] = livenessQueue.front();
+        livenessQueue.pop();
+        msg = queuedMsg;
+        id = queuedId;
         timeoutVals[id] = timeout;
     }
-    
+
     tick += dt;
-    if(tick > liveness_send_delay){
+    if (tick > liveness_send_delay) {
         tick = 0;
-        ESPTransceiver::LivenessMessage msg(1);
-        ESPTransceiver::getInstance().send(-1, ESPTransceiver::LIVENESS, (char *) msg);
+        LivenessMessage sendMsg = {1};  // requires ctor
+        send(-1, LIVENESS, reinterpret_cast<char*>(&sendMsg));
     }
 }
 

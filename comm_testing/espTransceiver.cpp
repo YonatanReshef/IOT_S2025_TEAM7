@@ -51,7 +51,36 @@ void ESPTransceiver::setup() {
     esp_now_register_recv_cb([](const uint8_t* mac, const uint8_t* data, int len) {
         ESPTransceiver::getInstance().onReceiveWrapper(mac, data, len);
     });
+    tick = 0;
 }
+
+void ESPTransceiver::update(int dt){
+
+    for(int i = 0; i < macCount; ++i){
+        timeoutVals[i] -= dt;
+        if(timeoutVals[i] < 0){
+            timeoutVals[i] = 0;
+        }
+    }
+    
+    int id;
+    LivenessMessage msg;
+    while (!livenessQueue.empty()) {
+        auto [queuedMsg, queuedId] = livenessQueue.front();
+        livenessQueue.pop();
+        msg = queuedMsg;
+        id = queuedId;
+        timeoutVals[id] = timeout;
+    }
+
+    tick += dt;
+    if (tick > liveness_send_delay) {
+        tick = 0;
+        LivenessMessage sendMsg = {1};  // requires ctor
+        send(-1, LIVENESS, reinterpret_cast<char*>(&sendMsg));
+    }
+}
+
 
 // --- Message Sending ---
 void ESPTransceiver::send(int idReceiver, MessageType msgType, char* msg) {
