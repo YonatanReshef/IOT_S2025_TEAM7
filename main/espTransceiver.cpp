@@ -84,6 +84,9 @@ void ESPTransceiver::update(int dt){
     }
 }
 
+bool ESPTransceiver::isAlive(int id){
+    return 0 != timeoutVals[id];
+}
 
 // --- Message Sending ---
 void ESPTransceiver::send(int idReceiver, MessageType msgType, char* msg) {
