@@ -4,6 +4,7 @@
 #include "gyro.h"
 #include "ledMatrix.h"
 #include "mazeMaps.h"
+#include "espTransciever.h"
 
 
 class Game
@@ -11,13 +12,15 @@ class Game
 private:
 
     int tick;
+    bool win;
 
     /* ==== Movement Option ==== */
     enum MovementOption {
         VALID,
         HIT_WALL,
         CROSS_BORDER,
-        OUT_OF_BOUNDS
+        OUT_OF_BOUNDS, 
+        WIN
     };
 
 
@@ -25,7 +28,7 @@ private:
     MazeMaps::BlockType map[18][18];
 
 
-    uint32_t colors[4] = {0x000000, 0xFFFFFF, 0x00FF00, 0x0000FF}
+    uint32_t colors[4] = {0x000000, 0xFFFFFF, 0x00FF00, 0x0000FF};
 
 
 
@@ -45,30 +48,39 @@ private:
     /* ==== Gyro and Matrix ==== */
     Gyro* gyro;
     LedMatrix* matrix;
+    MazeMaps* maze_maps;
+    ESPTransceiver* esp_tranceiver;
+    BoardLayout* board_layout;
 
 
 
     /* ==== inner funcs ==== */
     Position calcNextPos();
-    Gyro::SIDE calcCrossingSide(Position pos);
+    BoardLayout::SIDE calcCrossingSide(Position pos);
     MovementOption checkPos(Position pos);
     void performMovement(MovementOption option, Position pos);
+    void victory();
+    void checkBall();
+    void paintMatrix();
+
+    int calcOtherSideCrossingIdx(BoardLayout::SIDE other_side, BoardLayout::SIDE my_side, Position pos);
 
     void updateMatrix();
+
+    void handleBallCrossing();
+
+    void updateBallCrossing(BoardLayout::SIDE my_side, int my_idx);
 
 public:
     Game();
     ~Game() = default;
 
-    void setup(Gyro* gyro, LedMatrix* matrix);
+    void setup(Gyro* gyro, LedMatrix* matrix, MazeMaps* maze_maps, ESPTransceiver* esp_tranceiver, BoardLayout* board_layout);
     void update(int dt);
 
-    //ADD FUNCTION TO ANNOUNCE END GAME
+    void initGame(int map_id, int num_screens, int my_id);
 
-    //ADD A INIT GAME FUNC (NUM_PLAYERS, MAP_ID)
-    //ADD A INNER RESET FUNCTION
-    //ADD IF ON IS_BALL_HERE
-    //FUNC TO CHECK IF BALL CROSSING TO ME (inner)
+    bool isWin();
 };
 
 

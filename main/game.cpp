@@ -1,42 +1,25 @@
 #include "game.h"
 #include "config.h"
+#include <tuple>
 
-void Game::setup(Gyro* gyro, LedMatrix* matrix){
-    /*
-    Initialize the game setup here.
-    Initialize:
-    map
-    is_player_here
-    ball
-    */
-
+void Game::setup(Gyro* gyro, LedMatrix* matrix, MazeMaps* maze_maps, ESPTransceiver* esp_tranceiver, BoardLayout* board_layout){
     this->gyro = gyro;
     this->matrix = matrix;
+    this->maze_maps = maze_maps;
+    this->esp_tranceiver = esp_tranceiver;
+    this->board_layout = board_layout;
+}
 
-    this->ball = {7, 9};
-    this->is_player_here = true;
+void Game::initGame(int map_id, int num_screens, int my_id){
+    this->win = false;
+    this->maze_maps->getMapPart(num_screens, map_id, my_id, this->map);
+    checkBall();
 
+    paintMatrix();
+}
 
-    this->map =  {
-    {MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER},
-    {MazeMaps::BlockType::BORDER, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::BORDER},
-    {MazeMaps::BlockType::BORDER, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::BORDER},
-    {MazeMaps::BlockType::BORDER, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::BORDER},
-    {MazeMaps::BlockType::BORDER, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::BORDER},
-    {MazeMaps::BlockType::BORDER, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::BORDER},
-    {MazeMaps::BlockType::BORDER, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::BORDER},
-    {MazeMaps::BlockType::BORDER, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::BORDER},
-    {MazeMaps::BlockType::BORDER, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::BORDER},
-    {MazeMaps::BlockType::BORDER, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::BALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::BORDER},
-    {MazeMaps::BlockType::BORDER, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::BORDER},
-    {MazeMaps::BlockType::BORDER, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::BORDER},
-    {MazeMaps::BlockType::BORDER, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::BORDER},
-    {MazeMaps::BlockType::BORDER, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::FINISH, MazeMaps::BlockType::BORDER},
-    {MazeMaps::BlockType::BORDER, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::BORDER},
-    {MazeMaps::BlockType::BORDER, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::BORDER},
-    {MazeMaps::BlockType::BORDER, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::WALL, MazeMaps::BlockType::EMPTY, MazeMaps::BlockType::BORDER},
-    {MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER, MazeMaps::BlockType::BORDER}
-    };
+void Game::paintMatrix(){
+    uint32_t map_colors[256];
 
     for(int y=0; y<16; y++){
         for(int x=0; x<16; x++){
@@ -48,6 +31,20 @@ void Game::setup(Gyro* gyro, LedMatrix* matrix){
     this->matrix->setBoard(map_colors); // Set the initial board colors
 }
 
+void Game::checkBall(){
+    for(int y = 1; y <= 16; y++){
+        for(int x = 1; x <= 16; x++){
+            if(this->map[y][x] == MazeMaps::BlockType::BALL){
+                this->is_player_here = true;
+                this->ball = {x, y};
+                return;
+            }
+        }
+    }
+
+    this->is_player_here = false;
+    this->ball = {-1, -1};
+}
 
 Game::Position Game::calcNextPos() {
     // Calculate the next position of the ball based on the current gyro data
@@ -70,15 +67,13 @@ Game::Position Game::calcNextPos() {
     return next_pos;
 }
 
-
-
 Game::MovementOption Game::checkPos(Position pos) {
     // Check if the position is valid (within bounds and not a wall)
     if (pos.x < 0 || pos.x >= 18 || pos.y < 0 || pos.y >= 18) {
         return OUT_OF_BOUNDS; // Out of bounds
     }
 
-    if (this->map[pos.y][pos.x] == WALL || this->map[pos.y][pos.x] == BORDER) {
+    if (this->map[pos.y][pos.x] == MazeMaps::BlockType::WALL || this->map[pos.y][pos.x] == MazeMaps::BlockType::BORDER) {
         return HIT_WALL; // Hit a wall or border
     }
 
@@ -86,68 +81,226 @@ Game::MovementOption Game::checkPos(Position pos) {
         return CROSS_BORDER; // Crossed the finish line
     }
 
+    if(this->map[pos.y][pos.x] == MazeMaps::BlockType::FINISH){
+        return WIN;
+    }
+
     return VALID; // Valid position
 }
 
-
-Gyro::SIDE Game::calcCrossingSide(Position pos) {
+BoardLayout::SIDE Game::calcCrossingSide(Position pos) {
     // Determine which side the player is crossing based on the position
     if (pos.x == 0) {
-        return Gyro::SIDE::LEFT;
+        return BoardLayout::SIDE::LEFT;
     } else if (pos.x == 17) {
-        return Gyro::SIDE::RIGHT;
+        return BoardLayout::SIDE::RIGHT;
     } else if (pos.y == 0) {
-        return Gyro::SIDE::UP;
+        return BoardLayout::SIDE::UP;
     } else if (pos.y == 17) {
-        return Gyro::SIDE::DOWN;
+        return BoardLayout::SIDE::DOWN;
     }
     
-    return Gyro::SIDE::LEFT; // Default case, should not happen
+    return BoardLayout::SIDE::LEFT; // Default case, should not happen
 }
 
+void Game::updateBallCrossing(BoardLayout::SIDE my_side, int my_idx){
+    switch (my_side)
+    {
+    case BoardLayout::SIDE::DOWN:
+        this->ball = {my_idx, 16};
+        break;
+    case BoardLayout::SIDE::UP:
+        this->ball = {my_idx, 1};
+        break;
+    case BoardLayout::SIDE::LEFT:
+        this->ball = {1, my_idx};
+        break;
+    case BoardLayout::SIDE::RIGHT:
+        this->ball = {16, my_idx};
+        break;
+    
+    default:
+        break;
+    }
 
+    this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, this->colors[MazeMaps::BlockType::BALL]);
+}
 
+void Game::handleBallCrossing(){
+    if (!this->esp_tranceiver->ballCrossingQueue.empty()) {
+        // Get the front tuple
+        auto frontTuple = this->esp_tranceiver->ballCrossingQueue.front();
+        this->esp_tranceiver->ballCrossingQueue.pop();
+
+        // Unpack the tuple
+        ESPTransceiver::BallCrossingMessage msg;
+        int senderId;
+        std::tie(msg, senderId) = frontTuple;
+
+        BoardLayout::SIDE my_side = msg.side;
+        int my_idx = msg.idx;
+
+        updateBallCrossing(my_side, my_idx);
+    }
+}
 
 // Perform the movement based on the option
 void Game::performMovement(MovementOption option, Position pos) {
     
     if (option == VALID) {
-        this->map[this->ball.y][this->ball.x] = EMPTY; 
+        this->map[this->ball.y][this->ball.x] = MazeMaps::BlockType::EMPTY; 
         this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, 0x000000); // Clear the old position
         this->ball = pos;
-        this->map[this->ball.y][this->ball.x] = BALL;
+        this->map[this->ball.y][this->ball.x] = MazeMaps::BlockType::BALL;
         this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, 0x00FF00); // Set the new position
 
-        
+    } else if (option == WIN) {
+        this->map[this->ball.y][this->ball.x] = MazeMaps::BlockType::EMPTY; 
+        this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, 0x000000); // Clear the old position
+        this->ball = pos;
+
+        this->win = true;
+ 
     } else if (option == CROSS_BORDER) {
-        //this->map[this->ball.y][this->ball.x] = EMPTY;
-        //SIDE crossing_side = calcCrossingSide(pos);
-        // Logic to send message to other side about ball crossing
+        BoardLayout::SIDE crossing_side = calcCrossingSide(pos);
+        int other_side;
+        int id_receiver = this->board_layout->getState(crossing_side, other_side);
+
+        int other_idx = calcOtherSideCrossingIdx(other_side, crossing_side, pos);
+
+        ESPTransceiver::BallCrossingMessage msg_struct = {other_side, other_idx};
+
+        this->esp_tranceiver->send(id_receiver, ESPTransceiver::MessageType::BALL_CROSSING, (char*)msg_struct);
+
+        this->map[this->ball.y][this->ball.x] = MazeMaps::BlockType::EMPTY;
+        this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, 0x000000); 
+        this->is_player_here = false;
+        this->ball = {-1, -1};
     }
 }
 
+int Game::calcOtherSideCrossingIdx(BoardLayout::SIDE other_side, BoardLayout::SIDE my_side, Position pos){
+    int my_idx;
 
-
+    if(my_side == BoardLayout::SIDE::DOWN || my_side == BoardLayout::SIDE::UP){
+        my_idx = pos.x;
+    }
+    else{
+        my_idx = pos.y
+    }
+    
+    switch (my_side)
+    {
+    case BoardLayout::SIDE::DOWN:
+        switch (other_side)
+        {
+        case BoardLayout::SIDE::DOWN:
+            return 15 - my_idx;
+            break;
+        case BoardLayout::SIDE::UP:
+            return my_idx;
+            break;
+        case BoardLayout::SIDE::LEFT:
+            return 15 - my_idx;
+            break;
+        case BoardLayout::SIDE::RIGHT:
+            return my_idx;
+            break;
+        default:
+            break;
+        }
+        break;
+    
+    case BoardLayout::SIDE::UP:
+        switch (other_side)
+        {
+        case BoardLayout::SIDE::DOWN:
+            return my_idx;
+            break;
+        case BoardLayout::SIDE::UP:
+            return 15 - my_idx;
+            break;
+        case BoardLayout::SIDE::LEFT:
+            return my_idx;
+            break;
+        case BoardLayout::SIDE::RIGHT:
+            return 15 - my_idx;
+            break;
+        default:
+            break;
+        }
+        break;
+    
+    case BoardLayout::SIDE::LEFT:
+        switch (other_side)
+        {
+        case BoardLayout::SIDE::DOWN:
+            return 15 - my_idx;
+            break;
+        case BoardLayout::SIDE::UP:
+            return my_idx;
+            break;
+        case BoardLayout::SIDE::LEFT:
+            return 15 - my_idx;
+            break;
+        case BoardLayout::SIDE::RIGHT:
+            return my_idx;
+            break;
+        default:
+            break;
+        }
+        break;
+    
+    case BoardLayout::SIDE::RIGHT:
+        switch (other_side)
+        {
+        case BoardLayout::SIDE::DOWN:
+            return my_idx;
+            break;
+        case BoardLayout::SIDE::UP:
+            return 15 - my_idx;
+            break;
+        case BoardLayout::SIDE::LEFT:
+            return my_idx;
+            break;
+        case BoardLayout::SIDE::RIGHT:
+            return 15 - my_idx;
+            break;
+        default:
+            break;
+        }
+        break;
+    
+    default:
+        break;
+    }
+}
 
 void Game::update(int dt) {
     this->tick += dt;
 
-    this->move_to_side = this->gyro->update(); // Update gyro data
-
-    //update map and move_to_side here somehow
+    //CHECK THIS ALWAYS TRACKS!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    if(this->tick == 250){
+        handleBallCrossing();
+    }
 
     if(this->tick >= 500){
+        if(this->is_player_here){
+            this->move_to_side = this->gyro->getCurDir();
+            
+            Position next_pos = calcNextPos();
 
-        Position next_pos = calcNextPos();
+            MovementOption option = checkPos(next_pos);
 
-        MovementOption option = checkPos(next_pos);
+            performMovement(option, next_pos);
+        }
 
-        performMovement(option, next_pos);
         this->tick = 0;
     }
 }
 
-
-
-Game::Game(): tick(0){
+bool Game::isWin(){
+    return this->win;
 }
+
+Game::Game(): tick(0), win(false){}
