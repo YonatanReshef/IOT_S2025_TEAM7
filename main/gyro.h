@@ -10,6 +10,16 @@
 
 class Gyro
 {   
+public: 
+    // Sides for movement
+    enum SIDE {
+        LEFT,
+        RIGHT,
+        UP,
+        DOWN, 
+        STAY
+    };
+
 private:
     // MPU6050 object
     Adafruit_MPU6050 mpu;
@@ -27,7 +37,12 @@ private:
 
 
     // index in arrays for next reading
+    int tick;
     int reading_idx;
+
+    //curr_direction
+    SIDE curr_direction;
+
 
     
     // Get the average of an array
@@ -43,18 +58,11 @@ public:
     Gyro();
     ~Gyro() = default;
 
-    // Sides for movement
-    enum SIDE {
-        LEFT,
-        RIGHT,
-        UP,
-        DOWN, 
-        STAY
-    };
-
 
     bool setup();
-    SIDE update();
+    void update(int dt);
+
+    SIDE getCurDir();
     //MAKE UPDATE GET DT
     // Add any other necessary methods or members here
 };

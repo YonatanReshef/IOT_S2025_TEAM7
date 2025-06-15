@@ -1,24 +1,18 @@
 // Basic demo for accelerometer readings from Adafruit MPU6050
 #include "gyro.h"
 
-
-
 Gyro::Gyro(): acc_x_arr({0}), acc_y_arr({0}), acc_z_arr({0}),
-              acc_x(0), acc_y(0), acc_z(9.8), reading_idx(0){}
-
-
+              acc_x(0), acc_y(0), acc_z(9.8),tick(0), reading_idx(0), curr_direction(SIDE::STAY){}
 
 void Gyro::getGyroRead(){
   this->mpu.getEvent(&this->a, &this->g, &this->temp);
 }
-
 
 void Gyro::updateArrays(){
   this->acc_x_arr[this->reading_idx] = this->a.acceleration.x;
   this->acc_y_arr[this->reading_idx] = this->a.acceleration.y;
   this->acc_z_arr[this->reading_idx] = this->a.acceleration.z;
 }
-
 
 double Gyro::getArrAvg(double* arr){
     double sum = 0;
@@ -29,8 +23,6 @@ double Gyro::getArrAvg(double* arr){
     double average = sum / 10.0;
     return average;
 }
-
-
 
 bool Gyro::setup() {
   // Try to initialize!
@@ -46,33 +38,47 @@ bool Gyro::setup() {
   return false;
 }
 
+SIDE Gyro::getCurDir(){
+  return this->curr_direction;
+}
 
+void Gyro::update(int dt) {
+    this->tick += dt;
 
-Gyro::SIDE Gyro::update() {
-    this->getGyroRead();
-    this->updateArrays();
+    if(this->tick >= 300){
+      this->getGyroRead();
+      this->updateArrays();
 
-    this->reading_idx++;
+      this->reading_idx++;
 
-    if(this->reading_idx >= 10) {
-        this->reading_idx = 0;
-        this->acc_x = this->getArrAvg(this->acc_x_arr);
-        this->acc_y = this->getArrAvg(this->acc_y_arr);
-        this->acc_z = this->getArrAvg(this->acc_z_arr);
+      if(this->reading_idx >= 10) {
+          this->reading_idx = 0;
+          this->acc_x = this->getArrAvg(this->acc_x_arr);
+          this->acc_y = this->getArrAvg(this->acc_y_arr);
+          this->acc_z = this->getArrAvg(this->acc_z_arr);
+      
+      
+        // Decide which axis dominates
+        if (abs(this->acc_x) > abs(this->acc_y)) {
+          // Move along X
+          if (this->acc_x < -3){ 
+            this->curr_direction = SIDE::RIGHT;
+          }else if (this->acc_x > 3){ 
+            this->curr_direction = SIDE::LEFT;
+          }
+        } else {
+          // Move along Y
+          if (this->acc_y > 3){ 
+            this->curr_direction = SIDE::UP;
+          }
+          else if (this->acc_y < -3){ 
+            this->curr_direction = SIDE::DOWN;
+          }
+        }
+      }
+
+      this->tick = 0;
     }
- 
-    // Decide which axis dominates
-    if (abs(this->acc_x) > abs(this->acc_y)) {
-      // Move along X
-      if (this->acc_x < -3) return SIDE::RIGHT;
-      else if (this->acc_x > 3) return SIDE::LEFT;
-    } else {
-      // Move along Y
-      if (this->acc_y > 3) return SIDE::UP;
-      else if (this->acc_y < -3) return SIDE::DOWN;
-    }
-
-    return SIDE::STAY;
 }
 
 
