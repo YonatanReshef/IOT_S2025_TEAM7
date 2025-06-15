@@ -14,3 +14,9 @@ Another example:
 new entry in the mac_table was added / removed.
 
 *** use empty namespace or static for a global in a specific file.
+
+
+
+ADD A PREGAME OBJECT THAT HANDELS ALL PREGAME OPERATIONS (COMMS AND MATRIX)
+ADD A START BUTTON CLASS (???????????)
+

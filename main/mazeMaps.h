@@ -35,6 +35,8 @@ public:
 
     void fillBorder(int num_screens, int map_id, int other_screen_id, BoardLayout::SIDE my_side, BoardLayout::SIDE other_side, BlockType out_map[18][18]);
 
+    //IF WE SAVE TO FILE, ADD A LOAD
+    //GENERATE ~~~~~~~~~~
 
 };
 
