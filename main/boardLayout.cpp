@@ -97,8 +97,8 @@ void BoardLayout::update(int dt)
 
 int BoardLayout::getState(int my_side, int &other_side){
     int id = -1;
-    if(connectorsStates[i] != -1){
-        getData(connectorsStates[i], id, other_side);
+    if(connectorsStates[my_side] != -1){
+        getData(connectorsStates[my_side], id, other_side);
     }
     return id;
 }

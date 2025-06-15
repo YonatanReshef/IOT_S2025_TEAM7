@@ -30,7 +30,7 @@ public:
    BoardLayout();
    ~BoardLayout() = default;
    
-    void setup();
+    void setup(int id);
     void update(int dt);
     /*
         No connection: returns -1
