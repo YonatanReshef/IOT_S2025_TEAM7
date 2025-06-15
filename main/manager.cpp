@@ -2,8 +2,8 @@
 #include "manager.h"
 #include "config.h"
 
-Manager::Manager(): id(-1), state(PRE_GAME), 
-                    comm(), board_layout(), gyro(), matrix(PIN_MAT_IN), button(PIN_START_BTN),
+Manager::Manager(): id(-1), state(INIT_GAME), // TODO: change to PRE_GAME
+                    board_layout(), gyro(), matrix(PIN_MAT_IN), button(PIN_START_BTN),
                     maze_maps(), game()
 {}
 
@@ -22,7 +22,7 @@ void Manager::setup(){
     board_layout.setup(id);
 
     /* ==== game ==== */
-    game.setup(&gyro, &matrix, &maze_maps, &comm, &board_layout);
+    game.setup(&gyro, &matrix, &maze_maps, &board_layout);
 }
 
 void Manager::update(int dt){
@@ -35,7 +35,7 @@ void Manager::update(int dt){
     button.update(dt);
 
     // TODO:
-    comm.update(dt);
+    ESPTransceiver::update(dt);
 
     /* ==== State dependant logic ====*/
     
