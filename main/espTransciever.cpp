@@ -3,11 +3,32 @@
 //
 
 # include "espTransciever.h"
+#include <esp_wifi.h>
+#include <WiFi.h>
+#include <Arduino.h>
+
+const uint8_t ESPTransceiver::knownMacs[ESPTransceiver::macCount][6] = {
+    {0xB0, 0xA7, 0x32, 0xD7, 0x84, 0x3C},
+    {0xCC, 0xDB, 0xA7, 0x5A, 0x5B, 0x1C},
+    {0xF4, 0x65, 0x0B, 0xE9, 0x5E, 0x34}
+};
+
+ESPTransceiver::ESPTransceiver() {
+    Serial.println("ESPTransceiver Constructor Called");
+}
+
+const uint8_t ESPTransceiver::broadcast[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+
+
+ESPTransceiver::~ESPTransceiver() {
+    Serial.println("ESPTransceiver Destructor Called");
+}
 
 void ESPTransceiver::onSendWrapper(const uint8_t* mac_addr, esp_now_send_status_t status) {
     Serial.print("\r\nLast Packet Send Status:\t");
     Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
 }
+
 
 void ESPTransceiver::setup(){
 
@@ -17,11 +38,14 @@ void ESPTransceiver::setup(){
     esp_err_t ret = esp_wifi_get_mac(WIFI_IF_STA, this->selfMac);
     if (ret == ESP_OK) {
         Serial.printf("%02x:%02x:%02x:%02x:%02x:%02x\n",
-                      baseMac[0], baseMac[1], baseMac[2],
-                      baseMac[3], baseMac[4], baseMac[5]);
+                      selfMac[0], selfMac[1], selfMac[2],
+                      selfMac[3], selfMac[4], selfMac[5]);
     } else {
         Serial.println("Failed to read MAC address");
     }
+
+    myId = getId(selfMac);
+
     esp_now_register_send_cb(onSendWrapper);
     esp_now_register_recv_cb(onReceiveWrapper);
 
@@ -38,14 +62,23 @@ int ESPTransceiver::getId(uint8_t mac[6]) {
 
 int ESPTransceiver::getStructSize(MessageType msgType){
     switch (msgType) {
+
         case BALL_CROSSING:
-            return 4+4;
+            return sizeof(BallCrossingMessage);
         case GAME_INIT:
-            return 4+4*4;
+            return sizeof(GameInitMessage);
+        case VICTORY:
+            return sizeof(VictoryMessage);
+        case READY_INIT:
+            return sizeof(ReadyInitMessage);
+        case READY_CONNECT:
+            return sizeof(ReadyConnectMessage);
+        case ACK:
+            return sizeof(AckMessage);
+
         default:
             return 0;
     }
-
 }
 
 
@@ -69,7 +102,6 @@ void ESPTransceiver::send(int idReceiver, MessageType msgType, char* msg){
     buffer[0] = static_cast<uint8_t>(msgType);
     memcpy(buffer + 1, msg, msgSize);
 
-    const uint8_t* mac = knownMacs[idReceiver];
     esp_err_t result = esp_now_send(mac, buffer, totalSize);
 
     if (result != ESP_OK) {
@@ -140,4 +172,8 @@ void ESPTransceiver::onReceiveWrapper(const uint8_t* mac, const uint8_t* incomin
             Serial.println("Unknown message type received.");
             break;
     }
+}
+
+int ESPTransceiver::getMyId(){
+    return myId;
 }
