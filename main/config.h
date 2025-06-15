@@ -21,7 +21,7 @@
 #define PIN_GYRO_4 0
 
 // ==== LED matrix ====
-#define PIN_MAT_IN 0
+#define PIN_MAT_IN 14
 
 // ==== Buttons ====
 #define PIN_START_BTN 0

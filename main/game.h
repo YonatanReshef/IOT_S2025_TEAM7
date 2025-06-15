@@ -49,7 +49,6 @@ private:
     Gyro* gyro;
     LedMatrix* matrix;
     MazeMaps* maze_maps;
-    ESPTransceiver* esp_tranceiver;
     BoardLayout* board_layout;
 
 
@@ -75,7 +74,7 @@ public:
     Game();
     ~Game() = default;
 
-    void setup(Gyro* gyro, LedMatrix* matrix, MazeMaps* maze_maps, ESPTransceiver* esp_tranceiver, BoardLayout* board_layout);
+    void setup(Gyro* gyro, LedMatrix* matrix, MazeMaps* maze_maps, BoardLayout* board_layout);
     void update(int dt);
 
     void initGame(int map_id, int num_screens, int my_id);
