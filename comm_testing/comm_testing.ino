@@ -1,8 +1,6 @@
 
 #include <Arduino.h>
-#include "espTransciever.h"
-
-ESPTransceiver transceiver;
+#include "espTransceiver.h"
 
 
 void setup() {
@@ -10,7 +8,7 @@ void setup() {
     sleep(1);
 
     // init all others
-    transceiver.setup();
+    ESPTransceiver::getInstance().setup();
 
     sleep(1);
     Serial.println("Setup Success");
@@ -25,7 +23,7 @@ void loop() {
     msg.idx = 7;
 
     // Send it to device 0 (adjust if needed)
-    transceiver.send(0, ESPTransceiver::BALL_CROSSING, (char*)&msg);
+    ESPTransceiver::getInstance().send(0, ESPTransceiver::BALL_CROSSING, (char*)&msg);
 
     Serial.println("Test message sent.");
     delay(2000);
