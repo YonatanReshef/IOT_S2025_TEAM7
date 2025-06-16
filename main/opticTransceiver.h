@@ -61,11 +61,11 @@ class OpticTransceiver
 
   public:
   // 4-bit msg
-  OpticTransceiver(int sender_pin, int receveier_pin ,int msg);
+  OpticTransceiver(int sender_pin, int receveier_pin);
   ~OpticTransceiver() = default;
   
   void setMessage(int msg);
-  void setup();
+  void setup(int msg);
   int update(int dt);
 };
 

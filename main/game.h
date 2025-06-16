@@ -4,7 +4,7 @@
 #include "gyro.h"
 #include "ledMatrix.h"
 #include "mazeMaps.h"
-#include "espTransciever.h"
+#include "espTransceiver.h"
 
 
 class Game

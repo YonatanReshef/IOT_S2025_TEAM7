@@ -10,13 +10,13 @@ Manager::Manager(): id(-1), state(INIT_GAME), // TODO: change to PRE_GAME
 void Manager::setup(){
     
     /* ==== comm ==== */
-    ESPTransceiver::setup();
-    id = comm.getMyId();
+    ESPTransceiver::getInstance().setup();
+    id = ESPTransceiver::getInstance().getMyId();
     
     /* ==== HW ====*/
-    gyro.setup()
-    matrix.setup()
-    button.setup()
+    gyro.setup();
+    matrix.setup();
+    button.setup();
 
     /* ==== board_layout ==== */
     board_layout.setup(id);
@@ -35,7 +35,7 @@ void Manager::update(int dt){
     button.update(dt);
 
     // TODO:
-    ESPTransceiver::update(dt);
+    ESPTransceiver::getInstance().update(dt);
 
     /* ==== State dependant logic ====*/
     
@@ -60,8 +60,8 @@ void Manager::update(int dt){
         break;
     
     case GAME:
-        game.update();
-        if game.isWin(){
+        game.update(dt);
+        if(game.isWin()){
             state = END_GAME;
         }
         break;

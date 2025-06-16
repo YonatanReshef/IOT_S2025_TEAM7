@@ -38,7 +38,7 @@ bool Gyro::setup() {
   return false;
 }
 
-SIDE Gyro::getCurDir(){
+Gyro::SIDE Gyro::getCurDir(){
   return this->curr_direction;
 }
 

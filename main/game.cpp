@@ -170,7 +170,7 @@ void Game::performMovement(MovementOption option, Position pos) {
 
         ESPTransceiver::BallCrossingMessage msg_struct = {other_side, other_idx};
 
-        ESPTransceiver::getInstance().send(id_receiver, ESPTransceiver::MessageType::BALL_CROSSING, (char*)msg_struct);
+        ESPTransceiver::getInstance().send(id_receiver, ESPTransceiver::MessageType::BALL_CROSSING, (char*)&msg_struct);
 
         this->map[this->ball.y][this->ball.x] = MazeMaps::BlockType::EMPTY;
         this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, 0x000000); 
@@ -186,7 +186,7 @@ int Game::calcOtherSideCrossingIdx(BoardLayout::SIDE other_side, BoardLayout::SI
         my_idx = pos.x;
     }
     else{
-        my_idx = pos.y
+        my_idx = pos.y;
     }
     
     switch (my_side)
