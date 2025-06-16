@@ -95,10 +95,12 @@ void BoardLayout::update(int dt)
     }
 }
 
-int BoardLayout::getState(int my_side, int &other_side){
+int BoardLayout::getState(SIDE my_side, SIDE &other_side){
     int id = -1;
-    if(connectorsStates[my_side] != -1){
-        getData(connectorsStates[my_side], id, other_side);
+    int other_side_int;
+    if(connectorsStates[(int)my_side] != -1){
+        getData(connectorsStates[(int)my_side], id, other_side_int);
+        other_side = static_cast<SIDE>(other_side_int);
     }
     return id;
 }

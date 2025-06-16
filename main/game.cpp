@@ -163,7 +163,7 @@ void Game::performMovement(MovementOption option, Position pos) {
  
     } else if (option == CROSS_BORDER) {
         BoardLayout::SIDE crossing_side = calcCrossingSide(pos);
-        int other_side;
+        BoardLayout::SIDE other_side;
         int id_receiver = this->board_layout->getState(crossing_side, other_side);
 
         int other_idx = calcOtherSideCrossingIdx(other_side, crossing_side, pos);

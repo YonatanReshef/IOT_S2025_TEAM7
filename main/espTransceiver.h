@@ -7,6 +7,7 @@
 #include <queue>
 #include <tuple>
 #include <stdbool.h>
+#include "boardLayout.h"
 
 class ESPTransceiver
 {
@@ -22,7 +23,7 @@ public:
     };
 
     typedef struct {
-        int side;
+        BoardLayout::SIDE side;
         int idx;
     } BallCrossingMessage;
 

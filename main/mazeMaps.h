@@ -28,7 +28,7 @@ private:
 public:
 
     MazeMaps();
-    ~MazeMaps();
+    ~MazeMaps() = default;
 
 
     void getMapPart(int num_screens, int map_id, int screen_id, BlockType out_map[18][18]);

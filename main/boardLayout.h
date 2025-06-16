@@ -35,7 +35,7 @@ public:
         No connection: returns -1
         Connection: returns id and sets other_side
     */
-    int getState(int my_side, int &other_side);
+    int getState(SIDE my_side, SIDE &other_side);
     void setMsgId(int id);
 };
 
