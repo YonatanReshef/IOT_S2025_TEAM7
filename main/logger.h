@@ -10,30 +10,31 @@
 
 class Logger {
 public:
-    static Logger& getInstance(const std::string& filename = "log.txt");
+    static void setup(const std::string& filename);  // Call once at the beginning
+    static Logger& getInstance();
 
     void log(const std::string& message);
     void log(const char* message);
     bool isOpen() const;
 
 private:
-    Logger(const std::string& filename);
+    Logger() = default;
     ~Logger();
     Logger(const Logger&) = delete;
     Logger& operator=(const Logger&) = delete;
 
+    void openFile(const std::string& filename);
     std::ofstream logFile;
 };
 
 /*
  *  example of usage
     int main() {
-    Logger::getInstance("my_log.txt");  // First and only time you pass a filename
-    // From now on, just use Logger::getInstance().log(...)
+        Logger::setup("logfile.txt");
+        Logger::getInstance().log("Started program.");
+
+        return 0;
     }
-    ...
-    Logger::getInstance().log("This works anywhere");
-    ...
  */
 
 #endif //IOT_S2025_TEAM7_LOGGER_H
