@@ -25,4 +25,15 @@ private:
     std::ofstream logFile;
 };
 
+/*
+ *  example of usage
+    int main() {
+    Logger::getInstance("my_log.txt");  // First and only time you pass a filename
+    // From now on, just use Logger::getInstance().log(...)
+    }
+    ...
+    Logger::getInstance().log("This works anywhere");
+    ...
+ */
+
 #endif //IOT_S2025_TEAM7_LOGGER_H
