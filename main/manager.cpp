@@ -12,7 +12,8 @@ void Manager::setup(){
     /* ==== comm ==== */
     ESPTransceiver::getInstance().setup();
     id = ESPTransceiver::getInstance().getMyId();
-    
+    Serial.println(id);
+    id = 0;
     /* ==== HW ====*/
     gyro.setup();
     matrix.setup();
@@ -40,7 +41,7 @@ void Manager::update(int dt){
     /* ==== State dependant logic ====*/
     
     // Change according to liveness
-    int map_id = 1, num_screens = 1;
+    int map_id = 0, num_screens = 1;
 
     switch (state)
     {
@@ -50,6 +51,7 @@ void Manager::update(int dt){
         if(button.getClick()){
             //TODO: logic of starting a game
             state = PRE_GAME;
+            Serial.println("PRE -> INIT");
         }
         break;
     
@@ -57,19 +59,22 @@ void Manager::update(int dt){
         game.initGame(map_id, num_screens, this->id);
         // wait for successeful init
         state = GAME;
+        Serial.println("INIT -> GAME");
         break;
     
     case GAME:
         game.update(dt);
         if(game.isWin()){
             state = END_GAME;
+            Serial.println("GAME -> END");
         }
         break;
-    
-    case END_GAME:
+        
+        case END_GAME:
         /* code */
         // TODO: Display win msg
         state = PRE_GAME;
+        Serial.println("END -> PRE");
         break;
     }
 }

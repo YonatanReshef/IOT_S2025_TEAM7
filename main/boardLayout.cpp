@@ -80,6 +80,7 @@ void BoardLayout::setup(int id)
 {
     for (size_t i = 0; i < NUM_SIDES; i++){
         transceivers[i].setup(setData(id, i));
+        connectorsStates[i] = -1;
     }
 }
 

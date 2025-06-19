@@ -1,12 +1,66 @@
 #include "mazeMaps.h"
 
-MazeMaps::MazeMaps(){
-    //Initialize the different maps
+#include "mazeMaps.h"
+
+MazeMaps::MazeMaps() {
+    // ==== MAP 1: Single Board ====
+    for (int x = 0; x < 16; ++x)
+        for (int y = 0; y < 16; ++y)
+            maps_for_1[0][0][x][y] = EMPTY;
+
+    maps_for_1[0][0][0][0] = BALL;
+    maps_for_1[0][0][15][15] = FINISH;
+
+    for (int x = 1; x < 15; ++x)
+        maps_for_1[0][0][x][8] = WALL;
+
+    // ==== MAP 2: Two Boards ====
+    for (int s = 0; s < 2; ++s)
+        for (int x = 0; x < 16; ++x)
+            for (int y = 0; y < 16; ++y)
+                maps_for_2[0][s][x][y] = EMPTY;
+
+    maps_for_2[0][0][0][0] = BALL;
+    maps_for_2[0][1][15][15] = FINISH;
+
+    for (int y = 4; y < 12; ++y)
+        maps_for_2[0][0][8][y] = WALL;
+    for (int x = 4; x < 12; ++x)
+        maps_for_2[0][1][x][8] = WALL;
+
+    // ==== MAP 3: Three Boards ====
+    for (int s = 0; s < 3; ++s)
+        for (int x = 0; x < 16; ++x)
+            for (int y = 0; y < 16; ++y)
+                maps_for_3[0][s][x][y] = EMPTY;
+
+    maps_for_3[0][0][0][0] = BALL;
+    maps_for_3[0][2][15][15] = FINISH;
+
+    for (int x = 0; x < 16; ++x)
+        if (x % 2 == 0)
+            maps_for_3[0][1][x][7] = WALL;
+
+    // ==== MAP 4: Four Boards ====
+    for (int s = 0; s < 4; ++s)
+        for (int x = 0; x < 16; ++x)
+            for (int y = 0; y < 16; ++y)
+                maps_for_4[0][s][x][y] = EMPTY;
+
+    maps_for_4[0][0][0][0] = BALL;
+    maps_for_4[0][3][15][15] = FINISH;
+
+    // Zigzag walls across boards
+    for (int i = 0; i < 16; ++i)
+        if (i % 3 == 0) {
+            maps_for_4[0][1][i][i / 2] = WALL;
+            maps_for_4[0][2][15 - i][i / 2] = WALL;
+        }
 }
 
 
 void MazeMaps::getMapPart(int num_screens, int map_id, int screen_id, BlockType out_map[18][18]){
-     // Fill top and bottom rows with BORDER
+    // Fill top and bottom rows with BORDER
     for (int col = 0; col < 18; ++col) {
         out_map[0][col] = MazeMaps::BlockType::BORDER;       // top row
         out_map[17][col] = MazeMaps::BlockType::BORDER;      // bottom row

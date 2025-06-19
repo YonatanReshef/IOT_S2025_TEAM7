@@ -79,15 +79,15 @@ void OpticTransceiver::receiveLogic(){
           receiver.ticksOnPreamble = BIT_PERIOD_MS;
 
           int stop_bit = bit;
-          Serial.print("[PIN ");
-          Serial.print(receiver.analogInPin);
-          Serial.print("] Received: ");
-          for (int i = 0; i < MESSAGE_SIZE; ++i) {
-            Serial.print(receiver.received_data[i]);
-          }
-          Serial.println();
+          // Serial.print("[PIN ");
+          // Serial.print(receiver.analogInPin);
+          // Serial.print("] Received: ");
+          // for (int i = 0; i < MESSAGE_SIZE; ++i) {
+          //   Serial.print(receiver.received_data[i]);
+          // }
+          // Serial.println();
           if (stop_bit == 1) {
-            Serial.println("Valid.");
+            // Serial.println("Valid.");
 
             // build msg:
             receiver.msg = 0;
@@ -97,10 +97,10 @@ void OpticTransceiver::receiveLogic(){
             //===========
 
           } else {
-            Serial.println("Invalid message: missing stop bit.");
+            // Serial.println("Invalid message: missing stop bit.");
             receiver.msg = -1;
           }
-          Serial.println("===========");
+          // Serial.println("===========");
         }
       }
       break;

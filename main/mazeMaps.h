@@ -16,6 +16,8 @@ public:
 
 private:
     
+    /* name[num_of_maps][num_of_boards][board_widht][board_height]*/
+
     BlockType maps_for_1[1][1][16][16];
 
     BlockType maps_for_2[1][2][16][16];

@@ -1,8 +1,9 @@
 // Basic demo for accelerometer readings from Adafruit MPU6050
 #include "gyro.h"
+#include "config.h"
 
 Gyro::Gyro(): acc_x_arr({0}), acc_y_arr({0}), acc_z_arr({0}),
-              acc_x(0), acc_y(0), acc_z(9.8),tick(0), reading_idx(0), curr_direction(SIDE::STAY){}
+              acc_x(0), acc_y(0), acc_z(9.8),tick(0), reading_idx(0), curr_direction(SIDE::STAY), wire(0){}
 
 void Gyro::getGyroRead(){
   this->mpu.getEvent(&this->a, &this->g, &this->temp);
@@ -25,8 +26,11 @@ double Gyro::getArrAvg(double* arr){
 }
 
 bool Gyro::setup() {
+
+  wire.begin(PIN_GYRO_SDA, PIN_GYRO_SCL);
+
   // Try to initialize!
-  while (!this->mpu.begin()) {
+  while (!mpu.begin(0x68, &wire)) {
     Serial.println("Failed to find MPU6050 chip");
     return false;
   }

@@ -43,6 +43,7 @@ private:
     //curr_direction
     SIDE curr_direction;
 
+    TwoWire wire;
 
     
     // Get the average of an array
