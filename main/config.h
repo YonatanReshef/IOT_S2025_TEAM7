@@ -22,7 +22,7 @@
 #define PIN_MAT_IN 27
 
 // ==== Buttons ====
-#define PIN_START_BTN 4 //temp
+#define PIN_START_BTN 4
 
 
 // ==== Settings ====
