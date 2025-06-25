@@ -5,7 +5,7 @@
 
 Manager::Manager(): id(-1), state(PRE_GAME), // TODO: change to PRE_GAME
                     board_layout(), gyro(), matrix(PIN_MAT_IN), button(PIN_START_BTN),
-                    maze_maps(), game()
+                    maze_maps(), pre_game(), game()
 {}
 
 
@@ -63,6 +63,7 @@ void Manager::setup(){
     board_layout.setup(id);
 
     /* ==== game ==== */
+    pre_game.setup(&matrix);
     game.setup(&gyro, &matrix, &maze_maps, &board_layout);
 }
 
@@ -88,11 +89,11 @@ void Manager::update(int dt){
     case PRE_GAME:
         /* code */
         // TODO: pre-game logic
+        pre_game.update(dt);
         if(pre_game.shouldStart(map_id, participating_mask)){
             state = INIT_GAME;
             Serial.println("PRE -> INIT");
         }
-        
         break;
     
     case INIT_GAME:
@@ -113,6 +114,7 @@ void Manager::update(int dt){
         case END_GAME:
         /* code */
         // TODO: Display win msg
+        // TODO: reset pregame, game, msg queues...
         state = PRE_GAME;
         Serial.println("END -> PRE");
         break;

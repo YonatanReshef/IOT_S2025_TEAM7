@@ -4,6 +4,7 @@
 #include "boardLayout.h"
 #include "espTransceiver.h"
 #include "game.h"
+#include "preGame.h"
 #include "gyro.h"
 #include "ledMatrix.h"
 #include "mazeMaps.h"
@@ -32,6 +33,7 @@ private:
     Button button;
 
     MazeMaps maze_maps;
+    PreGame pre_game;
     Game game;
 
 
