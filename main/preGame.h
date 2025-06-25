@@ -3,13 +3,21 @@
 #define PREGAME
 
 #include "ledMatrix.h"
+#include <cstdlib>
+#include <cstdint>
 
 class PreGame
 {
-    private:
+private:
     /* data */
+    LedMatrix* led_matrix;
+    int m_participating_mask;
+    int m_map_id;
+    bool m_should_start;
 
-    public:
+    uint8_t brightness[16][16]; // Per-pixel brightness (0–255)
+
+public:
     PreGame();
     ~PreGame() = default;
 

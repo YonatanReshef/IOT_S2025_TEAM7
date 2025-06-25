@@ -28,24 +28,6 @@ int Manager::generateMapId(){
     return time % maze_maps.num_maps;
 }
 
-int Manager::sendStartMessages(){
-    int participating_mask = ESPTransceiver::getInstance().getParticipatingMask();
-    int map_id = generateMapId();
-
-    int player_id = 0;
-    int players_mask = participating_mask;
-    while (players_mask) {
-        if (players_mask & 1) {
-            ESPTransceiver::GameInitMessage msg_struct = {map_id, participating_mask};
-            ESPTransceiver::getInstance().send(player_id, ESPTransceiver::MessageType::GAME_INIT, (char*)&msg_struct);
-        }
-        players_mask >>= 1; // move to next bit
-        ++player_id;
-    }
-
-    return participating_mask;
-}
-
 void Manager::setup(){
     
     /* ==== comm ==== */
