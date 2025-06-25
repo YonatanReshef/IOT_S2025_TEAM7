@@ -10,12 +10,55 @@ void Game::setup(Gyro* gyro, LedMatrix* matrix, MazeMaps* maze_maps, BoardLayout
     this->board_layout = board_layout;
 }
 
-void Game::initGame(int map_id, int num_screens, int my_id){
+void Game::initGame(int participating_mask, int map_id){
+    this->participating_mask = participating_mask;
+    int game_id = getGameId();
+    int num_screens = getNumParicipating();
+
     this->win = false;
-    this->maze_maps->getMapPart(num_screens, map_id, my_id, this->map);
+    this->maze_maps->getMapPart(num_screens, map_id, game_id, this->map);
     checkBall();
 
     paintMatrix();
+}
+
+
+int Game::getNumParticipating(){
+    int num_participating = 0;
+    int player_mask = this->participating_mask;
+
+    while (players_mask) {
+        if (players_mask & 1) {
+            num_participating += 1;
+        }
+        players_mask >>= 1; // move to next bit
+    }
+
+    return num_participating;
+}
+
+
+
+int Game::getGameId(){
+    int my_id = ESPTransceiver::getInstance().getMyId();
+
+    int player_index = 0;
+    int game_id = 0;
+    int player_mask = this->participating_mask;
+    while (players_mask) {
+        if(player_index == my_id){
+            break;
+        }
+
+        if (players_mask & 1) {
+            game_id += 1;
+        }
+
+        players_mask >>= 1; // move to next bit
+        ++player_index;
+    }
+
+    return game_id;
 }
 
 void Game::paintMatrix(){
