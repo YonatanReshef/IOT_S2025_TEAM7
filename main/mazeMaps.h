@@ -18,13 +18,13 @@ private:
     
     /* name[num_of_maps][num_of_boards][board_widht][board_height]*/
 
-    BlockType maps_for_1[1][1][16][16];
+    BlockType maps_for_1[2][1][16][16];
 
-    BlockType maps_for_2[1][2][16][16];
+    BlockType maps_for_2[2][2][16][16];
 
-    BlockType maps_for_3[1][3][16][16];
+    BlockType maps_for_3[2][3][16][16];
 
-    BlockType maps_for_4[1][4][16][16];
+    BlockType maps_for_4[2][4][16][16];
 
 
 public:
@@ -39,6 +39,9 @@ public:
 
     //IF WE SAVE TO FILE, ADD A LOAD
     //GENERATE ~~~~~~~~~~
+
+    //num maps for each num of screens
+    int num_maps = 2;
 
 };
 

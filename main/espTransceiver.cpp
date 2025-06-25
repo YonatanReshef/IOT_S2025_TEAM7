@@ -58,6 +58,19 @@ void ESPTransceiver::setup() {
     tick = 0;
 }
 
+
+int ESPTransceiver::getParticipatingMask(){
+    int participating_mask = 0;
+
+    for(int i = 0; i < macCount; i++){
+        if(isAlive(i)){
+            participating_mask |= (1 << i);
+        }
+    }
+
+    return participating_mask;
+}
+
 void ESPTransceiver::update(int dt){
 
     for(int i = 0; i < macCount; ++i){

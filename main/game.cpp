@@ -13,7 +13,7 @@ void Game::setup(Gyro* gyro, LedMatrix* matrix, MazeMaps* maze_maps, BoardLayout
 void Game::initGame(int participating_mask, int map_id){
     this->participating_mask = participating_mask;
     int game_id = getGameId();
-    int num_screens = getNumParicipating();
+    int num_screens = getNumParticipating();
 
     this->win = false;
     this->maze_maps->getMapPart(num_screens, map_id, game_id, this->map);
@@ -25,7 +25,7 @@ void Game::initGame(int participating_mask, int map_id){
 
 int Game::getNumParticipating(){
     int num_participating = 0;
-    int player_mask = this->participating_mask;
+    int players_mask = this->participating_mask;
 
     while (players_mask) {
         if (players_mask & 1) {
@@ -44,7 +44,7 @@ int Game::getGameId(){
 
     int player_index = 0;
     int game_id = 0;
-    int player_mask = this->participating_mask;
+    int players_mask = this->participating_mask;
     while (players_mask) {
         if(player_index == my_id){
             break;
