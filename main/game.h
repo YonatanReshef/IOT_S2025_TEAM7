@@ -79,6 +79,8 @@ private:
 
     int getNumParticipating();
 
+    void checkWin();
+
 public:
     Game();
     ~Game() = default;

@@ -189,6 +189,17 @@ void Game::handleBallCrossing(){
     }
 }
 
+
+void Game::checkWin(){
+    if (!ESPTransceiver::getInstance().victoryQueue.empty()) {
+        // Get the front tuple
+        auto frontTuple = ESPTransceiver::getInstance().victoryQueue.front();
+        ESPTransceiver::getInstance().victoryQueue.pop();
+
+        this->win = true;
+    }
+}
+
 // Perform the movement based on the option
 void Game::performMovement(MovementOption option, Position pos) {
     
@@ -341,6 +352,9 @@ void Game::update(int dt) {
             MovementOption option = checkPos(next_pos);
 
             performMovement(option, next_pos);
+        }
+        else{
+            checkWin();
         }
 
         this->tick = 0;
