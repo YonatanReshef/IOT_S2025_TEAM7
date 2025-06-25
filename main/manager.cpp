@@ -92,7 +92,6 @@ void Manager::update(int dt){
 
         game.update(dt);
         if(game.isWin()){
-            game.sendWinMessages();
             state = END_GAME;
             Serial.println("GAME -> END");
         }
