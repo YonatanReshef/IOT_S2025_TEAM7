@@ -1,11 +1,50 @@
 
 #include "manager.h"
 #include "config.h"
+#include <random>
 
 Manager::Manager(): id(-1), state(INIT_GAME), // TODO: change to PRE_GAME
                     board_layout(), gyro(), matrix(PIN_MAT_IN), button(PIN_START_BTN),
                     maze_maps(), game()
 {}
+
+
+int Manager::getNumParticipating(int paricipating_mask){
+    int num_participating = 0;
+
+    while (paricipating_mask) {
+        if (paricipating_mask & 1) {
+            num_participating += 1;
+        }
+        paricipating_mask >>= 1; // move to next bit
+    }
+
+    return num_participating;
+}
+
+int Manager::generateMapId(int num_participating){
+    int time = milis();
+
+    return time % maze_maps.num_maps;
+}
+
+int Manager::sendStartMessages(){
+    int participating_mask = ESPTransceiver::getInstance().getParticipatingMask();
+    int map_id = generateMapId();
+
+    int player_id = 0;
+    int players_mask = participating_mask;
+    while (players_mask) {
+        if (players_mask & 1) {
+            ESPTransceiver::GameInitMessage msg_struct = {map_id, participating_mask};
+            ESPTransceiver::getInstance().send(player_id, ESPTransceiver::MessageType::GameInitMessage, (char*)&msg_struct);
+        }
+        players_mask >>= 1; // move to next bit
+        ++player_id;
+    }
+
+    return participating_mask;
+}
 
 void Manager::setup(){
     
@@ -42,7 +81,7 @@ void Manager::update(int dt){
     /* ==== State dependant logic ====*/
     
     // Change according to liveness
-    int map_id = 0, participating_mask = 1;
+    int map_id = 0, participating_mask = 0;
 
     switch (state)
     {
@@ -50,8 +89,8 @@ void Manager::update(int dt){
         /* code */
         // TODO: pre-game logic
         if(button.getClick()){
-            //TODO: logic of starting a game
-            state = PRE_GAME;
+            participating_mask = sendStartMessages();
+            state = INIT_GAME;
             Serial.println("PRE -> INIT");
         }
         break;

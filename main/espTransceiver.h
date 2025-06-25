@@ -28,8 +28,8 @@ public:
     } BallCrossingMessage;
 
     typedef struct {
-        int game_idx;
-        int perp_mat[4];
+        int map_id;
+        int participating_mask;
     } GameInitMessage;
 
     typedef struct {
@@ -63,6 +63,7 @@ public:
     int getStructSize(MessageType msgType);
     bool isAlive(int id);
     void onReceiveWrapper(const uint8_t* mac, const uint8_t* incomingData, int len);
+    int getMacCount();
 
     std::queue<std::tuple<BallCrossingMessage, int>> ballCrossingQueue;
     std::queue<std::tuple<GameInitMessage, int>> gameInitQueue;

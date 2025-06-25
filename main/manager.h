@@ -33,6 +33,12 @@ private:
 
     MazeMaps maze_maps;
     Game game;
+
+
+    /*==== FUNCS ==========*/
+    int getParticipatingMask();
+    int getNumParticipating(int paricipating_mask);
+    int generateMapId(int num_participating);
     
 
 public:
