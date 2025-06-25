@@ -3,7 +3,7 @@
 #include "config.h"
 #include <random>
 
-Manager::Manager(): id(-1), state(INIT_GAME), // TODO: change to PRE_GAME
+Manager::Manager(): id(-1), state(PRE_GAME), // TODO: change to PRE_GAME
                     board_layout(), gyro(), matrix(PIN_MAT_IN), button(PIN_START_BTN),
                     maze_maps(), game()
 {}
@@ -88,11 +88,11 @@ void Manager::update(int dt){
     case PRE_GAME:
         /* code */
         // TODO: pre-game logic
-        if(button.getClick()){
-            participating_mask = sendStartMessages();
+        if(pre_game.shouldStart(map_id, participating_mask)){
             state = INIT_GAME;
             Serial.println("PRE -> INIT");
         }
+        
         break;
     
     case INIT_GAME:
