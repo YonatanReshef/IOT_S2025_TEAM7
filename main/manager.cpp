@@ -31,7 +31,7 @@ void Manager::setup(){
     id = ESPTransceiver::getInstance().getMyId();
     Serial.print("id: ");
     Serial.println(id);
-    id = 0; // TODO: temp, change this
+    // id = 0; // TODO: temp, change this
     /* ==== HW ====*/
     gyro.setup();
     matrix.setup();
@@ -41,7 +41,7 @@ void Manager::setup(){
     board_layout.setup(id);
 
     /* ==== game ==== */
-    pre_game.setup(&matrix);
+    pre_game.setup(&matrix, &maze_maps, &button);
     game.setup(&gyro, &matrix, &maze_maps, &board_layout);
 }
 
@@ -68,13 +68,16 @@ void Manager::update(int dt){
         /* code */
         // TODO: pre-game logic
         pre_game.update(dt);
-        if(pre_game.shouldStart(map_id, participating_mask)){
+        if(pre_game.shouldStart(participating_mask, map_id)){
             state = INIT_GAME;
             Serial.println("PRE -> INIT");
         }
         break;
     
     case INIT_GAME:
+        pre_game.shouldStart(participating_mask, map_id);
+        Serial.println(map_id);
+        Serial.println(participating_mask);
         game.initGame(participating_mask, map_id);
         // wait for successeful init
         state = GAME;
@@ -95,7 +98,7 @@ void Manager::update(int dt){
         }
         break;
         
-        case END_GAME:
+    case END_GAME:
         /* code */
         // TODO: Display win msg
         // TODO: reset pregame, game, msg queues...

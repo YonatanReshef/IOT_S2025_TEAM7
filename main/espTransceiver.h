@@ -19,7 +19,8 @@ public:
         READY_INIT,
         READY_CONNECT,
         ACK,
-        LIVENESS
+        LIVENESS,
+        GAME_REQUEST
     };
 
     typedef struct {
@@ -51,6 +52,10 @@ public:
     typedef struct {
         int status;
     } LivenessMessage;
+    
+    typedef struct {
+        int status;
+    } GameRequestMessage;
 
     static ESPTransceiver& getInstance(); // Accessor for singleton instance
 
@@ -72,6 +77,7 @@ public:
     std::queue<std::tuple<ReadyConnectMessage, int>> readyConnectQueue;
     std::queue<std::tuple<AckMessage, int>> ackQueue;
     std::queue<std::tuple<LivenessMessage, int>> livenessQueue;
+    std::queue<std::tuple<GameRequestMessage, int>> gameRequestQueue;
 
 private:
     ESPTransceiver();                             // Private constructor
