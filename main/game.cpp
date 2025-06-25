@@ -218,6 +218,8 @@ void Game::performMovement(MovementOption option, Position pos) {
         this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, 0x000000); // Clear the old position
         this->ball = pos;
 
+        sendWinMessages();
+
         this->win = true;
  
     } else if (option == CROSS_BORDER) {
