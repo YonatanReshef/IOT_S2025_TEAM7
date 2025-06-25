@@ -9,23 +9,19 @@ Manager::Manager(): id(-1), state(PRE_GAME), // TODO: change to PRE_GAME
 {}
 
 
-int Manager::getNumParticipating(int paricipating_mask){
-    int num_participating = 0;
-
-    while (paricipating_mask) {
-        if (paricipating_mask & 1) {
-            num_participating += 1;
+bool Manager::isParticipatingAlive(int participating_mask){
+    int player_id = 0;
+    while (participating_mask) {
+        if (participating_mask & 1) {
+            if(!ESPTransceiver::getInstance().isAlive(player_id)){
+                return false;
+            }
         }
-        paricipating_mask >>= 1; // move to next bit
+        participating_mask >>= 1; // move to next bit
+        ++player_id;
     }
 
-    return num_participating;
-}
-
-int Manager::generateMapId(){
-    int time = millis();
-
-    return time % maze_maps.num_maps;
+    return true;
 }
 
 void Manager::setup(){
@@ -86,8 +82,14 @@ void Manager::update(int dt){
         break;
     
     case GAME:
+        if(!isParticipatingAlive(participating_mask)){
+            state = END_GAME;
+            break;
+        }
+
         game.update(dt);
         if(game.isWin()){
+            game.sendWinMessages();
             state = END_GAME;
             Serial.println("GAME -> END");
         }

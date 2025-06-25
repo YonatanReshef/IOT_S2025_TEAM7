@@ -79,6 +79,8 @@ private:
 
     int getNumParticipating();
 
+    void checkWin();
+
 public:
     Game();
     ~Game() = default;
@@ -89,6 +91,8 @@ public:
     void initGame(int participating, int map_id);
 
     bool isWin();
+
+    void sendWinMessages()
 };
 
 

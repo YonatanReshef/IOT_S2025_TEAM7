@@ -189,6 +189,17 @@ void Game::handleBallCrossing(){
     }
 }
 
+
+void Game::checkWin(){
+    if (!ESPTransceiver::getInstance().victoryQueue.empty()) {
+        // Get the front tuple
+        auto frontTuple = ESPTransceiver::getInstance().victoryQueue.front();
+        ESPTransceiver::getInstance().victoryQueue.pop();
+
+        this->win = true;
+    }
+}
+
 // Perform the movement based on the option
 void Game::performMovement(MovementOption option, Position pos) {
     
@@ -342,8 +353,26 @@ void Game::update(int dt) {
 
             performMovement(option, next_pos);
         }
+        else{
+            checkWin();
+        }
 
         this->tick = 0;
+    }
+}
+
+
+void Game::sendWinMessages(){
+
+    int player_id = 0;
+    int players_mask = this->participating_mask;
+    while (players_mask) {
+        if (players_mask & 1) {
+            ESPTransceiver::VictoryMessage msg_struct = {0};
+            ESPTransceiver::getInstance().send(player_id, ESPTransceiver::MessageType::VICTORY, (char*)&msg_struct);
+        }
+        players_mask >>= 1; // move to next bit
+        ++player_id;
     }
 }
 

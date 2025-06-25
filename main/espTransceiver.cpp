@@ -60,10 +60,11 @@ void ESPTransceiver::setup() {
 
 
 int ESPTransceiver::getParticipatingMask(){
+    int my_id = getMyId();
     int participating_mask = 0;
 
     for(int i = 0; i < macCount; i++){
-        if(isAlive(i)){
+        if(isAlive(i) && (i != my_id)){
             participating_mask |= (1 << i);
         }
     }
@@ -89,6 +90,9 @@ void ESPTransceiver::update(int dt){
         id = queuedId;
         timeoutVals[id] = timeout;
     }
+
+    int my_id = getMyId();
+    timeoutVals[my_id] = timeout;
 
     tick += dt;
     if (tick > liveness_send_delay) {
