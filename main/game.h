@@ -31,6 +31,11 @@ private:
     uint32_t colors[4] = {0x000000, 0xFFFFFF, 0x00FF00, 0x0000FF};
 
 
+    /*===== Participating =======*/
+
+    int participating_mask;
+
+
 
 
     /* ==== Player ==== */
@@ -70,6 +75,10 @@ private:
 
     void updateBallCrossing(BoardLayout::SIDE my_side, int my_idx);
 
+    int getGameId();
+
+    int getNumParticipating();
+
 public:
     Game();
     ~Game() = default;
@@ -77,7 +86,7 @@ public:
     void setup(Gyro* gyro, LedMatrix* matrix, MazeMaps* maze_maps, BoardLayout* board_layout);
     void update(int dt);
 
-    void initGame(int map_id, int num_screens, int my_id);
+    void initGame(int participating, int map_id);
 
     bool isWin();
 };

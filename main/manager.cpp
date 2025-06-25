@@ -42,7 +42,7 @@ void Manager::update(int dt){
     /* ==== State dependant logic ====*/
     
     // Change according to liveness
-    int map_id = 0, num_screens = 1;
+    int map_id = 0, participating_mask = 1;
 
     switch (state)
     {
@@ -57,7 +57,7 @@ void Manager::update(int dt){
         break;
     
     case INIT_GAME:
-        game.initGame(map_id, num_screens, this->id);
+        game.initGame(participating_mask, map_id);
         // wait for successeful init
         state = GAME;
         Serial.println("INIT -> GAME");
