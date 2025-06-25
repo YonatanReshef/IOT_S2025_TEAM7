@@ -49,7 +49,7 @@ Gyro::SIDE Gyro::getCurDir(){
 void Gyro::update(int dt) {
     this->tick += dt;
 
-    if(this->tick >= 300){
+    if(this->tick >= 50){
       this->getGyroRead();
       this->updateArrays();
 

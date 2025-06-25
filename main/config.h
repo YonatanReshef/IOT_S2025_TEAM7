@@ -19,7 +19,7 @@
 #define PIN_GYRO_SCL 22 // can switch to 19
 
 // ==== LED matrix ====
-#define PIN_MAT_IN 14
+#define PIN_MAT_IN 27
 
 // ==== Buttons ====
 #define PIN_START_BTN 4 //temp

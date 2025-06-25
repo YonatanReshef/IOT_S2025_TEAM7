@@ -12,8 +12,9 @@ void Manager::setup(){
     /* ==== comm ==== */
     ESPTransceiver::getInstance().setup();
     id = ESPTransceiver::getInstance().getMyId();
+    Serial.print("id: ");
     Serial.println(id);
-    id = 0;
+    id = 0; // TODO: temp, change this
     /* ==== HW ====*/
     gyro.setup();
     matrix.setup();

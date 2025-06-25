@@ -24,10 +24,12 @@ void Game::paintMatrix(){
     for(int y=0; y<16; y++){
         for(int x=0; x<16; x++){
             MazeMaps::BlockType t = this->map[y+1][x+1];
+            Serial.print(t);
+            Serial.print(" ");
             map_colors[y*16 + x] = this->colors[t];
         }
     }
-
+    Serial.println("");
     this->matrix->setBoard(map_colors); // Set the initial board colors
 }
 
@@ -284,7 +286,7 @@ void Game::update(int dt) {
         handleBallCrossing();
     }
 
-    if(this->tick >= 500){
+    if(this->tick >= 250){
         if(this->is_player_here){
             this->move_to_side = this->gyro->getCurDir();
             

@@ -79,7 +79,7 @@ private:
     ESPTransceiver(const ESPTransceiver&) = delete;             // Disable copy constructor
     ESPTransceiver& operator=(const ESPTransceiver&) = delete;  // Disable assignment
 
-    static constexpr int macCount = 3;
+    static constexpr int macCount = 4;
     static const uint8_t knownMacs[macCount][6];
     static const uint8_t broadcast[6];
     const int broadcast_id = -1;

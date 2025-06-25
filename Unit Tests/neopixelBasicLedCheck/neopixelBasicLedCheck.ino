@@ -8,7 +8,7 @@
 #endif
 
 // Constants
-#define PIN        12
+#define PIN        27
 #define NUMPIXELS 256
 #define BRIGHTNESS 20 
 #define DELAYVAL 50 // Time (in milliseconds) to pause between pixels
