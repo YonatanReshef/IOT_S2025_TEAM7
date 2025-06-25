@@ -22,8 +22,8 @@ int Manager::getNumParticipating(int paricipating_mask){
     return num_participating;
 }
 
-int Manager::generateMapId(int num_participating){
-    int time = milis();
+int Manager::generateMapId(){
+    int time = millis();
 
     return time % maze_maps.num_maps;
 }
@@ -37,7 +37,7 @@ int Manager::sendStartMessages(){
     while (players_mask) {
         if (players_mask & 1) {
             ESPTransceiver::GameInitMessage msg_struct = {map_id, participating_mask};
-            ESPTransceiver::getInstance().send(player_id, ESPTransceiver::MessageType::GameInitMessage, (char*)&msg_struct);
+            ESPTransceiver::getInstance().send(player_id, ESPTransceiver::MessageType::GAME_INIT, (char*)&msg_struct);
         }
         players_mask >>= 1; // move to next bit
         ++player_id;

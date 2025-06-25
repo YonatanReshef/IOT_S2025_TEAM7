@@ -63,7 +63,7 @@ public:
     int getStructSize(MessageType msgType);
     bool isAlive(int id);
     void onReceiveWrapper(const uint8_t* mac, const uint8_t* incomingData, int len);
-    int getMacCount();
+    int getParticipatingMask();
 
     std::queue<std::tuple<BallCrossingMessage, int>> ballCrossingQueue;
     std::queue<std::tuple<GameInitMessage, int>> gameInitQueue;

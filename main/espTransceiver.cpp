@@ -64,7 +64,7 @@ int ESPTransceiver::getParticipatingMask(){
 
     for(int i = 0; i < macCount; i++){
         if(isAlive(i)){
-            players_mask |= (1 << i);
+            participating_mask |= (1 << i);
         }
     }
 

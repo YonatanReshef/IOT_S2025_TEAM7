@@ -36,9 +36,9 @@ private:
 
 
     /*==== FUNCS ==========*/
-    int getParticipatingMask();
     int getNumParticipating(int paricipating_mask);
-    int generateMapId(int num_participating);
+    int generateMapId();
+    int sendStartMessages();
     
 
 public:
