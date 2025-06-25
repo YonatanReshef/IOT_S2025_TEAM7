@@ -347,6 +347,21 @@ void Game::update(int dt) {
     }
 }
 
+
+void Game::sendWinMessages(){
+
+    int player_id = 0;
+    int players_mask = this->participating_mask;
+    while (players_mask) {
+        if (players_mask & 1) {
+            ESPTransceiver::VictoryMessage msg_struct = {0};
+            ESPTransceiver::getInstance().send(player_id, ESPTransceiver::MessageType::VICTORY, (char*)&msg_struct);
+        }
+        players_mask >>= 1; // move to next bit
+        ++player_id;
+    }
+}
+
 bool Game::isWin(){
     return this->win;
 }

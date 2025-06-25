@@ -89,6 +89,8 @@ public:
     void initGame(int participating, int map_id);
 
     bool isWin();
+
+    void sendWinMessages()
 };
 
 
