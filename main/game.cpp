@@ -148,6 +148,9 @@ void Game::handleBallCrossing(){
 void Game::performMovement(MovementOption option, Position pos) {
     
     if (option == VALID) {
+        if(this->ball.x == pos.x && this->ball.y == pos.y){
+            return;
+        }
         this->map[this->ball.y][this->ball.x] = MazeMaps::BlockType::EMPTY; 
         this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, 0x000000); // Clear the old position
         this->ball = pos;
