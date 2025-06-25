@@ -70,6 +70,9 @@ void Gyro::update(int dt) {
           }else if (this->acc_x > 3){ 
             this->curr_direction = SIDE::LEFT;
           }
+          else{
+            this->curr_direction = SIDE::STAY;
+          }
         } else {
           // Move along Y
           if (this->acc_y > 3){ 
@@ -77,6 +80,9 @@ void Gyro::update(int dt) {
           }
           else if (this->acc_y < -3){ 
             this->curr_direction = SIDE::DOWN;
+          }
+          else{
+            this->curr_direction = SIDE::STAY;
           }
         }
       }
