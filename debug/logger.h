@@ -6,33 +6,48 @@
 #define IOT_S2025_TEAM7_LOGGER_H
 
 #include <string>
-#include <fstream>
+#include <iostream>
 
 class Logger {
 public:
-    static void setup(const std::string& filename);  // Call once at the beginning
+    enum ComponentsToDebug {
+        GYRO = 0,
+        LED_MATRIX = 1,
+        BUTTON = 2,
+        ESPTRANSCEIVER = 3,
+        OPTICTRANSCEIVER = 4,
+        PREGAME = 5,
+        GAME = 6
+    };
+
+    static void setup(int flags[]);
     static Logger& getInstance();
 
-    void log(const std::string& message);
-    void log(const char* message);
-    bool isOpen() const;
+    void log(const std::string& message, ComponentsToDebug component);
+    void log(const char* message, ComponentsToDebug component);
 
 private:
     Logger() = default;
-    ~Logger();
+    ~Logger() = default;
     Logger(const Logger&) = delete;
     Logger& operator=(const Logger&) = delete;
 
-    void openFile(const std::string& filename);
-    std::ofstream logFile;
+    int num_flags = 7; // Number of components to debug
+    // appropriate to ComponentsToDebug
+    // 0 - disabled, 1 - enabled
+    int componentFlags[7] = {0, 0, 0, 0, 0, 0, 0};
+
 };
 
 /*
  *  example of usage
-    int main() {
-        Logger::setup("logfile.txt");
-        Logger::getInstance().log("Started program.");
-
+    int main(){
+        int set[] = {1,0,0,0,0,0,0};
+        Logger& instance = Logger::getInstance();
+        Logger::setup(set);
+        Logger::getInstance().log("Started GYRO.", Logger::GYRO); // should be printed
+        Logger::getInstance().log("Started OPTICTRANSCEIVER.", Logger::OPTICTRANSCEIVER); // should not be printed
+    
         return 0;
     }
  */
