@@ -34,6 +34,7 @@ private:
     /*===== Participating =======*/
 
     int participating_mask;
+    int map_id;
 
 
 
@@ -75,11 +76,13 @@ private:
 
     void updateBallCrossing(BoardLayout::SIDE my_side, int my_idx);
 
-    int getGameId();
+    int getGameId(int id);
 
     int getNumParticipating();
 
     void checkWin();
+
+    void checkSides();
 
 public:
     Game();

@@ -12,7 +12,10 @@ void Game::setup(Gyro* gyro, LedMatrix* matrix, MazeMaps* maze_maps, BoardLayout
 
 void Game::initGame(int participating_mask, int map_id){
     this->participating_mask = participating_mask;
-    int game_id = getGameId();
+    this->map_id = map_id;
+
+    int my_id = ESPTransceiver::getInstance().getMyId();
+    int game_id = getGameId(my_id);
     int num_screens = getNumParticipating();
 
     this->win = false;
@@ -39,14 +42,12 @@ int Game::getNumParticipating(){
 
 
 
-int Game::getGameId(){
-    int my_id = ESPTransceiver::getInstance().getMyId();
-
+int Game::getGameId(int id){
     int player_index = 0;
     int game_id = 0;
     int players_mask = this->participating_mask;
     while (players_mask) {
-        if(player_index == my_id){
+        if(player_index == id){
             break;
         }
 
@@ -240,6 +241,45 @@ void Game::performMovement(MovementOption option, Position pos) {
     }
 }
 
+
+void Game::checkSides(){
+    BoardLayout::SIDE other_side;
+    int num_screens = getNumParticipating();
+    int esp_game_id;
+
+    BoardLayout::SIDE my_side = BoardLayout::SIDE::DOWN;
+    int down_esp = this->board_layout->getState(my_side, other_side);
+    if(down_esp != -1){
+        esp_game_id = getGameId(down_esp);
+        this->maze_maps->fillBorder(num_screens, this->map_id, esp_game_id, BoardLayout::SIDE::DOWN, other_side, this->map);
+    }
+
+
+    my_side = BoardLayout::SIDE::UP;
+    int up_esp = this->board_layout->getState(my_side, other_side);
+    if(up_esp != -1){
+        esp_game_id = getGameId(up_esp);
+        this->maze_maps->fillBorder(num_screens, this->map_id, esp_game_id, BoardLayout::SIDE::UP, other_side, this->map);
+    }
+
+
+    my_side = BoardLayout::SIDE::LEFT;
+    int left_esp = this->board_layout->getState(my_side, other_side);
+    if(left_esp != -1){
+        esp_game_id = getGameId(left_esp);
+        this->maze_maps->fillBorder(num_screens, this->map_id, esp_game_id, BoardLayout::SIDE::LEFT, other_side, this->map);
+    }
+
+
+    my_side = BoardLayout::SIDE::RIGHT;
+    int right_esp = this->board_layout->getState(my_side, other_side);
+    if(right_esp != -1){
+        esp_game_id = getGameId(right_esp);
+        this->maze_maps->fillBorder(num_screens, this->map_id, esp_game_id, BoardLayout::SIDE::RIGHT, other_side, this->map);
+    }
+
+}
+
 int Game::calcOtherSideCrossingIdx(BoardLayout::SIDE other_side, BoardLayout::SIDE my_side, Position pos){
     int my_idx;
 
@@ -341,7 +381,8 @@ void Game::update(int dt) {
     this->tick += dt;
 
     //CHECK THIS ALWAYS TRACKS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    if(this->tick == 250){
+    if(this->tick >= 250){
+        checkSides();
         handleBallCrossing();
     }
 
