@@ -3,9 +3,13 @@
 //
 
 #include "Logger.h"
+#include <Arduino.h>
 
-void Logger::setup(const std::string& filename) {
-    getInstance().openFile(filename);
+void Logger::setup(int flags[]) {
+    Logger& instance = getInstance();
+    for(int i=0; i<instance.num_flags;i++){
+        instance.componentFlags[i] = flags[i];
+    }
 }
 
 Logger& Logger::getInstance() {
@@ -13,31 +17,14 @@ Logger& Logger::getInstance() {
     return instance;
 }
 
-void Logger::openFile(const std::string& filename) {
-    logFile.open(filename, std::ios::app);
-    if (!logFile.is_open()) {
-        std::cerr << "Logger error: Cannot open file: " << filename << std::endl;
+void Logger::log(const std::string& message, ComponentsToDebug component) {
+    if (getInstance().componentFlags[component] == 1) {
+        Serial.println(message.c_str());
     }
 }
 
-Logger::~Logger() {
-    if (logFile.is_open()) {
-        logFile.close();
+void Logger::log(const char* message, ComponentsToDebug component) {
+    if (getInstance().componentFlags[component] == 1) {
+        Serial.println(message);
     }
-}
-
-void Logger::log(const std::string& message) {
-    if (logFile.is_open()) {
-        logFile << message << std::endl;
-    }
-}
-
-void Logger::log(const char* message) {
-    if (logFile.is_open()) {
-        logFile << message << std::endl;
-    }
-}
-
-bool Logger::isOpen() const {
-    return logFile.is_open();
 }
