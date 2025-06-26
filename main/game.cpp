@@ -120,10 +120,12 @@ Game::MovementOption Game::checkPos(Position pos) {
     }
 
     if (this->map[pos.y][pos.x] == MazeMaps::BlockType::WALL || this->map[pos.y][pos.x] == MazeMaps::BlockType::BORDER) {
+        Serial.println("Hitting wall");
         return HIT_WALL; // Hit a wall or border
     }
 
     if (pos.x == 0 || pos.x == 17 || pos.y == 0 || pos.y == 17) {
+        Serial.println("Crossing Border");
         return CROSS_BORDER; // Crossed the finish line
     }
 
@@ -238,6 +240,11 @@ void Game::performMovement(MovementOption option, Position pos) {
         this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, 0x000000); 
         this->is_player_here = false;
         this->ball = {-1, -1};
+
+        Serial.print("Croosing to esp ");
+        Serial.println(id_receiver)
+        Serial.print("At his side ");
+        Serial.println(other_side);
     }
 }
 
@@ -250,6 +257,7 @@ void Game::checkSides(){
     BoardLayout::SIDE my_side = BoardLayout::SIDE::DOWN;
     int down_esp = this->board_layout->getState(my_side, other_side);
     if(down_esp != -1){
+        Serial.println("DOWN connected");
         esp_game_id = getGameId(down_esp);
         this->maze_maps->fillBorder(num_screens, this->map_id, esp_game_id, BoardLayout::SIDE::DOWN, other_side, this->map);
     }
@@ -258,6 +266,7 @@ void Game::checkSides(){
     my_side = BoardLayout::SIDE::UP;
     int up_esp = this->board_layout->getState(my_side, other_side);
     if(up_esp != -1){
+        Serial.println("UP connected");
         esp_game_id = getGameId(up_esp);
         this->maze_maps->fillBorder(num_screens, this->map_id, esp_game_id, BoardLayout::SIDE::UP, other_side, this->map);
     }
@@ -266,6 +275,7 @@ void Game::checkSides(){
     my_side = BoardLayout::SIDE::LEFT;
     int left_esp = this->board_layout->getState(my_side, other_side);
     if(left_esp != -1){
+        Serial.println("LEFT connected");
         esp_game_id = getGameId(left_esp);
         this->maze_maps->fillBorder(num_screens, this->map_id, esp_game_id, BoardLayout::SIDE::LEFT, other_side, this->map);
     }
@@ -274,6 +284,7 @@ void Game::checkSides(){
     my_side = BoardLayout::SIDE::RIGHT;
     int right_esp = this->board_layout->getState(my_side, other_side);
     if(right_esp != -1){
+        Serial.println("RIGHT connected");
         esp_game_id = getGameId(right_esp);
         this->maze_maps->fillBorder(num_screens, this->map_id, esp_game_id, BoardLayout::SIDE::RIGHT, other_side, this->map);
     }
@@ -382,6 +393,7 @@ void Game::update(int dt) {
 
     //CHECK THIS ALWAYS TRACKS!!!!!!!!!!!!!!!!!!!!!!!!!!!
     if(this->tick >= 250){
+        Serial.println("Checking sides--------------------------------");
         checkSides();
         handleBallCrossing();
     }
