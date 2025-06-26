@@ -3,12 +3,11 @@
 #include "mazeMaps.h"
 
 MazeMaps::MazeMaps() {
-    // ==== MAP 1: Single Board ====
-    /*
+
 
     // ==== MAP 1: Single Board ====
 
-    int temp_maps_for_1[16][16] = {
+    MazeMaps::BlockType temp_maps_for_1[16][16] = {
         { BALL, WALL, EMPTY, EMPTY, EMPTY, WALL, EMPTY, WALL, EMPTY, WALL, EMPTY, EMPTY, EMPTY, WALL, EMPTY, FINISH },
         { EMPTY, WALL, EMPTY, WALL, WALL, WALL, EMPTY, EMPTY, EMPTY, WALL, EMPTY, WALL, EMPTY, WALL, EMPTY, WALL },
         { EMPTY, WALL, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, WALL, EMPTY, EMPTY, EMPTY, WALL, EMPTY, WALL, EMPTY, WALL },
@@ -29,14 +28,14 @@ MazeMaps::MazeMaps() {
 
      for(int i=0;i<16;i++){
         for(int j=0;j<16;j++){
-            maps_for_1[0][0][i][j] = temp_maps_for_1[i][j]
+            maps_for_1[0][0][i][j] = temp_maps_for_1[i][j];
         }
      }
 
 
     // ==== MAP 2: Single Board ====
 
-    int temp_maps_for_2_1[16][16] = {
+    MazeMaps::BlockType temp_maps_for_2_1[16][16] = {
         { BALL, EMPTY, WALL, WALL, WALL, WALL, WALL, EMPTY, WALL, WALL, EMPTY, WALL, WALL, WALL, WALL, WALL },
         { WALL, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, WALL, EMPTY, WALL, EMPTY, EMPTY, WALL, EMPTY, WALL, FINISH, WALL },
         { WALL, EMPTY, WALL, WALL, WALL, EMPTY, WALL, EMPTY, WALL, EMPTY, WALL, WALL, EMPTY, WALL, EMPTY, WALL },
@@ -55,7 +54,7 @@ MazeMaps::MazeMaps() {
         { WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL }
     };
 
-    int temp_maps_for_2_2[16][16] = {
+    MazeMaps::BlockType temp_maps_for_2_2[16][16] = {
         { WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL },
         { WALL, EMPTY, WALL, EMPTY, WALL, WALL, WALL, WALL, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, WALL },
         { WALL, EMPTY, WALL, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, WALL, EMPTY, WALL, WALL, WALL, EMPTY, WALL },
@@ -76,14 +75,14 @@ MazeMaps::MazeMaps() {
 
      for(int i=0;i<16;i++){
         for(int j=0;j<16;j++){
-            maps_for_2[0][0][i][j] = temp_maps_for_2_1[i][j]
-            maps_for_2[0][1][i][j] = temp_maps_for_2_2[i][j]
+            maps_for_2[0][0][i][j] = temp_maps_for_2_1[i][j];
+            maps_for_2[0][1][i][j] = temp_maps_for_2_2[i][j];
         }
      }
 
     // ==== MAP 3: Single Board ====
 
-    int temp_maps_for_3_1[16][16] = {
+    MazeMaps::BlockType temp_maps_for_3_1[16][16] = {
         { WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, EMPTY, WALL },
         { WALL, BALL, WALL, EMPTY, EMPTY, EMPTY, EMPTY, WALL, EMPTY, EMPTY, EMPTY, EMPTY, WALL, EMPTY, EMPTY, WALL },
         { WALL, EMPTY, WALL, EMPTY, WALL, WALL, WALL, WALL, EMPTY, WALL, WALL, WALL, WALL, EMPTY, WALL, WALL },
@@ -102,7 +101,7 @@ MazeMaps::MazeMaps() {
         { WALL, EMPTY, WALL, EMPTY, EMPTY, EMPTY, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL }
     };
 
-    int temp_maps_for_3_2[16][16] = {
+    MazeMaps::BlockType temp_maps_for_3_2[16][16] = {
         { EMPTY, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, EMPTY, EMPTY, EMPTY, WALL, EMPTY, WALL },
         { EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, WALL, EMPTY, EMPTY, EMPTY, WALL, EMPTY, WALL, EMPTY, WALL, EMPTY, WALL },
         { EMPTY, WALL, WALL, WALL, EMPTY, EMPTY, EMPTY, WALL, EMPTY, EMPTY, EMPTY, WALL, EMPTY, WALL, EMPTY, WALL },
@@ -121,7 +120,7 @@ MazeMaps::MazeMaps() {
         { WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, EMPTY, EMPTY, EMPTY, WALL, WALL, WALL, EMPTY, WALL }
     };
 
-    int temp_maps_for_3_3[16][16] = {
+    MazeMaps::BlockType temp_maps_for_3_3[16][16] = {
         { WALL, WALL, WALL, WALL, WALL, WALL, EMPTY, WALL, WALL, WALL, WALL, WALL, WALL, WALL, EMPTY, WALL },
         { WALL, EMPTY, WALL, EMPTY, EMPTY, WALL, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, WALL },
         { WALL, EMPTY, WALL, EMPTY, WALL, WALL, EMPTY, WALL, WALL, WALL, WALL, WALL, WALL, WALL, EMPTY, WALL },
@@ -140,18 +139,18 @@ MazeMaps::MazeMaps() {
         { WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL }
     };
 
-     for(int i=0;i<16;i++){
+    for(int i=0;i<16;i++){
         for(int j=0;j<16;j++){
-            maps_for_3[0][0][i][j] = temp_maps_for_3_1[i][j]
-            maps_for_3[0][1][i][j] = temp_maps_for_3_2[i][j]
-            maps_for_3[0][2][i][j] = temp_maps_for_3_3[i][j]
+            maps_for_3[0][0][i][j] = temp_maps_for_3_1[i][j];
+            maps_for_3[0][1][i][j] = temp_maps_for_3_2[i][j];
+            maps_for_3[0][2][i][j] = temp_maps_for_3_3[i][j];
         }
      }
 
 
     // ==== MAP 4: Single Board ====
 
-    int temp_maps_for_4_1[16][16] = {
+    MazeMaps::BlockType temp_maps_for_4_1[16][16] = {
         { WALL, WALL, WALL, EMPTY, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL },
         { WALL, BALL, WALL, EMPTY, WALL, EMPTY, EMPTY, EMPTY, WALL, EMPTY, WALL, EMPTY, EMPTY, WALL, EMPTY, WALL },
         { WALL, EMPTY, WALL, EMPTY, EMPTY, EMPTY, WALL, EMPTY, EMPTY, EMPTY, WALL, EMPTY, WALL, WALL, EMPTY, WALL },
@@ -170,7 +169,7 @@ MazeMaps::MazeMaps() {
         { WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL }
     };
 
-    int temp_maps_for_4_2[16][16] = {
+    MazeMaps::BlockType temp_maps_for_4_2[16][16] = {
         { WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL },
         { EMPTY, EMPTY, WALL, EMPTY, EMPTY, EMPTY, EMPTY, WALL, EMPTY, WALL, EMPTY, EMPTY, EMPTY, WALL, EMPTY, EMPTY },
         { WALL, EMPTY, WALL, EMPTY, WALL, EMPTY, WALL, WALL, EMPTY, EMPTY, EMPTY, WALL, EMPTY, EMPTY, EMPTY, WALL },
@@ -189,7 +188,7 @@ MazeMaps::MazeMaps() {
         { WALL, WALL, WALL, EMPTY, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL }
     };
 
-    int temp_maps_for_4_3[16][16] = {
+    MazeMaps::BlockType temp_maps_for_4_3[16][16] = {
         { WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL },
         { EMPTY, EMPTY, WALL, EMPTY, EMPTY, EMPTY, EMPTY, WALL, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, WALL },
         { WALL, EMPTY, WALL, EMPTY, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, EMPTY, EMPTY, WALL },
@@ -208,7 +207,7 @@ MazeMaps::MazeMaps() {
         { WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, EMPTY, WALL }
     };
 
-    int temp_maps_for_4_4[16][16] = {
+    MazeMaps::BlockType temp_maps_for_4_4[16][16] = {
         { WALL, EMPTY, EMPTY, EMPTY, EMPTY, WALL, EMPTY, EMPTY, EMPTY, WALL, EMPTY, EMPTY, EMPTY, WALL, EMPTY, WALL },
         { WALL, EMPTY, WALL, EMPTY, WALL, WALL, EMPTY, WALL, EMPTY, EMPTY, EMPTY, WALL, EMPTY, WALL, EMPTY, WALL },
         { WALL, EMPTY, WALL, EMPTY, EMPTY, WALL, EMPTY, WALL, WALL, WALL, WALL, WALL, EMPTY, WALL, EMPTY, WALL },
@@ -227,16 +226,18 @@ MazeMaps::MazeMaps() {
         { WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL }
     };
 
-     for(int i=0;i<16;i++){
+    for(int i=0;i<16;i++){
         for(int j=0;j<16;j++){
-            maps_for_4[0][0][i][j] = temp_maps_for_4_1[i][j]
-            maps_for_4[0][1][i][j] = temp_maps_for_4_2[i][j]
-            maps_for_4[0][2][i][j] = temp_maps_for_4_3[i][j]
-            maps_for_4[0][3][i][j] = temp_maps_for_4_4[i][j]
+            maps_for_4[0][0][i][j] = temp_maps_for_4_1[i][j];
+            maps_for_4[0][1][i][j] = temp_maps_for_4_2[i][j];
+            maps_for_4[0][2][i][j] = temp_maps_for_4_3[i][j];
+            maps_for_4[0][3][i][j] = temp_maps_for_4_4[i][j];
         }
      }
 
-    */
+    /*
+    // ==== MAP 1: Single Board ====
+
     for (int x = 0; x < 16; ++x)
         for (int y = 0; y < 16; ++y)
             maps_for_1[0][0][x][y] = EMPTY;
@@ -289,6 +290,7 @@ MazeMaps::MazeMaps() {
             maps_for_4[0][1][i][i / 2] = WALL;
             maps_for_4[0][2][15 - i][i / 2] = WALL;
         }
+    */
 }
 
 
