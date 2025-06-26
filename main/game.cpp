@@ -242,7 +242,7 @@ void Game::performMovement(MovementOption option, Position pos) {
         this->ball = {-1, -1};
 
         Serial.print("Croosing to esp ");
-        Serial.println(id_receiver)
+        Serial.println(id_receiver);
         Serial.print("At his side ");
         Serial.println(other_side);
     }
