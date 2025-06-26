@@ -28,7 +28,7 @@ private:
     MazeMaps::BlockType map[18][18];
 
 
-    uint32_t colors[4] = {0x000000, 0xFFFFFF, 0x00FF00, 0x0000FF};
+    uint32_t colors[4] = {0x000000, 0xFF0000, 0x00FF00, 0x0000FF};
 
 
     /*===== Participating =======*/

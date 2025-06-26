@@ -211,14 +211,14 @@ void Game::performMovement(MovementOption option, Position pos) {
             return;
         }
         this->map[this->ball.y][this->ball.x] = MazeMaps::BlockType::EMPTY; 
-        this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, 0x000000); // Clear the old position
+        this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, colors[0]); // Clear the old position
         this->ball = pos;
         this->map[this->ball.y][this->ball.x] = MazeMaps::BlockType::BALL;
-        this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, 0x00FF00); // Set the new position
+        this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, colors[2]); // Set the new position
 
     } else if (option == WIN) {
         this->map[this->ball.y][this->ball.x] = MazeMaps::BlockType::EMPTY; 
-        this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, 0x000000); // Clear the old position
+        this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, colors[0]); // Clear the old position
         this->ball = pos;
 
         sendWinMessages();
@@ -237,7 +237,7 @@ void Game::performMovement(MovementOption option, Position pos) {
         ESPTransceiver::getInstance().send(id_receiver, ESPTransceiver::MessageType::BALL_CROSSING, (char*)&msg_struct);
 
         this->map[this->ball.y][this->ball.x] = MazeMaps::BlockType::EMPTY;
-        this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, 0x000000); 
+        this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, colors[0]); 
         this->is_player_here = false;
         this->ball = {-1, -1};
 
