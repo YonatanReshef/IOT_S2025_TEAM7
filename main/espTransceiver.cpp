@@ -36,7 +36,10 @@ ESPTransceiver::~ESPTransceiver() {
 // --- Setup Method ---
 void ESPTransceiver::setup() {
     WiFi.mode(WIFI_STA);
-    WiFi.begin();  // Changed from WiFi.STA.begin() (which is not valid)
+    esp_wifi_set_promiscuous(true);
+    esp_wifi_set_channel(1, WIFI_SECOND_CHAN_NONE);  // All devices must match
+    esp_wifi_set_promiscuous(false);
+    
     if (esp_now_init() != ESP_OK) {
         Serial.println("Error initializing ESP-NOW");
         return;
@@ -156,7 +159,7 @@ void ESPTransceiver::onReceiveWrapper(const uint8_t* mac, const uint8_t* incomin
     MessageType msgType = static_cast<MessageType>(incomingData[0]);
     const uint8_t* payload = incomingData + 1;
     int senderId = getId(mac);
-
+    Serial.printf("Recved message of type %d from ID %d\n", msgType, senderId);
     switch (msgType) {
         case BALL_CROSSING: {
             int size = getStructSize(BALL_CROSSING);
@@ -221,6 +224,15 @@ void ESPTransceiver::onReceiveWrapper(const uint8_t* mac, const uint8_t* incomin
             }
             break;
         }
+        case GAME_REQUEST: {
+            int size = getStructSize(GAME_REQUEST);
+            if (len >= 1 + size) {
+                GameRequestMessage msg;
+                memcpy(&msg, payload, size);
+                gameRequestQueue.push({msg, senderId});
+            }
+            break;
+        }
         default:
             Serial.println("Unknown message type received.");
             break;
@@ -246,6 +258,7 @@ int ESPTransceiver::getStructSize(MessageType msgType) {
         case READY_CONNECT: return sizeof(ReadyConnectMessage);
         case ACK: return sizeof(AckMessage);
         case LIVENESS: return sizeof(LivenessMessage);
+        case GAME_REQUEST: return sizeof(GameRequestMessage);
         default: return 0;
     }
 }

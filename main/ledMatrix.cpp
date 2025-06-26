@@ -14,7 +14,7 @@ void LedMatrix::setup() {
 }
 
 int LedMatrix::update(int dt) {
-    // pixels.show();
+    pixels.show();
     return 0;
 }
 
@@ -24,7 +24,7 @@ void LedMatrix::setPixelColor(int x, int y, uint32_t color) {
 
     int index = getPixelIndex(x, y);
     pixels.setPixelColor(index, color);
-    pixels.show();
+    // pixels.show();
 }
 
 void LedMatrix::setBoard(uint32_t* colors) {
@@ -35,7 +35,7 @@ void LedMatrix::setBoard(uint32_t* colors) {
             pixels.setPixelColor(index, colors[colorIndex]);
         }
     }
-    pixels.show();
+    // pixels.show();
 }
 
 int LedMatrix::getPixelIndex(int x, int y) {

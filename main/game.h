@@ -92,7 +92,7 @@ public:
 
     bool isWin();
 
-    void sendWinMessages()
+    void sendWinMessages();
 };
 
 

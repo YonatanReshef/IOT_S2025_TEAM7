@@ -13,6 +13,7 @@
         "vector": "cpp",
         "xstring": "cpp",
         "xutility": "cpp",
-        "queue": "cpp"
+        "queue": "cpp",
+        "xlocale": "cpp"
     }
 }
