@@ -146,7 +146,7 @@ void ESPTransceiver::send(int idReceiver, MessageType msgType, char* msg) {
     if (result != ESP_OK) {
         Serial.printf("Failed to send to ID %d: %s (code: 0x%x)\n", idReceiver, esp_err_to_name(result), result);
     } else {
-        Serial.printf("Sent message of type %d to ID %d\n", msgType, idReceiver);
+        //Serial.printf("Sent message of type %d to ID %d\n", msgType, idReceiver);
     }
 
     delete[] buffer;
@@ -159,7 +159,7 @@ void ESPTransceiver::onReceiveWrapper(const uint8_t* mac, const uint8_t* incomin
     MessageType msgType = static_cast<MessageType>(incomingData[0]);
     const uint8_t* payload = incomingData + 1;
     int senderId = getId(mac);
-    Serial.printf("Recved message of type %d from ID %d\n", msgType, senderId);
+    //Serial.printf("Recved message of type %d from ID %d\n", msgType, senderId);
     switch (msgType) {
         case BALL_CROSSING: {
             int size = getStructSize(BALL_CROSSING);

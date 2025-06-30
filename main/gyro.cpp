@@ -76,10 +76,10 @@ void Gyro::update(int dt) {
         } else {
           // Move along Y
           if (this->acc_y > 3){ 
-            this->curr_direction = SIDE::UP;
+            this->curr_direction = SIDE::DOWN;
           }
           else if (this->acc_y < -3){ 
-            this->curr_direction = SIDE::DOWN;
+            this->curr_direction = SIDE::UP;
           }
           else{
             this->curr_direction = SIDE::STAY;

@@ -55,6 +55,7 @@ public:
     void setup(LedMatrix* matrix, MazeMaps* mazes, Button* button);
     void update(int dt);
     bool shouldStart(int& participating_mask, int& map_id);
+    void reset();
 };
 
 #endif // PREGAME

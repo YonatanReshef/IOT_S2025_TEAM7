@@ -18,4 +18,5 @@ public:
     void setup();
     int update(int dt);
     bool getClick();  // returns true once per press
+    void resetClick();
 };

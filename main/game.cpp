@@ -46,8 +46,11 @@ int Game::getGameId(int id){
     int player_index = 0;
     int game_id = 0;
     int players_mask = this->participating_mask;
+
+    bool id_in_game = false;
     while (players_mask) {
-        if(player_index == id){
+        if((player_index == id) && (players_mask & 1)){
+            id_in_game = true;
             break;
         }
 
@@ -59,7 +62,11 @@ int Game::getGameId(int id){
         ++player_index;
     }
 
-    return game_id;
+    if(id_in_game){
+        return game_id;
+    }
+    
+    return -1;
 }
 
 void Game::paintMatrix(){
@@ -68,12 +75,12 @@ void Game::paintMatrix(){
     for(int y=0; y<16; y++){
         for(int x=0; x<16; x++){
             MazeMaps::BlockType t = this->map[y+1][x+1];
-            Serial.print(t);
-            Serial.print(" ");
+            /*Serial.print(t);
+            Serial.print(" ");*/
             map_colors[y*16 + x] = this->colors[t];
         }
     }
-    Serial.println("");
+    //Serial.println("");
     this->matrix->setBoard(map_colors); // Set the initial board colors
 }
 
@@ -105,9 +112,9 @@ Game::Position Game::calcNextPos() {
     } else if (this->move_to_side == Gyro::SIDE::RIGHT) {
         next_pos.x += 1;
     } else if (this->move_to_side == Gyro::SIDE::UP) {
-        next_pos.y -= 1;
-    } else if (this->move_to_side == Gyro::SIDE::DOWN) {
         next_pos.y += 1;
+    } else if (this->move_to_side == Gyro::SIDE::DOWN) {
+        next_pos.y -= 1;
     }
 
     return next_pos;
@@ -120,19 +127,20 @@ Game::MovementOption Game::checkPos(Position pos) {
     }
 
     if (this->map[pos.y][pos.x] == MazeMaps::BlockType::WALL || this->map[pos.y][pos.x] == MazeMaps::BlockType::BORDER) {
-        Serial.println("Hitting wall");
+        //Serial.println("WALL OR BORDER");
         return HIT_WALL; // Hit a wall or border
     }
 
     if (pos.x == 0 || pos.x == 17 || pos.y == 0 || pos.y == 17) {
-        Serial.println("Crossing Border");
         return CROSS_BORDER; // Crossed the finish line
     }
 
     if(this->map[pos.y][pos.x] == MazeMaps::BlockType::FINISH){
+        //Serial.println("WIN");
         return WIN;
     }
 
+    //Serial.println("VALID");
     return VALID; // Valid position
 }
 
@@ -172,6 +180,8 @@ void Game::updateBallCrossing(BoardLayout::SIDE my_side, int my_idx){
     }
 
     this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, this->colors[MazeMaps::BlockType::BALL]);
+
+    this->is_player_here = true;
 }
 
 void Game::handleBallCrossing(){
@@ -185,8 +195,17 @@ void Game::handleBallCrossing(){
         int senderId;
         std::tie(msg, senderId) = frontTuple;
 
+        /*Serial.print("Sender is ");
+        Serial.println(senderId);*/
+
         BoardLayout::SIDE my_side = msg.side;
         int my_idx = msg.idx;
+
+        /*Serial.print("My Side is ");
+        Serial.println(my_side);
+
+        Serial.print("My Idx is ");
+        Serial.println(my_idx);*/
 
         updateBallCrossing(my_side, my_idx);
     }
@@ -257,36 +276,85 @@ void Game::checkSides(){
     BoardLayout::SIDE my_side = BoardLayout::SIDE::DOWN;
     int down_esp = this->board_layout->getState(my_side, other_side);
     if(down_esp != -1){
-        Serial.println("DOWN connected");
+        //Serial.println("DOWN connected");
         esp_game_id = getGameId(down_esp);
-        this->maze_maps->fillBorder(num_screens, this->map_id, esp_game_id, BoardLayout::SIDE::DOWN, other_side, this->map);
+        if(esp_game_id != -1){
+            if(this->map[17][0] == MazeMaps::BlockType::BORDER){
+                this->maze_maps->fillBorder(num_screens, this->map_id, esp_game_id, BoardLayout::SIDE::DOWN, other_side, this->map);
+            }
+        }
+    }
+    else{
+        if(this->map[17][0] != MazeMaps::BlockType::BORDER){
+            //Serial.println("DOWN disconnected");
+            for (int col = 0; col < 18; ++col) {
+                this->map[17][col] = MazeMaps::BlockType::BORDER;      // bottom row
+            }
+        }
     }
 
 
     my_side = BoardLayout::SIDE::UP;
     int up_esp = this->board_layout->getState(my_side, other_side);
     if(up_esp != -1){
-        Serial.println("UP connected");
+        //Serial.println("UP connected");
         esp_game_id = getGameId(up_esp);
-        this->maze_maps->fillBorder(num_screens, this->map_id, esp_game_id, BoardLayout::SIDE::UP, other_side, this->map);
+        if(esp_game_id != -1){
+            if(this->map[0][0] == MazeMaps::BlockType::BORDER){
+                this->maze_maps->fillBorder(num_screens, this->map_id, esp_game_id, BoardLayout::SIDE::UP, other_side, this->map);
+            }
+        }
+    }
+    else{
+        if(this->map[0][1] != MazeMaps::BlockType::BORDER){
+            //Serial.println("UP disconnected");
+            for (int col = 0; col < 18; ++col) {
+                this->map[0][col] = MazeMaps::BlockType::BORDER;       // top row
+            }
+        }
     }
 
 
     my_side = BoardLayout::SIDE::LEFT;
     int left_esp = this->board_layout->getState(my_side, other_side);
     if(left_esp != -1){
-        Serial.println("LEFT connected");
+        //Serial.println("LEFT connected");
         esp_game_id = getGameId(left_esp);
-        this->maze_maps->fillBorder(num_screens, this->map_id, esp_game_id, BoardLayout::SIDE::LEFT, other_side, this->map);
+        if(esp_game_id != -1){
+            if(this->map[0][0] == MazeMaps::BlockType::BORDER){
+                
+                this->maze_maps->fillBorder(num_screens, this->map_id, esp_game_id, BoardLayout::SIDE::LEFT, other_side, this->map);
+            }
+        }
+    }
+    else{
+        if(this->map[1][0] != MazeMaps::BlockType::BORDER){
+            //Serial.println("LEFT disconnected");
+            for (int row = 0; row < 18; ++row) {
+                this->map[row][0] = MazeMaps::BlockType::BORDER;       // left column
+            }
+        }
     }
 
 
     my_side = BoardLayout::SIDE::RIGHT;
     int right_esp = this->board_layout->getState(my_side, other_side);
     if(right_esp != -1){
-        Serial.println("RIGHT connected");
+        //Serial.println("RIGHT connected");
         esp_game_id = getGameId(right_esp);
-        this->maze_maps->fillBorder(num_screens, this->map_id, esp_game_id, BoardLayout::SIDE::RIGHT, other_side, this->map);
+        if(esp_game_id != -1){
+            if(this->map[0][17] == MazeMaps::BlockType::BORDER){
+                this->maze_maps->fillBorder(num_screens, this->map_id, esp_game_id, BoardLayout::SIDE::RIGHT, other_side, this->map);
+            }
+        }
+    }
+    else{
+        if(this->map[0][17] != MazeMaps::BlockType::BORDER){
+            //Serial.println("RIGHT disconnected");
+            for (int row = 0; row < 18; ++row) {
+                this->map[row][17] = MazeMaps::BlockType::BORDER;      // right column
+            }
+        }
     }
 
 }
@@ -391,20 +459,63 @@ int Game::calcOtherSideCrossingIdx(BoardLayout::SIDE other_side, BoardLayout::SI
 void Game::update(int dt) {
     this->tick += dt;
 
-    //CHECK THIS ALWAYS TRACKS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    if(this->tick >= 250){
-        Serial.println("Checking sides--------------------------------");
+    if(this->tick >= 280){
         checkSides();
         handleBallCrossing();
-    }
 
-    if(this->tick >= 250){
+
+
         if(this->is_player_here){
             this->move_to_side = this->gyro->getCurDir();
-            
+
+            /*Serial.print("Direction is ");
+            if(this->move_to_side == Gyro::DOWN){
+                Serial.println("DOWN ----------");
+            }
+            if(this->move_to_side == Gyro::UP){
+                Serial.println("UP ----------");
+            }
+            if(this->move_to_side == Gyro::LEFT){
+                Serial.println("LEFT ----------");
+            }
+            if(this->move_to_side == Gyro::RIGHT){
+                Serial.println("RIGHT ----------");
+            }
+            if(this->move_to_side == Gyro::STAY){
+                Serial.println("STAY ----------");
+            }
+            /*
+            Serial.print("Calc next POS from ");
+            Serial.print(this->ball.x);
+            Serial.print(" , ");
+            Serial.println(this->ball.y);*/
             Position next_pos = calcNextPos();
 
+            /*Serial.println("-----------------");
+
+            Serial.print("To Pos ");
+            Serial.print(next_pos.x);
+            Serial.print(" , ");
+            Serial.println(next_pos.y);*/
+
             MovementOption option = checkPos(next_pos);
+
+            Serial.print("Option is ");
+            if(option == MovementOption::CROSS_BORDER){
+                Serial.println("CROSS BORDER ----------");
+            }
+            if(option == MovementOption::HIT_WALL){
+                Serial.println("WALL ----------");
+            }
+            if(option == MovementOption::OUT_OF_BOUNDS){
+                Serial.println("OUT OF BOUNDS ----------");
+            }
+            if(option == MovementOption::VALID){
+                Serial.println("VALID ----------");
+            }
+            if(option == MovementOption::WIN){
+                Serial.println("WIN ----------");
+            }
 
             performMovement(option, next_pos);
         }
@@ -413,7 +524,10 @@ void Game::update(int dt) {
         }
 
         this->tick = 0;
+        //Serial.println("Game Update done---------------------");
     }
+
+    
 }
 
 
@@ -434,5 +548,50 @@ void Game::sendWinMessages(){
 bool Game::isWin(){
     return this->win;
 }
+
+void Game::playVictoryAnimationBallPulse() {
+    const int num_cycles = 3;         // How many shrink-grow cycles
+    const int frame_delay = 100;      // Milliseconds between frames
+    uint32_t map_colors[256];
+
+    for (int cycle = 0; cycle < num_cycles; ++cycle) {
+        // Shrinking
+        for (int radius = 7; radius >= 0; --radius) {
+            for (int y = 0; y < 16; ++y) {
+                for (int x = 0; x < 16; ++x) {
+                    int dx = x - 8;
+                    int dy = y - 8;
+                    int dist_sq = dx * dx + dy * dy;
+                    map_colors[y * 16 + x] = (dist_sq <= radius * radius)
+                        ? colors[MazeMaps::BlockType::BALL]
+                        : colors[MazeMaps::BlockType::EMPTY];
+                }
+            }
+            matrix->setBoard(map_colors);
+            matrix->update(10);
+            delay(frame_delay);
+        }
+
+        // Expanding
+        for (int radius = 1; radius <= 7; ++radius) {
+            for (int y = 0; y < 16; ++y) {
+                for (int x = 0; x < 16; ++x) {
+                    int dx = x - 8;
+                    int dy = y - 8;
+                    int dist_sq = dx * dx + dy * dy;
+                    map_colors[y * 16 + x] = (dist_sq <= radius * radius)
+                        ? colors[MazeMaps::BlockType::BALL]
+                        : colors[MazeMaps::BlockType::EMPTY];
+                }
+            }
+            matrix->setBoard(map_colors);
+            matrix->update(10);
+            delay(frame_delay);
+        }
+    }
+
+}
+
+
 
 Game::Game(): tick(0), win(false){}

@@ -91,7 +91,7 @@ private:
     static const uint8_t broadcast[6];
     const int broadcast_id = -1;
     static constexpr int liveness_send_delay = 2000;
-    static constexpr int timeout = liveness_send_delay * 3;
+    static constexpr int timeout = liveness_send_delay * 2;
     
     uint8_t selfMac[6];
     int myId;

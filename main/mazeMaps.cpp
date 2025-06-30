@@ -2,9 +2,11 @@
 
 #include "mazeMaps.h"
 
+#include <Arduino.h>
+
 MazeMaps::MazeMaps() {
 
-
+    /*
     // ==== MAP 1: Single Board ====
 
     MazeMaps::BlockType temp_maps_for_1[16][16] = {
@@ -234,8 +236,8 @@ MazeMaps::MazeMaps() {
             maps_for_4[0][3][i][j] = temp_maps_for_4_4[i][j];
         }
      }
+    */
 
-    /*
     // ==== MAP 1: Single Board ====
 
     for (int x = 0; x < 16; ++x)
@@ -290,7 +292,7 @@ MazeMaps::MazeMaps() {
             maps_for_4[0][1][i][i / 2] = WALL;
             maps_for_4[0][2][15 - i][i / 2] = WALL;
         }
-    */
+    
 }
 
 
@@ -342,7 +344,7 @@ void MazeMaps::getMapPart(int num_screens, int map_id, int screen_id, BlockType 
 }
 
 
-void MazeMaps::fillBorder(int num_screens, int map_id, int other_screen_id, BoardLayout::SIDE my_side, BoardLayout::SIDE other_side, BlockType out_map[18][18]){
+void MazeMaps::fillBorder(int num_screens, int map_id, int other_screen_id, BoardLayout::SIDE my_side, BoardLayout::SIDE other_side, BlockType (&out_map)[18][18]){
     bool his_row;
     int his_idx;
     BlockType other_border[16];
@@ -429,26 +431,26 @@ void MazeMaps::fillBorder(int num_screens, int map_id, int other_screen_id, Boar
     switch (my_side)
     {
     case BoardLayout::SIDE::DOWN:
-        for(int i = 0; i < 16; i++){
-            out_map[15][i] = other_border[i];
+        for(int i = 1; i < 17; i++){
+            out_map[17][i] = other_border[i];
         }
         break;
     
     case BoardLayout::SIDE::UP:
-        for(int i = 0; i < 16; i++){
+        for(int i = 1; i < 17; i++){
             out_map[0][i] = other_border[i];
         }
         break;
     
     case BoardLayout::SIDE::LEFT:
-        for(int i = 0; i < 16; i++){
+        for(int i = 1; i < 17; i++){
             out_map[i][0] = other_border[i];
         }
         break;
 
     case BoardLayout::SIDE::RIGHT:
-        for(int i = 0; i < 16; i++){
-            out_map[i][15] = other_border[i];
+        for(int i = 1; i < 17; i++){
+            out_map[i][17] = other_border[i];
         }
         break;
     

@@ -139,3 +139,11 @@ bool PreGame::shouldStart(int& participating_mask, int& map_id){
     map_id = m_map_id;
     return m_should_start;
 }
+
+void PreGame::reset(){
+    this->start_button->resetClick();
+    this->m_should_start = false;
+    this->timeout = REPLY_TIMEOUT;
+    this->state = WAITING_FOR_START;
+    this->m_participating_mask = 0;
+}

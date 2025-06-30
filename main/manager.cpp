@@ -9,10 +9,11 @@ Manager::Manager(): id(-1), state(PRE_GAME), // TODO: change to PRE_GAME
 {}
 
 
-bool Manager::isParticipatingAlive(int participating_mask){
+bool Manager::isParticipatingAlive(int participating_mask){ 
     int player_id = 0;
     while (participating_mask) {
         if (participating_mask & 1) {
+            //Serial.println(player_id);
             if(!ESPTransceiver::getInstance().isAlive(player_id)){
                 return false;
             }
@@ -43,6 +44,9 @@ void Manager::setup(){
     /* ==== game ==== */
     pre_game.setup(&matrix, &maze_maps, &button);
     game.setup(&gyro, &matrix, &maze_maps, &board_layout);
+
+    this->tick = 0;
+    this->participating_mask = 0;
 }
 
 void Manager::update(int dt){
@@ -60,7 +64,7 @@ void Manager::update(int dt){
     /* ==== State dependant logic ====*/
     
     // Change according to liveness
-    int map_id = 0, participating_mask = 0;
+    int map_id = 0;
 
     switch (state)
     {
@@ -68,26 +72,32 @@ void Manager::update(int dt){
         /* code */
         // TODO: pre-game logic
         pre_game.update(dt);
-        if(pre_game.shouldStart(participating_mask, map_id)){
+        if(pre_game.shouldStart(this->participating_mask, map_id)){
             state = INIT_GAME;
             Serial.println("PRE -> INIT");
         }
         break;
     
     case INIT_GAME:
-        pre_game.shouldStart(participating_mask, map_id);
-        Serial.println(map_id);
-        Serial.println(participating_mask);
-        game.initGame(participating_mask, map_id);
+        pre_game.shouldStart(this->participating_mask, map_id);
+        /*Serial.println(map_id);
+        Serial.println(this->participating_mask);*/
+        game.initGame(this->participating_mask, map_id);
         // wait for successeful init
         state = GAME;
         Serial.println("INIT -> GAME");
         break;
     
     case GAME:
-        if(!isParticipatingAlive(participating_mask)){
-            state = END_GAME;
-            break;
+        this->tick += dt;
+        if(tick >= 150){
+            if(!isParticipatingAlive(this->participating_mask)){
+                Serial.println("ParticipatingDead=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
+                state = END_GAME;
+                Serial.println("GAME -> END");
+                break;
+            }
+            this->tick = 0;
         }
 
         game.update(dt);
@@ -102,6 +112,11 @@ void Manager::update(int dt){
         // TODO: Display win msg
         // TODO: reset pregame, game, msg queues...
         state = PRE_GAME;
+
+        this->game.playVictoryAnimationBallPulse();
+
+        pre_game.reset();
+        this->participating_mask = 0;
         Serial.println("END -> PRE");
         break;
     }

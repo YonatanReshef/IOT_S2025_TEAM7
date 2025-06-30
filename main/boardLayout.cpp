@@ -63,6 +63,8 @@ static void printState(int my_side, int prev, int curr) {
         printSide(side);
         Serial.print(")");
     }
+
+    Serial.println("");
 }
 
 
