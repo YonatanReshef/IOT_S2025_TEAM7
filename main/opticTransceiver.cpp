@@ -70,11 +70,13 @@ void OpticTransceiver::receiveLogic(){
         int bit = (sensorValue < LIGHT_THRESHOLD) ? 1 : 0;
 
         if (receiver.bits_read < MESSAGE_SIZE) {
+          receiver.bits_read++;
           receiver.received_data[receiver.bits_read] = bit;
         }
         else if(receiver.bits_read == MESSAGE_SIZE){ // ZERO_BIT - now reading zero_bit
+          receiver.bits_read++;
           int zero_bit = bit;
-
+          
           if(zero_bit != 0){ // error
             receiver.msg = -1;
             receiver.bits_read = 0;
@@ -112,7 +114,6 @@ void OpticTransceiver::receiveLogic(){
             }
             // Serial.println("===========");
           }
-          receiver.bits_read++;
       }
       break;
   }
