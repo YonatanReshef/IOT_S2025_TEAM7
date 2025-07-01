@@ -14,7 +14,7 @@ class OpticTransceiver
 
   // Thresholds
   static const int LIGHT_THRESHOLD = 250;
-  static const int PREAMBLE_DURATION_MS = 500;
+  static const int PREAMBLE_DURATION_MS = 500; // change according to preamble size (num bits - 1) * BIT_PERIOD_MS
 
   // Bits
   static const int TRANSMISSION_SIZE = 10 + 1; //+1 for zero bit
@@ -25,7 +25,7 @@ class OpticTransceiver
   typedef struct {
     int analogOutPin;
     int current_bit;
-    // Transmission data: 6-bit preamble + 4-bit message
+    // Transmission data: 6-bit preamble + 4-bit message + zero bit
     int send_data[TRANSMISSION_SIZE]; // = {1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0}; 
     //                                    |----preamble----|----data----|zb|
   } Transmitter;

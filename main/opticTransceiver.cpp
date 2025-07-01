@@ -70,8 +70,8 @@ void OpticTransceiver::receiveLogic(){
         int bit = (sensorValue < LIGHT_THRESHOLD) ? 1 : 0;
 
         if (receiver.bits_read < MESSAGE_SIZE) {
-          receiver.bits_read++;
           receiver.received_data[receiver.bits_read] = bit;
+          receiver.bits_read++;
         }
         else if(receiver.bits_read == MESSAGE_SIZE){ // ZERO_BIT - now reading zero_bit
           receiver.bits_read++;
@@ -126,7 +126,7 @@ void OpticTransceiver::setup(int msg){
 
 int OpticTransceiver::update(int dt){
   tick += dt;
-  tick = tick % (BIT_PERIOD_MS * SAMPLE_INTERVAL_MS); // Avoid overflow
+  tick = tick % (2 * BIT_PERIOD_MS * SAMPLE_INTERVAL_MS); // Avoid overflow
 
   // TRANSMIT
   transmitLogic();
