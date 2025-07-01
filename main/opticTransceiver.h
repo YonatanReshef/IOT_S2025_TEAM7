@@ -17,7 +17,7 @@ class OpticTransceiver
   static const int PREAMBLE_DURATION_MS = 500;
 
   // Bits
-  static const int TRANSMISSION_SIZE = 10;
+  static const int TRANSMISSION_SIZE = 10 + 1; //+1 for zero bit
   static const int MESSAGE_SIZE = 4;
 
   /* ==== Transmitter ==== */
@@ -26,8 +26,8 @@ class OpticTransceiver
     int analogOutPin;
     int current_bit;
     // Transmission data: 6-bit preamble + 4-bit message
-    int send_data[TRANSMISSION_SIZE]; // = {1, 1, 1, 1, 1, 0, 1, 0, 1, 1}; 
-    //                                    |----preamble----|----data----|
+    int send_data[TRANSMISSION_SIZE]; // = {1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0}; 
+    //                                    |----preamble----|----data----|zb|
   } Transmitter;
 
   Transmitter trasmitter;
