@@ -41,9 +41,33 @@ void Animation::winAnimation(){
     this->frame += 1;
 }
     
-void Animation::disconnectedAnimation(){
+
+void Animation::disconnectedAnimation() {
+    uint32_t map_colors[256];
+
+    // Create a flickering checkerboard effect based on the frame number
+    for (int y = 0; y < 16; ++y) {
+        for (int x = 0; x < 16; ++x) {
+            // Flicker between checkerboard patterns every frame
+            bool flicker = ((x + y + this->frame) % 2 == 0);
+
+            map_colors[y * 16 + x] = flicker
+                ? colors[MazeMaps::BlockType::WALL]   // Random 'on' block (WALL or BALL)
+                : colors[MazeMaps::BlockType::EMPTY]; // Off
+        }
+    }
+
+    // Optional: Make the center pixel blink
+    if ((this->frame % 4) < 2) {
+        map_colors[8 * 16 + 8] = colors[MazeMaps::BlockType::BALL];
+    }
+
+    this->matrix->setBoard(map_colors);
+    this->matrix->update(10);
+
     this->frame += 1;
 }
+
 
 void Animation::update(int dt){
     tick += dt;
