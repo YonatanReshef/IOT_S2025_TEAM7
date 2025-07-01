@@ -9,6 +9,7 @@
 #include "ledMatrix.h"
 #include "mazeMaps.h"
 #include "button.h"
+#include "Animation.h"
 
 class Manager
 {
@@ -24,7 +25,6 @@ private:
     /* ==== State ====*/
     int id;
     State state;
-    int participating_mask;
 
     /* ==== components ==== */
     BoardLayout board_layout;
@@ -36,6 +36,7 @@ private:
     MazeMaps maze_maps;
     PreGame pre_game;
     Game game;
+    Animation animation;
 
 
     /*==== FUNCS ==========*/

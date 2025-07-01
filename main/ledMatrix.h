@@ -20,6 +20,8 @@ public:
     void setPixelColor(int x, int y, uint32_t color);
     void setBoard(uint32_t *colors);
 
+    void showAnimation(int type, int frame);
+
     //add an effect function
 };
 

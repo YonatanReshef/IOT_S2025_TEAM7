@@ -11,6 +11,7 @@ void Game::setup(Gyro* gyro, LedMatrix* matrix, MazeMaps* maze_maps, BoardLayout
 }
 
 void Game::initGame(int participating_mask, int map_id){
+    this->tick = 0;
     this->participating_mask = participating_mask;
     this->map_id = map_id;
 
@@ -21,6 +22,9 @@ void Game::initGame(int participating_mask, int map_id){
     this->win = false;
     this->maze_maps->getMapPart(num_screens, map_id, game_id, this->map);
     this->allAlive = true;
+
+    this->move_to_side = Gyro::SIDE::STAY;
+
     checkBall();
 
     paintMatrix();

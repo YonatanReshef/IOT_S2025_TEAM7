@@ -146,4 +146,11 @@ void PreGame::reset(){
     this->timeout = REPLY_TIMEOUT;
     this->state = WAITING_FOR_START;
     this->m_participating_mask = 0;
+
+    for (int x = 0; x < 16; ++x)
+    for (int y = 0; y < 16; ++y)
+    brightness[x][y] = 0;
+
+    this->tick = 0;
+    this->m_map_id = -1;
 }
