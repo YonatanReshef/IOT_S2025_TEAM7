@@ -5,7 +5,7 @@
 
 Manager::Manager(): id(-1), state(PRE_GAME), // TODO: change to PRE_GAME
                     board_layout(), gyro(), matrix(PIN_MAT_IN), button(PIN_START_BTN),
-                    maze_maps(), pre_game(), game(), animation(this->matrix)
+                    maze_maps(), pre_game(), game(), animation(&this->matrix)
 {}
 
 void Manager::setup(){
