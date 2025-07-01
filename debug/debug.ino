@@ -16,8 +16,9 @@ void loop() {
         int set[] = {1,0,0,0,0,0,0};
         Logger& instance = Logger::getInstance();
         Logger::setup(set);
-        Logger::getInstance().log("Started GYRO.", Logger::GYRO); // should be printed
-        Logger::getInstance().log("Started OPTICTRANSCEIVER.", Logger::OPTICTRANSCEIVER); // should not be printed
+        Logger::getInstance().log(Logger::GYRO, "Started GYRO."); // should be printed
+        Logger::getInstance().logf(Logger::GYRO, "dfajkf %d", 5); // should be printed
+        Logger::getInstance().log(Logger::OPTICTRANSCEIVER, "Started OPTICTRANSCEIVER."); // should not be printed
     }
 
 }
