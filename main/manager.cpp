@@ -29,7 +29,7 @@ void Manager::setup(){
     pre_game.setup(&matrix, &maze_maps, &button);
     game.setup(&gyro, &matrix, &maze_maps, &board_layout);
 
-    this->tick = 0;
+
     this->participating_mask = 0;
 }
 
@@ -73,18 +73,16 @@ void Manager::update(int dt){
         break;
     
     case GAME:
-        this->tick += dt;
-        if(tick >= 150){
-            if(!this->game.isParticipatingAlive(this->participating_mask)){
-                Serial.println("ParticipatingDead=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
-                state = END_GAME;
-                Serial.println("GAME -> END");
-                break;
-            }
-            this->tick = 0;
-        }
 
         game.update(dt);
+
+        if(!game.isAllAlive()){
+            Serial.println("ParticipatingDead=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
+            state = END_GAME;
+            Serial.println("GAME -> END");
+            break;
+        }
+
         if(game.isWin()){
             state = END_GAME;
             Serial.println("GAME -> END");

@@ -36,6 +36,8 @@ private:
     int participating_mask;
     int map_id;
 
+    bool allAlive;
+
 
 
 
@@ -94,6 +96,8 @@ public:
     void initGame(int participating, int map_id);
 
     bool isWin();
+    bool isAllAlive();
+
     void playVictoryAnimationBallPulse();
 
     bool isParticipatingAlive(int participating_mask);

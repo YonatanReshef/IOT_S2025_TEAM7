@@ -23,7 +23,6 @@ private:
 
     /* ==== State ====*/
     int id;
-    int tick;
     State state;
     int participating_mask;
 

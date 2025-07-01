@@ -20,6 +20,7 @@ void Game::initGame(int participating_mask, int map_id){
 
     this->win = false;
     this->maze_maps->getMapPart(num_screens, map_id, game_id, this->map);
+    this->allAlive = true;
     checkBall();
 
     paintMatrix();
@@ -460,6 +461,13 @@ void Game::update(int dt) {
     this->tick += dt;
 
     if(this->tick >= 280){
+
+        if(!isParticipatingAlive(this->participating_mask)){
+            this->allAlive = false;
+            this->tick = 0;
+            return;
+        }
+
         checkSides();
         handleBallCrossing();
 
@@ -608,6 +616,11 @@ bool Game::isParticipatingAlive(int participating_mask){
     }
 
     return true;
+}
+
+
+bool Game::isAllAlive(){
+    return this->allAlive;
 }
 
 
