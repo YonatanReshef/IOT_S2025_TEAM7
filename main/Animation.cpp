@@ -11,7 +11,6 @@ Animation::Animation(LedMatrix* matrix){
     this->tick = 0;
 }
 
-
 void Animation::winAnimation(){
     // Compute the radius for this frame
     int radius;
@@ -42,7 +41,6 @@ void Animation::winAnimation(){
     this->frame += 1;
 }
     
-
 void Animation::disconnectedAnimation(){
     this->frame += 1;
 }
@@ -90,8 +88,6 @@ void Animation::update(int dt){
     }
 }
 
-
-
 void Animation::setup(Type type){
     this->type = type;
     this->frame = 0;
@@ -99,8 +95,6 @@ void Animation::setup(Type type){
     this->cycle = 0;
     this->tick = 0;
 }
-
-
 
 bool Animation::isDone(){
     return this->is_animation_done;

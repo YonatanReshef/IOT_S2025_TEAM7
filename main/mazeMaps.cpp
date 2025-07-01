@@ -295,7 +295,6 @@ MazeMaps::MazeMaps() {
     
 }
 
-
 void MazeMaps::getMapPart(int num_screens, int map_id, int screen_id, BlockType out_map[18][18]){
     // Fill top and bottom rows with BORDER
     for (int col = 0; col < 18; ++col) {
@@ -342,7 +341,6 @@ void MazeMaps::getMapPart(int num_screens, int map_id, int screen_id, BlockType 
     }
     
 }
-
 
 void MazeMaps::fillBorder(int num_screens, int map_id, int other_screen_id, BoardLayout::SIDE my_side, BoardLayout::SIDE other_side, BlockType (&out_map)[18][18]){
     bool his_row;

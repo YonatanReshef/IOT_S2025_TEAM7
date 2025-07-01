@@ -61,7 +61,6 @@ void ESPTransceiver::setup() {
     tick = 0;
 }
 
-
 int ESPTransceiver::getParticipatingMask(){
     int my_id = getMyId();
     int participating_mask = 0;

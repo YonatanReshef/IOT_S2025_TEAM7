@@ -13,7 +13,6 @@ static void getData(int msg, int &id, int &side) {
     id = msg >> 2;
 }
 
-
 static void printSide(int side){
     switch (side)
     {
@@ -31,7 +30,6 @@ static void printSide(int side){
         break;
     }
 }
-
 
 static void printState(int my_side, int prev, int curr) {
 
@@ -66,7 +64,6 @@ static void printState(int my_side, int prev, int curr) {
 
     Serial.println("");
 }
-
 
 BoardLayout::BoardLayout()
     : transceivers{

@@ -30,7 +30,6 @@ void Game::initGame(int participating_mask, int map_id){
     paintMatrix();
 }
 
-
 int Game::getNumParticipating(){
     int num_participating = 0;
     int players_mask = this->participating_mask;
@@ -44,8 +43,6 @@ int Game::getNumParticipating(){
 
     return num_participating;
 }
-
-
 
 int Game::getGameId(int id){
     int player_index = 0;
@@ -216,7 +213,6 @@ void Game::handleBallCrossing(){
     }
 }
 
-
 void Game::checkWin(){
     if (!ESPTransceiver::getInstance().victoryQueue.empty()) {
         // Get the front tuple
@@ -271,7 +267,6 @@ void Game::performMovement(MovementOption option, Position pos) {
         Serial.println(other_side);
     }
 }
-
 
 void Game::checkSides(){
     BoardLayout::SIDE other_side;
@@ -542,7 +537,6 @@ void Game::update(int dt) {
     
 }
 
-
 void Game::sendWinMessages(){
 
     int player_id = 0;
@@ -604,8 +598,6 @@ void Game::playVictoryAnimationBallPulse() {
 
 }
 
-
-
 bool Game::isParticipatingAlive(int participating_mask){ 
     int player_id = 0;
     while (participating_mask) {
@@ -622,11 +614,8 @@ bool Game::isParticipatingAlive(int participating_mask){
     return true;
 }
 
-
 bool Game::isAllAlive(){
     return this->allAlive;
 }
-
-
 
 Game::Game(): tick(0), win(false){}
