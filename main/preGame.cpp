@@ -6,7 +6,6 @@
 PreGame::PreGame(): state(WAITING_FOR_START), led_matrix(nullptr), maze_maps(nullptr), start_button(nullptr), 
                     m_participating_mask(0), m_map_id(-1), m_should_start(false), timeout(REPLY_TIMEOUT), tick(0){}
 
-
 void PreGame::setup(LedMatrix* matrix, MazeMaps* mazes, Button* button){
     led_matrix = matrix;
     maze_maps = mazes;
@@ -15,7 +14,6 @@ void PreGame::setup(LedMatrix* matrix, MazeMaps* mazes, Button* button){
     for (int y = 0; y < 16; ++y)
     brightness[x][y] = 0;
 }
-
 
 void PreGame::update(int dt) {
 
@@ -133,7 +131,6 @@ void PreGame::update(int dt) {
     }
 }
 
-
 bool PreGame::shouldStart(int& participating_mask, int& map_id){
     participating_mask = m_participating_mask;
     map_id = m_map_id;
@@ -146,4 +143,11 @@ void PreGame::reset(){
     this->timeout = REPLY_TIMEOUT;
     this->state = WAITING_FOR_START;
     this->m_participating_mask = 0;
+
+    for (int x = 0; x < 16; ++x)
+    for (int y = 0; y < 16; ++y)
+    brightness[x][y] = 0;
+
+    this->tick = 0;
+    this->m_map_id = -1;
 }

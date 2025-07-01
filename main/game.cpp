@@ -11,6 +11,7 @@ void Game::setup(Gyro* gyro, LedMatrix* matrix, MazeMaps* maze_maps, BoardLayout
 }
 
 void Game::initGame(int participating_mask, int map_id){
+    this->tick = 0;
     this->participating_mask = participating_mask;
     this->map_id = map_id;
 
@@ -20,11 +21,14 @@ void Game::initGame(int participating_mask, int map_id){
 
     this->win = false;
     this->maze_maps->getMapPart(num_screens, map_id, game_id, this->map);
+    this->allAlive = true;
+
+    this->move_to_side = Gyro::SIDE::STAY;
+
     checkBall();
 
     paintMatrix();
 }
-
 
 int Game::getNumParticipating(){
     int num_participating = 0;
@@ -39,8 +43,6 @@ int Game::getNumParticipating(){
 
     return num_participating;
 }
-
-
 
 int Game::getGameId(int id){
     int player_index = 0;
@@ -211,7 +213,6 @@ void Game::handleBallCrossing(){
     }
 }
 
-
 void Game::checkWin(){
     if (!ESPTransceiver::getInstance().victoryQueue.empty()) {
         // Get the front tuple
@@ -266,7 +267,6 @@ void Game::performMovement(MovementOption option, Position pos) {
         Serial.println(other_side);
     }
 }
-
 
 void Game::checkSides(){
     BoardLayout::SIDE other_side;
@@ -460,6 +460,13 @@ void Game::update(int dt) {
     this->tick += dt;
 
     if(this->tick >= 280){
+
+        if(!isParticipatingAlive(this->participating_mask)){
+            this->allAlive = false;
+            this->tick = 0;
+            return;
+        }
+
         checkSides();
         handleBallCrossing();
 
@@ -530,7 +537,6 @@ void Game::update(int dt) {
     
 }
 
-
 void Game::sendWinMessages(){
 
     int player_id = 0;
@@ -592,6 +598,24 @@ void Game::playVictoryAnimationBallPulse() {
 
 }
 
+bool Game::isParticipatingAlive(int participating_mask){ 
+    int player_id = 0;
+    while (participating_mask) {
+        if (participating_mask & 1) {
+            //Serial.println(player_id);
+            if(!ESPTransceiver::getInstance().isAlive(player_id)){
+                return false;
+            }
+        }
+        participating_mask >>= 1; // move to next bit
+        ++player_id;
+    }
 
+    return true;
+}
+
+bool Game::isAllAlive(){
+    return this->allAlive;
+}
 
 Game::Game(): tick(0), win(false){}

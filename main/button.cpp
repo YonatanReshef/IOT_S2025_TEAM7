@@ -32,7 +32,6 @@ bool Button::getClick() {
     return false;
 }
 
-
 void Button::resetClick(){
     this->clicked = false;
 }

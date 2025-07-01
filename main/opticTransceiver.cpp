@@ -7,7 +7,6 @@ OpticTransceiver::OpticTransceiver(int sender_pin, int receiver_pin)
   : trasmitter{sender_pin, 0}, receiver{receiver_pin, WAIT_PREAMBLE, 0, 0, 0, {0}, -1}, tick(0)
 {}
 
-
 void OpticTransceiver::setMessage(int msg){
   // Calculate the preamble size
   const int PREAMBLE_SIZE = TRANSMISSION_SIZE - MESSAGE_SIZE - 1; // |msg| + |zero_bit|
@@ -123,7 +122,6 @@ void OpticTransceiver::setup(int msg){
   pinMode(trasmitter.analogOutPin, OUTPUT);
   setMessage(msg);
 }
-
 
 int OpticTransceiver::update(int dt){
   tick += dt;

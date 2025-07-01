@@ -36,6 +36,8 @@ private:
     int participating_mask;
     int map_id;
 
+    bool allAlive;
+
 
 
 
@@ -56,6 +58,7 @@ private:
     LedMatrix* matrix;
     MazeMaps* maze_maps;
     BoardLayout* board_layout;
+    
 
 
 
@@ -94,7 +97,11 @@ public:
     void initGame(int participating, int map_id);
 
     bool isWin();
+    bool isAllAlive();
+
     void playVictoryAnimationBallPulse();
+
+    bool isParticipatingAlive(int participating_mask);
 
     void sendWinMessages();
 };
