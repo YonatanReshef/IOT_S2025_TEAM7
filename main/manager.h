@@ -40,7 +40,6 @@ private:
 
 
     /*==== FUNCS ==========*/
-    bool isParticipatingAlive(int participating_mask);
     
 
 public:

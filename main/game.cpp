@@ -594,4 +594,22 @@ void Game::playVictoryAnimationBallPulse() {
 
 
 
+bool Game::isParticipatingAlive(int participating_mask){ 
+    int player_id = 0;
+    while (participating_mask) {
+        if (participating_mask & 1) {
+            //Serial.println(player_id);
+            if(!ESPTransceiver::getInstance().isAlive(player_id)){
+                return false;
+            }
+        }
+        participating_mask >>= 1; // move to next bit
+        ++player_id;
+    }
+
+    return true;
+}
+
+
+
 Game::Game(): tick(0), win(false){}

@@ -96,6 +96,8 @@ public:
     bool isWin();
     void playVictoryAnimationBallPulse();
 
+    bool isParticipatingAlive(int participating_mask);
+
     void sendWinMessages();
 };
 

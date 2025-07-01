@@ -9,22 +9,6 @@ Manager::Manager(): id(-1), state(PRE_GAME), // TODO: change to PRE_GAME
 {}
 
 
-bool Manager::isParticipatingAlive(int participating_mask){ 
-    int player_id = 0;
-    while (participating_mask) {
-        if (participating_mask & 1) {
-            //Serial.println(player_id);
-            if(!ESPTransceiver::getInstance().isAlive(player_id)){
-                return false;
-            }
-        }
-        participating_mask >>= 1; // move to next bit
-        ++player_id;
-    }
-
-    return true;
-}
-
 void Manager::setup(){
     
     /* ==== comm ==== */
@@ -91,7 +75,7 @@ void Manager::update(int dt){
     case GAME:
         this->tick += dt;
         if(tick >= 150){
-            if(!isParticipatingAlive(this->participating_mask)){
+            if(!this->game.isParticipatingAlive(this->participating_mask)){
                 Serial.println("ParticipatingDead=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
                 state = END_GAME;
                 Serial.println("GAME -> END");
