@@ -165,16 +165,16 @@ void Game::updateBallCrossing(BoardLayout::SIDE my_side, int my_idx){
     switch (my_side)
     {
     case BoardLayout::SIDE::DOWN:
-        this->ball = {my_idx, 16};
-        break;
-    case BoardLayout::SIDE::UP:
         this->ball = {my_idx, 1};
         break;
+    case BoardLayout::SIDE::UP:
+        this->ball = {my_idx, 16};
+        break;
     case BoardLayout::SIDE::LEFT:
-        this->ball = {1, my_idx};
+        this->ball = {16, my_idx};
         break;
     case BoardLayout::SIDE::RIGHT:
-        this->ball = {16, my_idx};
+        this->ball = {1, my_idx};
         break;
     
     default:
