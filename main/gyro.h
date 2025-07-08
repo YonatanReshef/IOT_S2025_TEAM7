@@ -25,9 +25,9 @@ private:
     Adafruit_MPU6050 mpu;
 
     //acceleration arrays in each axis
-    double acc_x_arr[10];
-    double acc_y_arr[10];
-    double acc_z_arr[10];
+    double acc_x_arr[8];
+    double acc_y_arr[8];
+    double acc_z_arr[8];
 
     //acceleration values in each exis
     double acc_x, acc_y, acc_z;

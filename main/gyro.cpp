@@ -55,7 +55,7 @@ void Gyro::update(int dt) {
 
       this->reading_idx++;
 
-      if(this->reading_idx >= 10) {
+      if(this->reading_idx >= 8) {
           this->reading_idx = 0;
           this->acc_x = this->getArrAvg(this->acc_x_arr);
           this->acc_y = this->getArrAvg(this->acc_y_arr);

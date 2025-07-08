@@ -459,7 +459,7 @@ int Game::calcOtherSideCrossingIdx(BoardLayout::SIDE other_side, BoardLayout::SI
 void Game::update(int dt) {
     this->tick += dt;
 
-    if(this->tick >= 280){
+    if(this->tick >= 350){
 
         if(!isParticipatingAlive(this->participating_mask)){
             this->allAlive = false;

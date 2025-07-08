@@ -16,7 +16,7 @@ public:
 
 private:
 
-    static const int DISCONNECTED_FRAME_NUM = 15;
+    static const int DISCONNECTED_FRAME_NUM = 7;
 
     static const int WIN_FRAME_NUM = 15;
     static const int MAX_RADIUS = 7;

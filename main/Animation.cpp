@@ -72,7 +72,7 @@ void Animation::disconnectedAnimation() {
 void Animation::update(int dt){
     tick += dt;
 
-    if(tick >= 250){
+    if(tick >= 200){
 
         if(cycle == NUM_CYCLES){
             this->is_animation_done = true;
