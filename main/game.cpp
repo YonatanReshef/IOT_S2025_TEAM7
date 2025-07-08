@@ -148,13 +148,13 @@ Game::MovementOption Game::checkPos(Position pos) {
 
 BoardLayout::SIDE Game::calcCrossingSide(Position pos) {
     // Determine which side the player is crossing based on the position
-    if (pos.x == 0) {
+    if (pos.x == 17) {
         return BoardLayout::SIDE::LEFT;
-    } else if (pos.x == 17) {
+    } else if (pos.x == 0) {
         return BoardLayout::SIDE::RIGHT;
-    } else if (pos.y == 0) {
-        return BoardLayout::SIDE::UP;
     } else if (pos.y == 17) {
+        return BoardLayout::SIDE::UP;
+    } else if (pos.y == 0) {
         return BoardLayout::SIDE::DOWN;
     }
     
