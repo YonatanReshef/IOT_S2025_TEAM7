@@ -149,9 +149,9 @@ Game::MovementOption Game::checkPos(Position pos) {
 BoardLayout::SIDE Game::calcCrossingSide(Position pos) {
     // Determine which side the player is crossing based on the position
     if (pos.x == 17) {
-        return BoardLayout::SIDE::LEFT;
-    } else if (pos.x == 0) {
         return BoardLayout::SIDE::RIGHT;
+    } else if (pos.x == 0) {
+        return BoardLayout::SIDE::LEFT;
     } else if (pos.y == 17) {
         return BoardLayout::SIDE::UP;
     } else if (pos.y == 0) {
@@ -250,10 +250,11 @@ void Game::performMovement(MovementOption option, Position pos) {
         BoardLayout::SIDE crossing_side = calcCrossingSide(pos);
         Serial.println("calcCrossingSide after");
         BoardLayout::SIDE other_side;
-        Serial.println("getState before");
+        Serial.println("getState before, params");
+        Serial.println(crossing_side);
         int id_receiver = this->board_layout->getState(crossing_side, other_side);
-        Serial.println("getState after");
-
+        Serial.println("getState after, param");
+        Serial.println(id_receiver);
 
         Serial.println("calcOtherSideCrossingIdx before");
         int other_idx = calcOtherSideCrossingIdx(other_side, crossing_side, pos);
@@ -370,6 +371,18 @@ void Game::checkSides(){
 }
 
 int Game::calcOtherSideCrossingIdx(BoardLayout::SIDE other_side, BoardLayout::SIDE my_side, Position pos){
+
+    Serial.println("other side");
+    Serial.println(other_side);
+
+    Serial.println("my side");
+    Serial.println(my_side);
+
+    Serial.println("Pos X");
+    Serial.println(pos.x);
+    Serial.println("Pos y");
+    Serial.println(pos.y);
+
     int my_idx;
 
     if(my_side == BoardLayout::SIDE::DOWN || my_side == BoardLayout::SIDE::UP){
@@ -378,7 +391,10 @@ int Game::calcOtherSideCrossingIdx(BoardLayout::SIDE other_side, BoardLayout::SI
     else{
         my_idx = pos.y;
     }
-    
+
+    Serial.println("my idx");
+    Serial.println(my_idx);
+
     switch (my_side)
     {
     case BoardLayout::SIDE::DOWN:

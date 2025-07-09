@@ -20,6 +20,9 @@
 Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 
 
+
+
+
 void setup() {
   // These lines are specifically to support the Adafruit Trinket 5V 16 MHz.
   // Any other board, you can remove this part (but no harm leaving it):
@@ -34,6 +37,8 @@ void setup() {
   pixels.show();
 }
 
+int loop_num = 0;
+
 void loop() {
   /*
   The following loop test each pixel with white.
@@ -42,10 +47,23 @@ void loop() {
   for(int i=0; i<NUMPIXELS; i++) {
 
     pixels.clear(); // Set all pixel colors to 'off'
-    pixels.setPixelColor(i, pixels.Color(255, 255, 255));
+    if ( loop_num % 3 == 0) {
+        pixels.setPixelColor(i, pixels.Color(255, 0, 0));
+    }
+    if( loop_num % 3 == 1){
+        pixels.setPixelColor(i, pixels.Color(0, 255, 0));
+    }
+    if(loop_num % 3 == 2){
+        pixels.setPixelColor(i, pixels.Color(0, 0, 255));
+    }
 
     pixels.show();   // Send the updated pixel colors to the hardware.
 
     delay(DELAYVAL); // Pause before next pass through loop
+  }
+
+  loop_num += 1;
+  if(loop_num == 3){
+      loop_num = 0;
   }
 }
