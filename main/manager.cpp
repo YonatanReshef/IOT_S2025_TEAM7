@@ -9,7 +9,7 @@ Manager::Manager(): id(-1), state(PRE_GAME), // TODO: change to PRE_GAME
 {}
 
 void Manager::setup(){
-    
+
     /* ==== comm ==== */
     ESPTransceiver::getInstance().setup();
     id = ESPTransceiver::getInstance().getMyId();

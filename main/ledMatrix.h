@@ -1,6 +1,6 @@
 
-#ifndef LED_MATRIX
-#define LED_MATRIX
+#ifndef LED_MATRIX_H
+#define LED_MATRIX_H
 
 #include <cstdint>
 #include <Adafruit_NeoPixel.h>

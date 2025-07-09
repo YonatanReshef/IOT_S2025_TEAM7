@@ -246,15 +246,25 @@ void Game::performMovement(MovementOption option, Position pos) {
         this->win = true;
  
     } else if (option == CROSS_BORDER) {
+        Serial.println("calcCrossingSide before");
         BoardLayout::SIDE crossing_side = calcCrossingSide(pos);
+        Serial.println("calcCrossingSide after");
         BoardLayout::SIDE other_side;
+        Serial.println("getState before");
         int id_receiver = this->board_layout->getState(crossing_side, other_side);
+        Serial.println("getState after");
 
+
+        Serial.println("calcOtherSideCrossingIdx before");
         int other_idx = calcOtherSideCrossingIdx(other_side, crossing_side, pos);
+        Serial.println("calcOtherSideCrossingIdx after");
+
 
         ESPTransceiver::BallCrossingMessage msg_struct = {other_side, other_idx};
-
+        
+        Serial.println("Send before");
         ESPTransceiver::getInstance().send(id_receiver, ESPTransceiver::MessageType::BALL_CROSSING, (char*)&msg_struct);
+        Serial.println("Send after");
 
         this->map[this->ball.y][this->ball.x] = MazeMaps::BlockType::EMPTY;
         this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, colors[0]); 
@@ -474,6 +484,7 @@ void Game::update(int dt) {
 
         if(this->is_player_here){
             this->move_to_side = this->gyro->getCurDir();
+            Serial.printf("Gyro current lean: %d\n", this->move_to_side);
 
             /*Serial.print("Direction is ");
             if(this->move_to_side == Gyro::DOWN){
