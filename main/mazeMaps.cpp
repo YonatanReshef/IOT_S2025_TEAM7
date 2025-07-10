@@ -352,12 +352,12 @@ void MazeMaps::fillBorder(int num_screens, int map_id, int other_screen_id, Boar
     {
     case BoardLayout::SIDE::DOWN:
         his_row = true;
-        his_idx = 15;
+        his_idx = 0;
         break;
     
     case BoardLayout::SIDE::UP:
         his_row = true;
-        his_idx = 0;
+        his_idx = 15;
         break;
     
     case BoardLayout::SIDE::LEFT:
@@ -430,13 +430,13 @@ void MazeMaps::fillBorder(int num_screens, int map_id, int other_screen_id, Boar
     {
     case BoardLayout::SIDE::DOWN:
         for(int i = 1; i < 17; i++){
-            out_map[17][i] = other_border[i];
+            out_map[0][i] = other_border[i];
         }
         break;
     
     case BoardLayout::SIDE::UP:
         for(int i = 1; i < 17; i++){
-            out_map[0][i] = other_border[i];
+            out_map[17][i] = other_border[i];
         }
         break;
     
