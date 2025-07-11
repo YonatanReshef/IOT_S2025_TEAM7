@@ -423,8 +423,17 @@ void Game::checkSides(){
         esp_game_id = getGameId(right_esp);
         if(esp_game_id != -1){
             if(this->map[1][17] == MazeMaps::BlockType::BORDER){
+                Serial.println("Border RIGHT before: ");
+                for(int i=0; i < 16; i++){
+                    Serial.print(this->map[i][17]);
+                }
                 Serial.print("filling RIGHT");
                 this->maze_maps->fillBorder(num_screens, this->map_id, esp_game_id, BoardLayout::SIDE::RIGHT, other_side, this->map);
+
+                Serial.println("Border RIGHT after: ");
+                for(int i=0; i < 16; i++){
+                    Serial.print(this->map[i][17]);
+                }
             }
         }
     }
@@ -437,6 +446,8 @@ void Game::checkSides(){
             }
         }
     }
+
+    //this->paintMatrix();
 
 }
 

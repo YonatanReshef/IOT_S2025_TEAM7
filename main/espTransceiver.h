@@ -69,6 +69,7 @@ public:
     bool isAlive(int id);
     void onReceiveWrapper(const uint8_t* mac, const uint8_t* incomingData, int len);
     int getParticipatingMask();
+    void reset();
 
     std::queue<std::tuple<BallCrossingMessage, int>> ballCrossingQueue;
     std::queue<std::tuple<GameInitMessage, int>> gameInitQueue;

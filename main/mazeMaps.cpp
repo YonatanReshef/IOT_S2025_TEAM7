@@ -6,7 +6,7 @@
 
 MazeMaps::MazeMaps() {
 
-    /*
+    
     // ==== MAP 1: Single Board ====
 
     MazeMaps::BlockType temp_maps_for_1[16][16] = {
@@ -28,7 +28,19 @@ MazeMaps::MazeMaps() {
         { EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, WALL, EMPTY, EMPTY, EMPTY, EMPTY, WALL }
     };
 
-     for(int i=0;i<16;i++){
+    /*for(int i=0;i<16;i++){
+        for(int j=0;j<16;j++){
+            maps_for_1[0][0][i][j] = EMPTY;
+        }
+     }
+
+    maps_for_1[0][0][0][0] = BALL;
+    maps_for_1[0][0][0][15] = FINISH;
+    maps_for_1[0][0][1][0] = WALL;
+    */
+    
+    
+    for(int i=0;i<16;i++){
         for(int j=0;j<16;j++){
             maps_for_1[0][0][i][j] = temp_maps_for_1[i][j];
         }
@@ -74,6 +86,53 @@ MazeMaps::MazeMaps() {
         { WALL, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, WALL, EMPTY, EMPTY, EMPTY, WALL, EMPTY, EMPTY, EMPTY, WALL },
         { WALL, WALL, WALL, WALL, WALL, WALL, EMPTY, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL }
     };
+
+
+    /*for(int i=0;i<16;i++){
+        for(int j=0;j<16;j++){
+            maps_for_2[0][0][i][j] = EMPTY;
+        }
+     }
+
+    for(int i=0;i<16;i++){
+        for(int j=0;j<16;j++){
+            maps_for_2[0][1][i][j] = EMPTY;
+        }
+    }
+
+
+
+    for(int j=1;j<2;j++){
+            maps_for_2[0][1][0][j] = WALL;
+    }
+    for(int j=1;j<3;j++){
+            maps_for_2[0][1][15][j] = WALL;
+    }
+    for(int j=1;j<4;j++){
+            maps_for_2[0][1][j][0] = WALL;
+    }
+    for(int j=1;j<5;j++){
+            maps_for_2[0][1][j][15] = WALL;
+    }
+
+
+    for(int j=1;j<2;j++){
+            maps_for_2[0][0][0][j] = WALL;
+    }
+    for(int j=1;j<3;j++){
+            maps_for_2[0][0][15][j] = WALL;
+    }
+    for(int j=1;j<4;j++){
+            maps_for_2[0][0][j][0] = WALL;
+    }
+    for(int j=1;j<5;j++){
+            maps_for_2[0][0][j][15] = WALL;
+    }
+
+    */
+
+
+    
 
      for(int i=0;i<16;i++){
         for(int j=0;j<16;j++){
@@ -236,8 +295,8 @@ MazeMaps::MazeMaps() {
             maps_for_4[0][3][i][j] = temp_maps_for_4_4[i][j];
         }
      }
-    */
-
+    
+    /*
     // ==== MAP 1: Single Board ====
 
     for (int x = 0; x < 16; ++x)
@@ -292,6 +351,8 @@ MazeMaps::MazeMaps() {
             maps_for_4[0][1][i][i / 2] = WALL;
             maps_for_4[0][2][15 - i][i / 2] = WALL;
         }
+
+    */
     
 }
 
@@ -340,6 +401,35 @@ void MazeMaps::getMapPart(int num_screens, int map_id, int screen_id, BlockType 
         break;
     }
     
+}
+
+
+
+bool invertBorder(BoardLayout::SIDE my_side, BoardLayout::SIDE other_side){
+    if (my_side == other_side){
+        return true;
+    }
+    
+    if (my_side == BoardLayout::SIDE::RIGHT && other_side == BoardLayout::SIDE::DOWN)
+    {
+        return true;
+    }
+
+    if (my_side == BoardLayout::SIDE::DOWN && other_side == BoardLayout::SIDE::RIGHT){
+        return true;
+    }
+
+
+    if (my_side == BoardLayout::SIDE::LEFT && other_side == BoardLayout::SIDE::UP)
+    {
+        return true;
+    }
+
+    if (my_side == BoardLayout::SIDE::UP && other_side == BoardLayout::SIDE::LEFT){
+        return true;
+    }
+
+    return false;
 }
 
 void MazeMaps::fillBorder(int num_screens, int map_id, int other_screen_id, BoardLayout::SIDE my_side, BoardLayout::SIDE other_side, BlockType (&out_map)[18][18]){
@@ -424,31 +514,65 @@ void MazeMaps::fillBorder(int num_screens, int map_id, int other_screen_id, Boar
         break;
     }
 
+    bool invert = invertBorder(my_side, other_side);
+    
+    
+    
+
+
+    /*Serial.println("Copying border: ");
+    for(int i=0; i < 16; i++){
+        Serial.println(other_border[i]);
+    }
+    Serial.println("Border Done-----");
+    */
 
     //copy to out_map
     switch (my_side)
     {
     case BoardLayout::SIDE::DOWN:
         for(int i = 1; i < 17; i++){
-            out_map[0][i] = other_border[i];
+            if(invert){
+                out_map[0][i] = other_border[16 - i];
+            }
+            else{
+                out_map[0][i] = other_border[i - 1];
+            }
         }
         break;
     
     case BoardLayout::SIDE::UP:
         for(int i = 1; i < 17; i++){
-            out_map[17][i] = other_border[i];
+            if(invert){
+                out_map[17][i] = other_border[16 - i];
+            }
+            else{
+                out_map[17][i] = other_border[i - 1];
+            }
+            
         }
         break;
     
     case BoardLayout::SIDE::LEFT:
         for(int i = 1; i < 17; i++){
-            out_map[i][0] = other_border[i];
+            if(invert){
+                out_map[i][0] = other_border[16 - i];
+            }
+            else{
+                out_map[i][0] = other_border[i - 1];
+            }
         }
         break;
 
     case BoardLayout::SIDE::RIGHT:
         for(int i = 1; i < 17; i++){
-            out_map[i][17] = other_border[i];
+            if(invert){
+                out_map[i][17] = other_border[16 - i];
+            }
+            else{
+                out_map[i][17] = other_border[i - 1];
+            }
+            
         }
         break;
     

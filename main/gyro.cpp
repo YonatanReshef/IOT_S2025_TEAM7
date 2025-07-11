@@ -65,9 +65,9 @@ void Gyro::update(int dt) {
         // Decide which axis dominates
         if (abs(this->acc_x) > abs(this->acc_y)) {
           // Move along X
-          if (this->acc_x < -3){ 
+          if (this->acc_x < -2.5){ 
             this->curr_direction = SIDE::RIGHT;
-          }else if (this->acc_x > 3){ 
+          }else if (this->acc_x > 2.5){ 
             this->curr_direction = SIDE::LEFT;
           }
           else{
@@ -75,10 +75,10 @@ void Gyro::update(int dt) {
           }
         } else {
           // Move along Y
-          if (this->acc_y > 3){ 
+          if (this->acc_y > 2.5){ 
             this->curr_direction = SIDE::UP;
           }
-          else if (this->acc_y < -3){ 
+          else if (this->acc_y < -2.5){ 
             this->curr_direction = SIDE::DOWN;
           }
           else{

@@ -97,6 +97,9 @@ void Manager::update(int dt){
 
         if(this->animation.isDone()){
             this->pre_game.reset();
+            // this->game.reset() <----- TODO;
+            
+            ESPTransceiver::getInstance().reset();
 
             state = PRE_GAME;
             Serial.println("END -> PRE");

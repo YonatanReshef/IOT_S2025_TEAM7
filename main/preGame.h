@@ -47,6 +47,7 @@ private:
     uint8_t brightness[16][16]; // Per-pixel brightness (0–255)
 
     static const int REPLY_TIMEOUT = 3000; //ms
+    static const int INIT_TIMEOUT = 4000; //ms
 
 public:
     PreGame();

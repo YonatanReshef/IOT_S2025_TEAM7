@@ -74,6 +74,32 @@ int ESPTransceiver::getParticipatingMask(){
     return participating_mask;
 }
 
+void ESPTransceiver::reset(){
+    
+    // reset all queues but liveness
+    while(!ballCrossingQueue.empty()){
+        ballCrossingQueue.pop();
+    }
+    while(!gameInitQueue.empty()){
+        gameInitQueue.pop();
+    }
+    while(!victoryQueue.empty()){
+        victoryQueue.pop();
+    }
+    while(!readyInitQueue.empty()){
+        readyInitQueue.pop();
+    }
+    while(!readyConnectQueue.empty()){
+        readyConnectQueue.pop();
+    }
+    while(!ackQueue.empty()){
+        ackQueue.pop();
+    }
+    while(!gameRequestQueue.empty()){
+        gameRequestQueue.pop();
+    }
+}
+
 void ESPTransceiver::update(int dt){
 
     for(int i = 0; i < macCount; ++i){

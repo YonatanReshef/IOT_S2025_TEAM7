@@ -62,6 +62,7 @@ void PreGame::update(int dt) {
             comm.send(-1, ESPTransceiver::MessageType::GAME_REQUEST, (char*)&msg);
             state = WAITING_FOR_ACCEPT;
             m_participating_mask = (1 << comm.getMyId());
+            timeout = REPLY_TIMEOUT;
         }
         else if(!comm.gameRequestQueue.empty()){
             // TODO: pop msg, send accept
@@ -74,6 +75,7 @@ void PreGame::update(int dt) {
             ESPTransceiver::ReadyInitMessage send_msg = {0};
             comm.send(senderId, ESPTransceiver::MessageType::READY_INIT, (char*)&send_msg);
             state = WAITING_FOR_INIT_DATA;
+            timeout = INIT_TIMEOUT; 
         }
         break;
 
@@ -126,6 +128,7 @@ void PreGame::update(int dt) {
         else if(timeout <= 0){ // Reached timeout for INIT_DATA, ABORT.
             // do not know what to do here really...
             state = WAITING_FOR_START;
+            this->reset();
         }
         break;
     }
@@ -150,4 +153,17 @@ void PreGame::reset(){
 
     this->tick = 0;
     this->m_map_id = -1;
+
+    // clean queues!
+    ESPTransceiver& comm = ESPTransceiver::getInstance();
+
+    while (!comm.gameInitQueue.empty()) {
+        comm.gameInitQueue.pop();
+    }
+    while (!comm.readyInitQueue.empty()) {
+        comm.readyInitQueue.pop();
+    }
+    while (!comm.gameRequestQueue.empty()) {
+        comm.gameRequestQueue.pop();
+    }
 }
