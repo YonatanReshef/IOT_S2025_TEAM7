@@ -49,6 +49,8 @@ void OpticTransceiver::receiveLogic(){
     case WAIT_PREAMBLE:
       if (tick % SAMPLE_INTERVAL_MS == 0) {
         int sensorValue = analogRead(receiver.analogInPin);
+//        Serial.printf("From %d recved: ",receiver.analogInPin);
+//        Serial.println(sensorValue);
         if (sensorValue < LIGHT_THRESHOLD) {
           receiver.ticksOnPreamble += SAMPLE_INTERVAL_MS;
         } else {
@@ -71,6 +73,9 @@ void OpticTransceiver::receiveLogic(){
 
         if (receiver.bits_read < MESSAGE_SIZE) {
           receiver.received_data[receiver.bits_read] = bit;
+          /*Serial.print("data bit i=");
+          Serial.println(receiver.bits_read);
+          Serial.println(bit);*/
           receiver.bits_read++;
         }
         else if(receiver.bits_read == MESSAGE_SIZE){ // ZERO_BIT - now reading zero_bit

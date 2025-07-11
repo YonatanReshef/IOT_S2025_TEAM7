@@ -75,7 +75,7 @@ private:
 
     void updateMatrix();
 
-    void handleBallCrossing();
+    bool handleBallCrossing();
 
     void updateBallCrossing(BoardLayout::SIDE my_side, int my_idx);
 
@@ -108,3 +108,12 @@ public:
 
 
 #endif // GAME_H
+
+
+/*
+ *
+ * notes:
+ * - why "isAllAlive" needed?? - this is for the "Game aborted", I dont like this "isAllAlive" name
+ * -
+ *
+ * */

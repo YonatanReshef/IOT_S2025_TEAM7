@@ -201,13 +201,23 @@ void Game::updateBallCrossing(BoardLayout::SIDE my_side, int my_idx){
     Serial.print(" Y- ");
     Serial.println(this->ball.y);
 
+    if(this->map[this->ball.y][this->ball.x] == MazeMaps::BlockType::FINISH){
+        this->map[this->ball.y][this->ball.x] = MazeMaps::BlockType::EMPTY;
+        sendWinMessages();
+        this->win = true;
+    }
+    else{
+        this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, this->colors[MazeMaps::BlockType::BALL]);
+    }
 
-    this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, this->colors[MazeMaps::BlockType::BALL]);
+
 
     this->is_player_here = true;
+
+
 }
 
-void Game::handleBallCrossing(){
+bool Game::handleBallCrossing(){
     if (!ESPTransceiver::getInstance().ballCrossingQueue.empty()) {
         // Get the front tuple
         auto frontTuple = ESPTransceiver::getInstance().ballCrossingQueue.front();
@@ -231,7 +241,11 @@ void Game::handleBallCrossing(){
         Serial.println(my_idx);*/
 
         updateBallCrossing(my_side, my_idx);
+
+        return true;
     }
+
+    return false;
 }
 
 void Game::checkWin(){
@@ -483,10 +497,10 @@ int Game::calcOtherSideCrossingIdx(BoardLayout::SIDE other_side, BoardLayout::SI
             return 17 - my_idx;
             break;
         case BoardLayout::SIDE::LEFT:
-            return my_idx;
+            return 17 - my_idx;
             break;
         case BoardLayout::SIDE::RIGHT:
-            return 17 - my_idx;
+            return my_idx;
             break;
         default:
             break;
@@ -538,6 +552,14 @@ int Game::calcOtherSideCrossingIdx(BoardLayout::SIDE other_side, BoardLayout::SI
     }
 }
 
+/*
+ * What should happen in update:
+ * - Check game validity (aborted yes/no)
+ * - update ball position
+ * - ball crossing
+ * - check win
+ *
+ * */
 void Game::update(int dt) {
     this->tick += dt;
 
@@ -550,63 +572,62 @@ void Game::update(int dt) {
         }
 
         checkSides();
-        handleBallCrossing();
+        bool is_crossing_in = handleBallCrossing();
+
+        if(!is_crossing_in) {
+            if (this->is_player_here) {
+                this->move_to_side = this->gyro->getCurDir();
+
+                /*Serial.print("Direction is ");
+                if(this->move_to_side == Gyro::DOWN){
+                    Serial.println("DOWN ----------");
+                }
+                if(this->move_to_side == Gyro::UP){
+                    Serial.println("UP ----------");
+                }
+                if(this->move_to_side == Gyro::LEFT){
+                    Serial.println("LEFT ----------");
+                }
+                if(this->move_to_side == Gyro::RIGHT){
+                    Serial.println("RIGHT ----------");
+                }
+                if(this->move_to_side == Gyro::STAY){
+                    Serial.println("STAY ----------");
+                }
+                /*
+                Serial.print("Calc next POS from ");
+                Serial.print(this->ball.x);
+                Serial.print(" , ");
+                Serial.println(this->ball.y);*/
+                Position next_pos = calcNextPos();
+
+                /*Serial.println("-----------------");
+
+                Serial.print("To Pos ");
+                Serial.print(next_pos.x);
+                Serial.print(" , ");
+                Serial.println(next_pos.y);*/
+
+                MovementOption option = checkPos(next_pos);
 
 
+                if (option == MovementOption::CROSS_BORDER) {
+                    Serial.print("Option is ");
+                    Serial.println("CROSS BORDER ----------");
+                }
+                if (option == MovementOption::HIT_WALL) {
+                    Serial.print("Option is ");
+                    Serial.println("WALL ----------");
+                }
+                if (option == MovementOption::OUT_OF_BOUNDS) {
+                    Serial.print("Option is ");
+                    Serial.println("OUT OF BOUNDS ----------");
+                }
 
-        if(this->is_player_here){
-            this->move_to_side = this->gyro->getCurDir();
-
-            /*Serial.print("Direction is ");
-            if(this->move_to_side == Gyro::DOWN){
-                Serial.println("DOWN ----------");
+                performMovement(option, next_pos);
+            } else {
+                checkWin();
             }
-            if(this->move_to_side == Gyro::UP){
-                Serial.println("UP ----------");
-            }
-            if(this->move_to_side == Gyro::LEFT){
-                Serial.println("LEFT ----------");
-            }
-            if(this->move_to_side == Gyro::RIGHT){
-                Serial.println("RIGHT ----------");
-            }
-            if(this->move_to_side == Gyro::STAY){
-                Serial.println("STAY ----------");
-            }
-            /*
-            Serial.print("Calc next POS from ");
-            Serial.print(this->ball.x);
-            Serial.print(" , ");
-            Serial.println(this->ball.y);*/
-            Position next_pos = calcNextPos();
-
-            /*Serial.println("-----------------");
-
-            Serial.print("To Pos ");
-            Serial.print(next_pos.x);
-            Serial.print(" , ");
-            Serial.println(next_pos.y);*/
-
-            MovementOption option = checkPos(next_pos);
-
-            
-            if(option == MovementOption::CROSS_BORDER){
-                Serial.print("Option is ");
-                Serial.println("CROSS BORDER ----------");
-            }
-            if(option == MovementOption::HIT_WALL){
-                Serial.print("Option is ");
-                Serial.println("WALL ----------");
-            }
-            if(option == MovementOption::OUT_OF_BOUNDS){
-                Serial.print("Option is ");
-                Serial.println("OUT OF BOUNDS ----------");
-            }
-
-            performMovement(option, next_pos);
-        }
-        else{
-            checkWin();
         }
 
         this->tick = 0;

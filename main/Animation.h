@@ -20,7 +20,7 @@ private:
 
     static const int WIN_FRAME_NUM = 15;
     static const int MAX_RADIUS = 7;
-    static const int NUM_CYCLES = 3;
+    static const int NUM_CYCLES = 2;
 
     uint32_t colors[4] = {0x000000, 0xFF0000, 0x00FF00, 0x0000FF};
 
