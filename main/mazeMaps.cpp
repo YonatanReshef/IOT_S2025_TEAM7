@@ -161,7 +161,7 @@ MazeMaps::MazeMaps() {
         { WALL, WALL, WALL, WALL, EMPTY, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL }
     };
 
-    MazeMaps::BlockType temp_maps_for_2_other_1_1[16][16] = {
+    MazeMaps::BlockType temp_maps_for_2_other_2_1[16][16] = {
             {WALL, WALL, WALL, WALL, EMPTY, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL},
             {WALL, BALL, WALL, WALL, EMPTY, WALL, WALL, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, WALL, WALL},
             {WALL, EMPTY, WALL, WALL, EMPTY, WALL, WALL, EMPTY, WALL, EMPTY, WALL, WALL, WALL, WALL, WALL, WALL},
@@ -181,7 +181,7 @@ MazeMaps::MazeMaps() {
 
     };
 
-    MazeMaps::BlockType temp_maps_for_2_other_2_1[16][16] = {
+    MazeMaps::BlockType temp_maps_for_2_other_2_2[16][16] = {
             {WALL, WALL, WALL, EMPTY, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL},
             {WALL, WALL, EMPTY, EMPTY, EMPTY, WALL, EMPTY, WALL, EMPTY, EMPTY, EMPTY, WALL, EMPTY, EMPTY, FINISH, WALL},
             {WALL, WALL, EMPTY, WALL, EMPTY, WALL, EMPTY, WALL, EMPTY, WALL, EMPTY, WALL, EMPTY, WALL, WALL, WALL},
@@ -256,8 +256,8 @@ MazeMaps::MazeMaps() {
 
      for(int i=0;i<16;i++){
         for(int j=0;j<16;j++){
-            maps_for_2[1][0][i][j] = temp_maps_for_2_other_1_1[i][j];
-            maps_for_2[1][1][i][j] = temp_maps_for_2_other_1_2[i][j];
+            maps_for_2[1][0][i][j] = temp_maps_for_2_other_2_1[i][j];
+            maps_for_2[1][1][i][j] = temp_maps_for_2_other_2_2[i][j];
         }
      }
 
