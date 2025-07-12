@@ -36,7 +36,6 @@ void Animation::winAnimation(){
     }
 
     this->matrix->setBoard(map_colors);
-    this->matrix->update(10);
 
     this->frame += 1;
 }
@@ -63,10 +62,38 @@ void Animation::disconnectedAnimation() {
     }
 
     this->matrix->setBoard(map_colors);
-    this->matrix->update(10);
 
     this->frame += 1;
 }
+
+void Animation::stoppedAnimation() {
+    uint32_t map_colors[256];
+
+    // Shrink from full screen (size 16) down to center (size 0)
+    int max_size = 16;
+    int size = max_size - (frame % (max_size + 1)); // size from 16 to 0
+
+    // Calculate square bounds (centered)
+    int half = size / 2;
+    int xmin = 8 - half;
+    int xmax = 7 + half + (size % 2); // +1 if size is odd
+    int ymin = 8 - half;
+    int ymax = 7 + half + (size % 2); // +1 if size is odd
+
+    for (int y = 0; y < 16; ++y) {
+        for (int x = 0; x < 16; ++x) {
+            bool inside = (x >= xmin && x <= xmax && y >= ymin && y <= ymax);
+
+            map_colors[y * 16 + x] = inside
+                ? colors[MazeMaps::BlockType::WALL]   // Active square
+                : colors[MazeMaps::BlockType::EMPTY]; // Background
+        }
+    }
+
+    this->matrix->setBoard(map_colors);
+    this->frame += 1;
+}
+
 
 
 void Animation::update(int dt){
@@ -101,12 +128,22 @@ void Animation::update(int dt){
                 this->frame = 0;
                 this->cycle += 1;
             }
-
+            
             break;
-        
+            
+        case STOPPED:
+
+            stoppedAnimation();
+
+            if(this->frame == STOPPED_FRAME_NUM){
+                this->frame = 0;
+                this->cycle += 1;
+            }
+            
         default:
             break;
         }
+
 
         this->tick = 0;
     }

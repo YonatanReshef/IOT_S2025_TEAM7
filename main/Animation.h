@@ -11,12 +11,14 @@ public:
 
     enum Type{
         WIN,
-        DISCONNECTED
+        DISCONNECTED,
+        STOPPED
     };
 
 private:
 
     static const int DISCONNECTED_FRAME_NUM = 7;
+    static const int STOPPED_FRAME_NUM = 9;
 
     static const int WIN_FRAME_NUM = 15;
     static const int MAX_RADIUS = 7;
@@ -40,6 +42,7 @@ private:
 
     void winAnimation();
     void disconnectedAnimation();
+    void stoppedAnimation();
 
 
 public:
