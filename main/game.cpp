@@ -699,10 +699,6 @@ void Game::sendWinMessages(int win_stop){
     }
 }
 
-bool Game::isWin(){
-    return this->win;
-}
-
 bool Game::isParticipatingAlive(int participating_mask){ 
     int player_id = 0;
     while (participating_mask) {
