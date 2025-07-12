@@ -92,15 +92,7 @@ def help_1():
         ['BALL', 'WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY'],
     ]
     """
-
-
-def help_2():
-    import pygame
-    import sys
-
-    # Define block map
-    block_map = [
-        ['EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'BALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL'],
+"""['EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'BALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL'],
         ['EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL'],
         ['EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'WALL'],
         ['EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'WALL'],
@@ -115,7 +107,115 @@ def help_2():
         ['EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL'],
         ['EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL'],
         ['EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL'],
-        ['WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'FINISH', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL'],
+        ['WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'FINISH', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL'],"""
+
+"""
+block_map1 = [
+        ['WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'BALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'WALL'],
+        ['WALL', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL'],
+        ['WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'WALL', 'WALL'],
+        ['EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY'],
+        ['WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL'],
+        ['WALL', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL'],
+        ['WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL'],
+        ['WALL', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY'],
+        ['WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL'],
+
+    ]
+
+    block_map2 = [
+        ['WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'FINISH', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL'],
+        ['EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL'],
+        ['EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL'],
+        ['WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL'],
+
+    ]
+"""
+
+
+"""
+base
+        ['WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL'],
+
+"""
+
+
+def help_2():
+    import pygame
+    import sys
+
+    # Define block map
+    block_map1 = [
+        ['WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'BALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'WALL'],
+        ['WALL', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL'],
+        ['WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'WALL', 'WALL'],
+        ['EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY'],
+        ['WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL'],
+        ['WALL', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL'],
+        ['WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL'],
+        ['WALL', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY'],
+        ['WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL'],
+
+    ]
+
+    block_map2 = [
+        ['WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'FINISH', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL'],
+        ['EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL'],
+        ['EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL'],
+        ['WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL'],
 
     ]
 
@@ -129,10 +229,12 @@ def help_2():
     }
 
     # Settings
-    CELL_SIZE = 30
-    ROWS = len(block_map)
-    COLS = len(block_map[0])
-    WIDTH = COLS * CELL_SIZE
+    CELL_SIZE = 20
+    ROWS = len(block_map1)
+    COLS = len(block_map1[0])
+    PADDING = 40  # space between maps
+
+    WIDTH = COLS * CELL_SIZE * 2 + PADDING
     HEIGHT = ROWS * CELL_SIZE
 
     # Initialize Pygame
@@ -141,11 +243,11 @@ def help_2():
     pygame.display.set_caption("Block Map Viewer")
 
     # Draw the map
-    def draw_map():
-        for i, row in enumerate(block_map):
+    def draw_map(map_data, offset_x=0):
+        for i, row in enumerate(map_data):
             for j, block in enumerate(row):
-                color = block_colors.get(block, (128, 128, 128))  # default: gray
-                rect = pygame.Rect(j * CELL_SIZE, i * CELL_SIZE, CELL_SIZE, CELL_SIZE)
+                color = block_colors.get(block, (128, 128, 128))
+                rect = pygame.Rect(offset_x + j * CELL_SIZE, i * CELL_SIZE, CELL_SIZE, CELL_SIZE)
                 pygame.draw.rect(screen, color, rect)
                 pygame.draw.rect(screen, (50, 50, 50), rect, 1)  # Grid lines
 
@@ -153,7 +255,8 @@ def help_2():
     running = True
     while running:
         screen.fill((200, 200, 200))  # Background
-        draw_map()
+        draw_map(block_map1, offset_x=0)
+        draw_map(block_map2, offset_x=COLS * CELL_SIZE + PADDING)
         pygame.display.flip()
 
         for event in pygame.event.get():
@@ -167,23 +270,45 @@ def help_2():
 def help_3():
 
     s = """
-         block_map = [
-        ['EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'BALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL'],
-        ['EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL'],
-        ['EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'WALL'],
-        ['EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'WALL'],
-        ['EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL'],
-        ['EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL'],
-        ['EMPTY', 'WALL', 'WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL'],
-        ['EMPTY', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL'],
-        ['EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL'],
-        ['EMPTY', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL'],
-        ['EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL'],
-        ['EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL'],
-        ['EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL'],
-        ['EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL'],
-        ['EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL'],
-        ['WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'FINISH', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL'],
+         block_map1 = [
+        ['WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'BALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'WALL'],
+        ['WALL', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL'],
+        ['WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'WALL', 'WALL'],
+        ['EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY'],
+        ['WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL'],
+        ['WALL', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL'],
+        ['WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL'],
+        ['WALL', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY'],
+        ['WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL'],
+
+    ]
+
+    block_map2 = [
+        ['WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'FINISH', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL'],
+        ['EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL'],
+        ['WALL', 'WALL', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'EMPTY', 'EMPTY', 'WALL'],
+        ['EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL'],
+        ['WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'EMPTY', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'WALL'],
+
+    ]
 
     ]
 
