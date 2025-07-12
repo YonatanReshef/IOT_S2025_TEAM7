@@ -26,19 +26,22 @@ public:
     //GENERATE ~~~~~~~~~~
     
     //num maps for each num of screens
-    static const int num_maps = 1;
-    
+    static const int num_maps_1 = 4;
+    static const int num_maps_2 = 2;
+    static const int num_maps_3 = 1;
+    static const int num_maps_4 = 1;
+
 private:
     
     /* name[num_of_maps][num_of_boards][board_widht][board_height]*/
 
-    BlockType maps_for_1[num_maps][1][16][16];
+    BlockType maps_for_1[num_maps_1][1][16][16];
 
-    BlockType maps_for_2[num_maps][2][16][16];
+    BlockType maps_for_2[num_maps_2][2][16][16];
 
-    BlockType maps_for_3[num_maps][3][16][16];
+    BlockType maps_for_3[num_maps_3][3][16][16];
 
-    BlockType maps_for_4[num_maps][4][16][16];
+    BlockType maps_for_4[num_maps_4][4][16][16];
 };
 
 #endif

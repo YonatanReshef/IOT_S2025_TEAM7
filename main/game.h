@@ -4,6 +4,7 @@
 #include "gyro.h"
 #include "ledMatrix.h"
 #include "mazeMaps.h"
+#include "button.h"
 #include "espTransceiver.h"
 
 
@@ -13,6 +14,7 @@ private:
 
     int tick;
     bool win;
+    bool stopped;
 
     /* ==== Movement Option ==== */
     enum MovementOption {
@@ -83,8 +85,8 @@ private:
     LedMatrix* matrix;
     MazeMaps* maze_maps;
     BoardLayout* board_layout;
+    Button* button;
     
-
 
 
     /* ==== inner funcs ==== */
@@ -107,26 +109,29 @@ private:
     int getGameId(int id);
 
     int getNumParticipating();
-
+    
     void checkWin();
-
+    
     void checkSides();
+
+    bool handleStop();
 
 public:
     Game();
     ~Game() = default;
 
-    void setup(Gyro* gyro, LedMatrix* matrix, MazeMaps* maze_maps, BoardLayout* board_layout);
+    void setup(Gyro* gyro, LedMatrix* matrix, MazeMaps* maze_maps, BoardLayout* board_layout, Button* button);
     void update(int dt);
 
     void initGame(int participating, int map_id, int color_id);
 
     bool isWin();
+    bool isStopped();
     bool isAllAlive();
 
     bool isParticipatingAlive(int participating_mask);
 
-    void sendWinMessages();
+    void sendWinMessages(int win_stop);
 };
 
 
