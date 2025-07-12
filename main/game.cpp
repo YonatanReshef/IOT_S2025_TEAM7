@@ -3,11 +3,12 @@
 #include "espTransceiver.h"
 #include <tuple>
 
-void Game::setup(Gyro* gyro, LedMatrix* matrix, MazeMaps* maze_maps, BoardLayout* board_layout){
+void Game::setup(Gyro* gyro, LedMatrix* matrix, MazeMaps* maze_maps, BoardLayout* board_layout, Button* button){
     this->gyro = gyro;
     this->matrix = matrix;
     this->maze_maps = maze_maps;
     this->board_layout = board_layout;
+    this->button = button;
 }
 
 void Game::initGame(int participating_mask, int map_id){
@@ -20,6 +21,7 @@ void Game::initGame(int participating_mask, int map_id){
     int num_screens = getNumParticipating();
 
     this->win = false;
+    this->stopped = false;
     this->maze_maps->getMapPart(num_screens, map_id, game_id, this->map);
     this->allAlive = true;
 
@@ -203,7 +205,7 @@ void Game::updateBallCrossing(BoardLayout::SIDE my_side, int my_idx){
 
     if(this->map[this->ball.y][this->ball.x] == MazeMaps::BlockType::FINISH){
         this->map[this->ball.y][this->ball.x] = MazeMaps::BlockType::EMPTY;
-        sendWinMessages();
+        sendWinMessages(1);
         this->win = true;
     }
     else{
@@ -252,9 +254,15 @@ void Game::checkWin(){
     if (!ESPTransceiver::getInstance().victoryQueue.empty()) {
         // Get the front tuple
         auto frontTuple = ESPTransceiver::getInstance().victoryQueue.front();
-        ESPTransceiver::getInstance().victoryQueue.pop();
 
-        this->win = true;
+        ESPTransceiver::VictoryMessage msg;
+        int senderId;
+        std::tie(msg, senderId) = frontTuple;
+
+        if(msg.win_stop == 1){ // == win
+            ESPTransceiver::getInstance().victoryQueue.pop();
+            this->win = true;
+        } 
     }
 }
 
@@ -276,7 +284,7 @@ void Game::performMovement(MovementOption option, Position pos) {
         this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, colors[0]); // Clear the old position
         this->ball = pos;
 
-        sendWinMessages();
+        sendWinMessages(1);
 
         this->win = true;
  
@@ -582,6 +590,13 @@ void Game::update(int dt) {
             return;
         }
 
+        if(this->stopped || handleStop()){
+            // Game stopped!
+            this->stopped = true;
+            return;
+        }
+
+
         checkSides();
         bool is_crossing_in = handleBallCrossing();
 
@@ -648,13 +663,34 @@ void Game::update(int dt) {
     
 }
 
-void Game::sendWinMessages(){
+bool Game::handleStop(){
+    if(this->button->getClick()){
+        sendWinMessages(0);
+        this->stopped = true;
+    }
+    else if (!ESPTransceiver::getInstance().victoryQueue.empty()) {
+        // Get the front tuple
+        auto frontTuple = ESPTransceiver::getInstance().victoryQueue.front();
+        
+        ESPTransceiver::VictoryMessage msg;
+        int senderId;
+        std::tie(msg, senderId) = frontTuple;
+
+        if(msg.win_stop == 0){ // == stop
+            ESPTransceiver::getInstance().victoryQueue.pop();
+            this->stopped = true;
+        } 
+    }
+    return false;
+}
+
+void Game::sendWinMessages(int win_stop){
 
     int player_id = 0;
     int players_mask = this->participating_mask;
     while (players_mask) {
         if (players_mask & 1) {
-            ESPTransceiver::VictoryMessage msg_struct = {0};
+            ESPTransceiver::VictoryMessage msg_struct = {win_stop};
             ESPTransceiver::getInstance().send(player_id, ESPTransceiver::MessageType::VICTORY, (char*)&msg_struct);
         }
         players_mask >>= 1; // move to next bit
@@ -662,15 +698,12 @@ void Game::sendWinMessages(){
     }
 }
 
-bool Game::isWin(){
-    return this->win;
-}
 
 void Game::playVictoryAnimationBallPulse() {
     const int num_cycles = 3;         // How many shrink-grow cycles
     const int frame_delay = 100;      // Milliseconds between frames
     uint32_t map_colors[256];
-
+    
     for (int cycle = 0; cycle < num_cycles; ++cycle) {
         // Shrinking
         for (int radius = 7; radius >= 0; --radius) {
@@ -680,15 +713,15 @@ void Game::playVictoryAnimationBallPulse() {
                     int dy = y - 8;
                     int dist_sq = dx * dx + dy * dy;
                     map_colors[y * 16 + x] = (dist_sq <= radius * radius)
-                        ? colors[MazeMaps::BlockType::BALL]
-                        : colors[MazeMaps::BlockType::EMPTY];
+                    ? colors[MazeMaps::BlockType::BALL]
+                    : colors[MazeMaps::BlockType::EMPTY];
                 }
             }
             matrix->setBoard(map_colors);
             matrix->update(10);
             delay(frame_delay);
         }
-
+        
         // Expanding
         for (int radius = 1; radius <= 7; ++radius) {
             for (int y = 0; y < 16; ++y) {
@@ -697,8 +730,8 @@ void Game::playVictoryAnimationBallPulse() {
                     int dy = y - 8;
                     int dist_sq = dx * dx + dy * dy;
                     map_colors[y * 16 + x] = (dist_sq <= radius * radius)
-                        ? colors[MazeMaps::BlockType::BALL]
-                        : colors[MazeMaps::BlockType::EMPTY];
+                    ? colors[MazeMaps::BlockType::BALL]
+                    : colors[MazeMaps::BlockType::EMPTY];
                 }
             }
             matrix->setBoard(map_colors);
@@ -721,12 +754,20 @@ bool Game::isParticipatingAlive(int participating_mask){
         participating_mask >>= 1; // move to next bit
         ++player_id;
     }
-
+    
     return true;
+}
+
+bool Game::isWin(){
+    return this->win;
+}
+
+bool Game::isStopped(){
+    return this->stopped;
 }
 
 bool Game::isAllAlive(){
     return this->allAlive;
 }
 
-Game::Game(): tick(0), win(false){}
+Game::Game(): tick(0), win(false), stopped(false){}

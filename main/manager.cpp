@@ -26,7 +26,7 @@ void Manager::setup(){
 
     /* ==== game ==== */
     pre_game.setup(&matrix, &maze_maps, &button);
-    game.setup(&gyro, &matrix, &maze_maps, &board_layout);
+    game.setup(&gyro, &matrix, &maze_maps, &board_layout, &button);
 }
 
 void Manager::update(int dt){
@@ -66,24 +66,31 @@ void Manager::update(int dt){
         // wait for successeful init
         state = GAME;
         Serial.println("INIT -> GAME");
+
+        // TODO: CLEAR EVENTS LIKE BUTTON!!! Maybe some queues too
+        button.resetClick();
+
         break;
     
     case GAME:
-
+        
         game.update(dt);
 
         if(!game.isAllAlive()){
             this->animation.setup(Animation::Type::DISCONNECTED);
-            state = END_GAME;
-            Serial.println("GAME -> END");
+        }
+        else if(game.isStopped()){
+            this->animation.setup(Animation::Type::STOPPED);
+        }
+        else if(game.isWin()){
+            this->animation.setup(Animation::Type::WIN);
+        }
+        else { // No finish condition met
             break;
         }
 
-        if(game.isWin()){
-            this->animation.setup(Animation::Type::WIN);
-            state = END_GAME;
-            Serial.println("GAME -> END");
-        }
+        state = END_GAME;
+        Serial.println("GAME -> END");
         break;
     
     case END_GAME:

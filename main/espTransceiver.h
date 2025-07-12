@@ -34,7 +34,7 @@ public:
     } GameInitMessage;
 
     typedef struct {
-        int no_need_yet;
+        int win_stop;
     } VictoryMessage;
 
     typedef struct {
