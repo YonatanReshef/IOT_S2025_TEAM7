@@ -62,7 +62,7 @@ void Manager::update(int dt){
         pre_game.shouldStart(participating_mask, map_id);
         /*Serial.println(map_id);
         Serial.println(this->participating_mask);*/
-        game.initGame(participating_mask, map_id);
+        game.initGame(participating_mask, map_id, pre_game.getMasterId());
         // wait for successeful init
         state = GAME;
         Serial.println("INIT -> GAME");

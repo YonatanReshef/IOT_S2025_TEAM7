@@ -10,10 +10,11 @@ void Game::setup(Gyro* gyro, LedMatrix* matrix, MazeMaps* maze_maps, BoardLayout
     this->board_layout = board_layout;
 }
 
-void Game::initGame(int participating_mask, int map_id){
+void Game::initGame(int participating_mask, int map_id, int color_id){
     this->tick = 0;
     this->participating_mask = participating_mask;
     this->map_id = map_id;
+    this->color_id = color_id;
 
     int my_id = ESPTransceiver::getInstance().getMyId();
     int game_id = getGameId(my_id);
@@ -79,7 +80,7 @@ void Game::paintMatrix(){
             MazeMaps::BlockType t = this->map[y+1][x+1];
             /*Serial.print(t);
             Serial.print(" ");*/
-            map_colors[y*16 + x] = this->colors[t];
+            map_colors[y*16 + x] = this->colors[this->color_id][t];
         }
     }
     //Serial.println("");
@@ -207,7 +208,7 @@ void Game::updateBallCrossing(BoardLayout::SIDE my_side, int my_idx){
         this->win = true;
     }
     else{
-        this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, this->colors[MazeMaps::BlockType::BALL]);
+        this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, this->colors[this->color_id][MazeMaps::BlockType::BALL]);
     }
 
 
@@ -266,14 +267,14 @@ void Game::performMovement(MovementOption option, Position pos) {
             return;
         }
         this->map[this->ball.y][this->ball.x] = MazeMaps::BlockType::EMPTY; 
-        this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, colors[0]); // Clear the old position
+        this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, colors[this->color_id][0]); // Clear the old position
         this->ball = pos;
         this->map[this->ball.y][this->ball.x] = MazeMaps::BlockType::BALL;
-        this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, colors[2]); // Set the new position
+        this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, colors[this->color_id][2]); // Set the new position
 
     } else if (option == WIN) {
         this->map[this->ball.y][this->ball.x] = MazeMaps::BlockType::EMPTY; 
-        this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, colors[0]); // Clear the old position
+        this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, colors[this->color_id][0]); // Clear the old position
         this->ball = pos;
 
         sendWinMessages();
@@ -331,7 +332,7 @@ void Game::performMovement(MovementOption option, Position pos) {
         //Serial.println("Send after");
 
         this->map[this->ball.y][this->ball.x] = MazeMaps::BlockType::EMPTY;
-        this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, colors[0]); 
+        this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, colors[this->color_id][0]); 
         this->is_player_here = false;
         this->ball = {-1, -1};
 
@@ -664,49 +665,6 @@ void Game::sendWinMessages(){
 
 bool Game::isWin(){
     return this->win;
-}
-
-void Game::playVictoryAnimationBallPulse() {
-    const int num_cycles = 3;         // How many shrink-grow cycles
-    const int frame_delay = 100;      // Milliseconds between frames
-    uint32_t map_colors[256];
-
-    for (int cycle = 0; cycle < num_cycles; ++cycle) {
-        // Shrinking
-        for (int radius = 7; radius >= 0; --radius) {
-            for (int y = 0; y < 16; ++y) {
-                for (int x = 0; x < 16; ++x) {
-                    int dx = x - 8;
-                    int dy = y - 8;
-                    int dist_sq = dx * dx + dy * dy;
-                    map_colors[y * 16 + x] = (dist_sq <= radius * radius)
-                        ? colors[MazeMaps::BlockType::BALL]
-                        : colors[MazeMaps::BlockType::EMPTY];
-                }
-            }
-            matrix->setBoard(map_colors);
-            matrix->update(10);
-            delay(frame_delay);
-        }
-
-        // Expanding
-        for (int radius = 1; radius <= 7; ++radius) {
-            for (int y = 0; y < 16; ++y) {
-                for (int x = 0; x < 16; ++x) {
-                    int dx = x - 8;
-                    int dy = y - 8;
-                    int dist_sq = dx * dx + dy * dy;
-                    map_colors[y * 16 + x] = (dist_sq <= radius * radius)
-                        ? colors[MazeMaps::BlockType::BALL]
-                        : colors[MazeMaps::BlockType::EMPTY];
-                }
-            }
-            matrix->setBoard(map_colors);
-            matrix->update(10);
-            delay(frame_delay);
-        }
-    }
-
 }
 
 bool Game::isParticipatingAlive(int participating_mask){ 
