@@ -93,9 +93,19 @@ void PreGame::update(int dt) {
 
         timeout -= dt;
         if(timeout <= 0){ // Reached timeout for accept, start with the current mask!
-            m_map_id = millis() % maze_maps->num_maps;
-            int player_id = 0;
+           
+            int num_players  = 0;
             int players_mask = m_participating_mask;
+            while (players_mask) {
+                if (players_mask & 1) {
+                    num_players++;
+                }
+                players_mask >>= 1; // move to next bit
+            }
+
+            m_map_id = millis() % maze_maps->getNumMaps(num_players);
+            int player_id = 0;
+            players_mask = m_participating_mask;
             while (players_mask) {
                 if ((players_mask & 1) && (player_id != comm.getMyId())) {
                     ESPTransceiver::GameInitMessage msg_struct = {m_map_id, m_participating_mask};

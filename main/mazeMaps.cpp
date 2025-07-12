@@ -701,3 +701,23 @@ void MazeMaps::fillBorder(int num_screens, int map_id, int other_screen_id, Boar
     }
 
 }
+
+int MazeMaps::getNumMaps(int num_players){
+    switch (num_players)
+    {
+        case 1:
+            return num_maps_1;
+            break;
+        case 2:
+            return num_maps_2;
+            break;
+        case 3:
+            return num_maps_3;
+            break;
+        case 4:
+            return num_maps_4;
+            break;
+        
+        return 1;
+    }
+}

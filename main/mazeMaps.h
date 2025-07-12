@@ -31,6 +31,8 @@ public:
     static const int num_maps_3 = 1;
     static const int num_maps_4 = 1;
 
+    int getNumMaps(int num_players);
+
 private:
     
     /* name[num_of_maps][num_of_boards][board_widht][board_height]*/
