@@ -313,41 +313,43 @@ void Game::performMovement(MovementOption option, Position pos) {
         Serial.print("id of esp in crossing side: ");
         Serial.println(id_receiver);
 
-        Serial.print("And his side is: ");
-        if(other_side == BoardLayout::SIDE::RIGHT){
-            Serial.println("RIGHT");
+        if(id_receiver != -1){
+            Serial.print("And his side is: ");
+            if(other_side == BoardLayout::SIDE::RIGHT){
+                Serial.println("RIGHT");
+            }
+            if(other_side == BoardLayout::SIDE::LEFT){
+                Serial.println("LEFT");
+            }
+            if(other_side == BoardLayout::SIDE::UP){
+                Serial.println("UP");
+            }
+            if(other_side == BoardLayout::SIDE::DOWN){
+                Serial.println("DOWN");
+            }
+
+            int other_idx = calcOtherSideCrossingIdx(other_side, crossing_side, pos);
+            Serial.println("Other crossing idx is: ");
+            Serial.println(other_idx);
+
+
+
+            ESPTransceiver::BallCrossingMessage msg_struct = {other_side, other_idx};
+            
+            //Serial.println("Send before");
+            ESPTransceiver::getInstance().send(id_receiver, ESPTransceiver::MessageType::BALL_CROSSING, (char*)&msg_struct);
+            //Serial.println("Send after");
+
+            this->map[this->ball.y][this->ball.x] = MazeMaps::BlockType::EMPTY;
+            this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, colors[this->color_id][0]); 
+            this->is_player_here = false;
+            this->ball = {-1, -1};
+
+            /*Serial.print("Croosing to esp ");
+            Serial.println(id_receiver);
+            Serial.print("At his side ");
+            Serial.println(other_side);*/
         }
-        if(other_side == BoardLayout::SIDE::LEFT){
-            Serial.println("LEFT");
-        }
-        if(other_side == BoardLayout::SIDE::UP){
-            Serial.println("UP");
-        }
-        if(other_side == BoardLayout::SIDE::DOWN){
-            Serial.println("DOWN");
-        }
-
-        int other_idx = calcOtherSideCrossingIdx(other_side, crossing_side, pos);
-        Serial.println("Other crossing idx is: ");
-        Serial.println(other_idx);
-
-
-
-        ESPTransceiver::BallCrossingMessage msg_struct = {other_side, other_idx};
-        
-        //Serial.println("Send before");
-        ESPTransceiver::getInstance().send(id_receiver, ESPTransceiver::MessageType::BALL_CROSSING, (char*)&msg_struct);
-        //Serial.println("Send after");
-
-        this->map[this->ball.y][this->ball.x] = MazeMaps::BlockType::EMPTY;
-        this->matrix->setPixelColor(this->ball.x - 1, this->ball.y - 1, colors[this->color_id][0]); 
-        this->is_player_here = false;
-        this->ball = {-1, -1};
-
-        /*Serial.print("Croosing to esp ");
-        Serial.println(id_receiver);
-        Serial.print("At his side ");
-        Serial.println(other_side);*/
     }
 }
 

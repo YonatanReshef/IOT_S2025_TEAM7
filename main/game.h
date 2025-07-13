@@ -42,12 +42,12 @@ private:
                                                // Ball: Deep green (#1FAF0B)
                                                // Finish: Deep blue (#181A4C)
 
-    { 0x000000, 0xFFC0CB, 0x1EBF33, 0x1C1BBF }, // Theme 2: "Pink"
+    { 0x000000, 0xFFC0CB, 0x1EBF33, 0xFF0000 }, // Theme 2: "Pink"
                                                // Wall: Classic soft pink (#FFC0CB)
                                                // Ball: Bright green (#1EBF33)
                                                // Finish: Royal blue (#1C1BBF)
 
-    { 0x000000, 0x008080, 0x33CC26, 0x3C3BBF }  // Theme 3: "Teal"
+    { 0x000000, 0x008080, 0x33CC26, 0xFF0000 }  // Theme 3: "Teal"
                                                // Wall: Pure teal (#008080)
                                                // Ball: Minty green (#33CC26)
                                                // Finish: Dusty blue (#3C3BBF)
