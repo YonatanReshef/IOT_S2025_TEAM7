@@ -27,7 +27,7 @@
 
 // ==== Settings ====
 #define DELTA_TIME 10
-#define BRIGHTNESS 10
+#define BRIGHTNESS 25
 
 
 #endif
