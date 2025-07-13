@@ -1,4 +1,5 @@
-#include "LedMatrix.h"
+#include "ledMatrix.h"
+#include "config.h"
 
 #define MATRIX_WIDTH 16
 #define MATRIX_HEIGHT 16
@@ -9,7 +10,7 @@ LedMatrix::LedMatrix(int pin)
 
 void LedMatrix::setup() {
     pixels.begin();
-    pixels.setBrightness(10);
+    pixels.setBrightness(BRIGHTNESS);
     pixels.show();  // Turn off all pixels initially
 }
 
