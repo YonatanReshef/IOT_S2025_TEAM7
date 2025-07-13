@@ -67,6 +67,8 @@ void Manager::update(int dt){
         state = GAME;
         Serial.println("INIT -> GAME");
 
+        //final
+
         // TODO: CLEAR EVENTS LIKE BUTTON!!! Maybe some queues too
         button.resetClick();
 
